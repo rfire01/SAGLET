@@ -1,0 +1,15 @@
+﻿DELETE FROM LinesUnbouded
+DELETE FROM Lines
+DELETE FROM Points
+DELETE FROM Shapes
+DELETE FROM CriticalActionPoints
+DELETE FROM CriticalMsgPoints
+DELETE FROM VActions
+DELETE FROM VMsgs
+DELETE FROM Users
+DELETE FROM Tabs
+DELETE FROM RoomModerators
+DELETE FROM Moderators
+DELETE FROM Groups
+DELETE FROM Rooms
+INSERT INTO Users VALUES('server')
