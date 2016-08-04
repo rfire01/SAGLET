@@ -1,0 +1,48 @@
+﻿@model Dictionary<int,string>
+
+
+<!-- Nav tabs -->
+<div id="vmt-iframes-nav">
+    <ul class="nav nav-tabs" role="tablist">
+        @if (Model.Keys.Count > 0)
+        {
+            <li class="active"><a id="vmt-frame-link-@Model.Keys.First()" href="#vmt-frame-@Model.Keys.First()" data-toggle="tab">@Model.Keys.First()</a></li>   
+        }
+        @for (int i = 1; i < Model.Keys.Count; i++)
+        {
+            var item = Model.Keys.ElementAt(i);
+            <li><a id="vmt-frame-link-@item" href="#vmt-frame-@item" data-toggle="tab">@item</a></li>   
+        }
+    </ul>
+</div>
+
+<!-- Tab panes -->
+<div id="vmt-iframes-tabs" class="tab-content">
+    @if (Model.Keys.Count > 0)
+    {
+        int id = Model.Keys.First();
+        string filename = Model[id];
+        <div class="tab-pane fade in active embed-responsive embed-responsive-16by9" id="vmt-frame-@id">
+            <div id="player-@id">
+                <video>
+                    <source type="video/mp4" src="https://dl.dropboxusercontent.com/u/30630388/SAGLET/Video/@filename" />
+                    your browser does not support the video tag.>
+                </video>
+            </div>
+        </div>
+    }
+    @for (int i = 1; i < Model.Keys.Count; i++)
+    {
+        int id = Model.Keys.ElementAt(i);
+        string filename = Model[id];
+        <div class="tab-pane fade embed-responsive embed-responsive-16by9" id="vmt-frame-@id">
+            <div id="player-@id">
+                <video>
+                    <source type="video/mp4" src="https://dl.dropboxusercontent.com/u/30630388/SAGLET/Video/@filename" />
+                    @*<source src="~/Areas/Demo/Videos/@filename" type="video/mp4" />*@
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    }
+</div>

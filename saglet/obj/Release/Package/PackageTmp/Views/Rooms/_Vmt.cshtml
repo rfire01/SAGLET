@@ -1,0 +1,135 @@
+﻿@using SAGLET.Models;
+@model SAGLET.Models.Room
+
+<hr />
+
+@{
+    string mod = SAGLET.Class.AppHelper.GetVmtUser();
+    ICollection<Room> roomsAllowed = Model.ModeratorsAllowed.First(m => m.Username.ToLower() == mod).RoomsAllowed;
+}
+
+<div class="container-fluid clear-top">
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="icon-list">VMT</span>
+            </div>
+        </div>
+        <div id="notifications-box">
+            <ul></ul>
+        </div>
+        <div id="vmt-iframes-container">
+            @Html.Partial("_VMT_Frames", roomsAllowed);
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="icon-group">Groups Toolbar</span>
+            </div>
+        </div>
+        <div id="rooms-toolbar">
+
+            <div class="panel-group" id="room-panels">
+                @{
+                    Dictionary<int, List<CriticalMsgPoints>> dict_cpmList =
+                       new Dictionary<int, List<CriticalMsgPoints>>();
+                    Dictionary<int, List<CriticalActionPoints>> dict_cpaList =
+                        new Dictionary<int, List<CriticalActionPoints>>();
+                    Dictionary<int, int> dict_cpmAll = new Dictionary<int, int>();
+                    Dictionary<int, int> dict_cpaAll = new Dictionary<int, int>();
+                    Dictionary<int, int> dict_cpmUnseen = new Dictionary<int, int>();
+                    Dictionary<int, int> dict_cpaUnseen = new Dictionary<int, int>();
+                    Dictionary<int, string> dict_cpmMin = new Dictionary<int, string>();
+                    Dictionary<int, string> dict_cpaMin = new Dictionary<int, string>();
+                    List<CriticalMsgPoints> allCPM = new List<CriticalMsgPoints>();
+
+                    foreach (Room item in roomsAllowed)
+                    {
+                        dict_cpmList[item.ID] = ViewBag.cpm[item.ID];
+                        dict_cpaList[item.ID] = ViewBag.cpa[item.ID];
+                        dict_cpmAll[item.ID] = dict_cpmList[item.ID].Count();
+                        dict_cpaAll[item.ID] = dict_cpaList[item.ID].Count();
+                        dict_cpmUnseen[item.ID] = dict_cpmList[item.ID].Where(c => c.Like == null).Count();
+                        dict_cpaUnseen[item.ID] = dict_cpaList[item.ID].Where(c => c.Like == null).Count();
+                        dict_cpmMin[item.ID] = dict_cpmList[item.ID].Min(x => x.Priority);
+                        dict_cpaMin[item.ID] = dict_cpaList[item.ID].Min(x => x.Priority);
+                        allCPM.AddRange(dict_cpmList[item.ID]);
+                    }
+                    
+                    allCPM.OrderBy(c => c.Msg.TimeStamp);
+                }
+
+
+
+                @Html.Partial("_VMT_Summary", allCPM)
+                <hr />
+                @foreach (var item in dict_cpmList)
+                {
+                    var cpmList = item.Value;
+                    var cpaList = dict_cpaList[item.Key];
+                    int cpmAll = dict_cpmAll[item.Key];
+                    int cpaAll = dict_cpaAll[item.Key];
+                    int cpmUnseen = dict_cpmUnseen[item.Key];
+                    int cpaUnseen = dict_cpaUnseen[item.Key];
+                    string cpmMin = dict_cpmMin[item.Key];
+                    string cpaMin = dict_cpaMin[item.Key];
+                    if (cpmMin == null) { cpmMin = "99"; }
+                    if (cpaMin == null) { cpaMin = "99"; }
+
+                    <div id="vmt-room-@item.Key" class="panel panel-default">
+                        <div class="panel-heading" data-toggle="collapse" data-target="#collapse-@item.Key" data-priority="-1">
+                            <div class="panel-title">
+                                <span class="icon-plus-square">Room @item.Key</span>
+                                <div class="toolbar-badges">
+                                    <span class="badge toolbar-badge toolbar-users" data-toggle="tooltip" title="Users - Online / Total" data-placement="top">
+                                            <span class="icon-users"></span>
+                                            <span id="vmt-room-@item.Key-top-num-users">
+                                                <span class="first-value">0</span>/<span class="second-value">0</span>
+                                            </span>
+                                        </span>
+                                    <span class="badge toolbar-badge toolbar-cpm" data-toggle="tooltip" title="Critical Messages - Unhandeled / Total" data-placement="left">
+                                            <span class="icon-chat-bubble-two"></span>
+                                            <span id="vmt-room-@item.Key-top-num-cp-msg">
+                                                <span class="first-value">@cpmUnseen</span>/<span class="second-value">@cpmAll</span>
+                                            </span>
+                                        </span>
+                                    <span class="badge toolbar-badge toolbar-cpa" data-toggle="tooltip" title="Critical Actions - Unhandeled / Total" data-placement="left">
+                                            <span class="icon-flash-electric"></span>
+                                            <span id="vmt-room-@item.Key-top-num-cp-act">
+                                                <span class="first-value">@cpaUnseen</span>/<span class="second-value">@cpaAll</span>
+                                            </span>
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="collapse-@item.Key" class="panel-collapse collapse">
+                            <div class="panel-goroup col-md-12 vmt-toolbox-group">
+                                @Html.Partial("_VMT_Users_Panel", item.Key)
+                                @Html.Partial("_VMT_CPM_Panel", cpmList, new ViewDataDictionary {
+                                                { "key", item.Key},
+                                                { "cpmMin", cpmMin},
+                                                { "cpmAll", cpmAll},
+                                                { "cpmUnseen", cpmUnseen},
+                                                { "listRoomID", false },
+                                                { "listTrigger", true},
+                                                { "listTime", true}
+                                            })
+                                @Html.Partial("_VMT_CPA_Panel", cpaList, new ViewDataDictionary {
+                                                { "key", item.Key},
+                                                { "cpaMin", cpaMin},
+                                                { "cpaAll", cpaAll},
+                                                { "cpaUnseen", cpaUnseen},
+                                                { "listRoomID", false },
+                                                { "listTrigger", true},
+                                                { "listTime", true}
+                                            })
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

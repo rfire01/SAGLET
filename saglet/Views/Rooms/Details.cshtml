@@ -1,0 +1,128 @@
+﻿@model SAGLET.Models.Room
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<center style="vertical-align: middle">
+    <img src="~/Icons/loading-image.gif" id="loader" style="display: none;">
+</center>
+
+<div>
+    <h4>Room @Model.ID</h4>
+    <hr />
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#vmt" data-toggle="tab" class="icon-list">VMT</a></li>
+        <li><a href="#live" data-toggle="tab" class="icon-rss">Live</a></li>
+        <li><a href="#history" data-toggle="tab" class="icon-history">History</a></li>
+        <li><a href="#graphs" role="tab" data-toggle="tab" class="icon-graph-bar">Graphs</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="vmt">@Html.Partial("_Vmt")</div>
+        <div class="tab-pane fade" id="live">@Html.Partial("_Live")</div>
+        <div class="tab-pane fade" id="history">@Html.Partial("_History")</div>
+        <div class="tab-pane fade" id="graphs">@Html.Partial("_Graphs")</div>
+    </div>
+
+</div>
+
+<p style="clear:both">
+    <hr />
+    <a data-toggle="tooltip" title="Edit" data-placement="right" href="@Url.Action("Details", "Rooms", new { id = Model.ID })"><i class="icon-pencil"></i></a> |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+        <!-- Modal -->
+<div class="modal fade" id="cpmModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Set\Adjust Critical Point</h4>
+            </div>
+            <div class="modal-body">
+                <dl class="dl-horizontal">
+                    <dt>Msg ID:</dt>
+                    <dd id="cpm-modal-msgID"></dd>
+                    <dt>Room ID:</dt>
+                    <dd id="cpm-modal-roomID"></dd>
+                    <dt>Timestamp:</dt>
+                    <dd id="cpm-modal-timestamp"></dd>
+                    <dt>Username:</dt>
+                    <dd id="cpm-modal-username"></dd>
+                    <dt>Text:</dt>
+                    <dd id="cpm-modal-text"></dd>
+                </dl>
+                <hr />
+                <h4>Modifiy CP:</h4>
+                <div id="cpm-modal-active-cpm">
+                    <table class="table">
+                        <tr class="header">
+                            <th class="col-sm-2">#</th>
+                            <th class="col-sm-3">Type</th>
+                            <th class="col-sm-2">Priority</th>
+                            <th class="col-sm-2"></th>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td><select id="cpm-modal-cp-types" name="type"></select></td>
+                            <td>
+                                <select id="cpm-modal-cp-priority" name="priority">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </td>
+                            <td><i id="cpm-modal-add-cp" class="icon-plus-add" data-toggle="tooltip" data-placement="top" title="Inject new CP"></i></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery-ui.min.js"></script>   @* this is a custom build without tooltip -> to avoid clash with bootstrap tooltip  *@
+    <script src='~/Scripts/live/socket.io.js'></script>   
+    <script src="~/Scripts/live/vmt-highlight-api.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/hub/details-page.js"></script>
+    <script src="~/Scripts/bootstrap-toggle.js"></script>
+    <script src="~/Scripts/graph/jsapi.js"></script>
+    <script src="~/Scripts/graph/gauge.js"></script>
+    <script src="~/Scripts/graph/wordcloud.js"></script>
+    <script src="~/Scripts/graph/pie.js"></script>
+    <script>
+    // live data
+    $(document).ready(function () {
+        room['id'] = @Model.ID
+        room['user'] = @Html.Raw(Json.Encode(SAGLET.Class.AppHelper.GetVmtUser()))
+        room['settings'] = {
+            demo: false,
+            sentiment: false,
+            cpa: false,
+            saveCpFeedbackTo: 'db',
+            reviewed: false,
+            listRoomID: true,
+            listTrigger: true,
+            listTime: true,
+            displayActionGraph: true,
+            usersPerLine: 2
+        };
+    });
+</script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/Content/bootstrap-toggle.less">
+}

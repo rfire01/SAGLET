@@ -1,0 +1,112 @@
+﻿@model SAGLET.Models.Moderator
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Moderator</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AspUserID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspUserID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.demo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.demo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sentiment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sentiment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cpa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cpa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.saveCpFeedbackTo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.saveCpFeedbackTo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.reviewed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reviewed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.listRoomID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.listRoomID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.listTrigger)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.listTrigger)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.listTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.listTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.displayActionGraph)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.displayActionGraph)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usersPerLine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usersPerLine)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

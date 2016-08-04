@@ -1,0 +1,133 @@
+﻿@using SAGLET.Models;
+@model SAGLET.Models.Room
+
+<hr />
+
+@{
+    //string mod = SAGLET.Class.AppHelper.GetVmtUser();
+    //ICollection<Room> roomsAllowed = Model.ModeratorsAllowed.First(m => m.Username.ToLower() == mod).RoomsAllowed;
+}
+
+<div class="container-fluid clear-top">
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="icon-list">VMT</span>
+            </div>
+        </div>
+        <div id="vmt-iframes-container">
+            @Html.Partial("_VMT_Frames", roomsAllowed);          
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="icon-group">Groups Toolbar</span>
+            </div>
+        </div>
+        <div id="rooms-toolbar">
+
+            <div class="panel-group" id="room-panels">
+                
+                @foreach (var item in roomsAllowed)
+                {
+                    IEnumerable<SAGLET.Models.CriticalMsgPoints> cpmList = ViewBag.cpm[item.ID];
+                    IEnumerable<SAGLET.Models.CriticalActionPoints> cpaList = ViewBag.cpa[item.ID];
+                    int cpmAll = cpmList.Count();
+                    int cpaAll = cpaList.Count();
+                    int cpmUnseen = cpmList.Where(c => c.Like == null).Count();
+                    int cpaUnseen = cpaList.Where(c => c.Like == null).Count();
+                    string cpmMin = cpmList.Min(x => x.Priority);
+                    string cpaMin = cpaList.Min(x => x.Priority);
+                    if (cpmMin == null) { cpmMin = "99"; }
+                    if (cpaMin == null) { cpaMin = "99"; }
+                    
+                    <div id="vmt-room-@item.ID" class="panel panel-default">
+                        <div class="panel-heading" data-toggle="collapse" data-target="#collapse-@item.ID" data-priority="-1">
+                            <div class="panel-title">
+                                <span class="icon-plus-square">Room @item.ID</span>
+                                <div class="toolbar-badges">
+                                    <span class="badge toolbar-badge" data-toggle="tooltip" title="Users - Online / Total" data-placement="top">
+                                        <span class="icon-users"></span>
+                                        <span id="vmt-room-@item.ID-top-num-users">
+                                            <span class="first-value">0</span>/<span class="second-value">0</span>
+                                        </span>
+                                    </span>
+                                    <span class="badge toolbar-badge" data-toggle="tooltip" title="Critical Messages - Unhandeled / Total" data-placement="left">
+                                        <span class="icon-chat-bubble-two"></span>
+                                        <span id="vmt-room-@item.ID-top-num-cp-msg">
+                                            <span class="first-value">@cpmUnseen</span>/<span class="second-value">@cpmAll</span>
+                                        </span>
+                                    </span>
+                                    <span class="badge toolbar-badge" data-toggle="tooltip" title="Critical Actions - Unhandeled / Total" data-placement="left">
+                                        <span class="icon-flash-electric"></span>
+                                        <span id="vmt-room-@item.ID-top-num-cp-act">
+                                            <span class="first-value">@cpaUnseen</span>/<span class="second-value">@cpaAll</span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapse-@item.ID" class="panel-collapse collapse">
+                            <div class="panel-goroup col-md-12 vmt-toolbox-group">
+                                @* USERS *@
+                                <div class="panel panel-default head-users">
+                                    <div class="panel-heading" data-toggle="collapse" data-target="#collapse-users-@item.ID">
+                                        <h4 class="panel-title">
+                                            <span class="icon-plus-square"></span>
+                                            <span class="icon-users" data-toggle="tooltip" title="Users" data-placement="top"></span>
+                                            <span id="vmt-room-@item.ID-num-users" data-toggle="tooltip" title="Online / Total" data-placement="top" class="badge">
+                                                <span class="first-value">0</span>/<span class="second-value">0</span>
+                                            </span>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-users-@item.ID" class="panel-collapse collapse" data-type="users" data-roomid="@item.ID">
+                                        <div class="panel-body users">
+                                            @Html.Partial("_VMT_Users", @item.ID)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* CPM *@
+                                <div class="panel panel-default head-msg">
+                                    <div class="panel-heading" data-toggle="collapse" data-target="#collapse-cpm-@item.ID" data-priority="@cpmMin">
+                                        <h4 class="panel-title">
+                                            <span class="icon-plus-square"></span>
+                                            <span class="icon-chat-bubble-two" data-toggle="tooltip" title="Critical Messages" data-placement="top"></span>
+                                            <span id="vmt-room-@item.ID-num-cp-msg" data-toggle="tooltip" title="Unhandeled / Total" data-placement="top" class="badge">
+                                                <span class="first-value">@cpmUnseen</span>/<span class="second-value">@cpmAll</span>
+                                            </span>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-cpm-@item.ID" class="panel-collapse collapse" data-type="cpm" data-roomid="@item.ID">
+                                        <div class="panel-body msg">
+                                            @Html.Partial("_VMT_CPM", cpmList)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* CPA *@
+                                <div class="panel panel-default head-act">
+                                    <div class="panel-heading" data-toggle="collapse" data-target="#collapse-cpa-@item.ID" data-priority="@cpaMin">
+                                        <h4 class="panel-title">
+                                            <span class="icon-plus-square"></span>
+                                            <span class="icon-flash-electric" data-toggle="tooltip" title="Critical Actions" data-placement="top"></span>
+                                            <span id="vmt-room-@item.ID-num-cp-act" data-toggle="tooltip" title="Unhandeled / Total" data-placement="top" class="badge">
+                                                <span class="first-value">@cpaUnseen</span>/<span class="second-value">@cpaAll</span>
+                                            </span>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-cpa-@item.ID" class="panel-collapse collapse">
+                                        <div class="panel-body act">
+                                            @Html.Partial("_VMT_CPA", cpaList)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\SAGLET.dll.config
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\SAGLET.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\SAGLET.pdb
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Antlr3.Runtime.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\EngineIoClientDotNet.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\EntityFramework.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\EntityFramework.SqlServer.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Hangfire.Core.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Hangfire.SqlServer.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Core.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.Core.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Cookies.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Facebook.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Google.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.OAuth.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Twitter.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Web.Infrastructure.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Newtonsoft.Json.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Owin.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\SocketIoClientDotNet.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Helpers.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Mvc.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Optimization.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Razor.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.WebPages.Deployment.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.WebPages.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.WebPages.Razor.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\WebGrease.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\WebSocket4Net.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Antlr3.Runtime.pdb
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\EntityFramework.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\EntityFramework.SqlServer.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Hangfire.Core.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Hangfire.SqlServer.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Core.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.Core.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Cookies.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Facebook.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Google.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.OAuth.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Microsoft.Owin.Security.Twitter.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\Newtonsoft.Json.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Helpers.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Mvc.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Razor.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.WebPages.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.WebPages.Deployment.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.WebPages.Razor.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\bin\System.Web.Optimization.xml
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\obj\Release\SAGLET.Areas.Demo.Migrations.DemoModal.InitialDatabaseCreation.resources
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\obj\Release\SAGLET.csproj.GenerateResource.Cache
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\obj\Release\SAGLET.dll
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\obj\Release\SAGLET.pdb
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\obj\Release\SAGLET.csprojResolveAssemblyReference.cache
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\obj\Release\SAGLET.Migrations.SagletApp.InitialDatabaseCreation.resources
+D:\Dropbox\Programming\Kobi\Saglet\Saglet\SAGLET\obj\Release\SAGLET.Migrations.SagletModel.InitialDatabaseCreation.resources
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\SAGLET.dll.config
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\SAGLET.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\SAGLET.pdb
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Antlr3.Runtime.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\EngineIoClientDotNet.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\EntityFramework.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\EntityFramework.SqlServer.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Hangfire.Core.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Hangfire.SqlServer.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Newtonsoft.Json.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Owin.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\SocketIoClientDotNet.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Helpers.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Mvc.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Optimization.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Razor.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.WebPages.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.WebPages.Razor.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\WebGrease.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\WebSocket4Net.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Antlr3.Runtime.pdb
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\EntityFramework.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\EntityFramework.SqlServer.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Hangfire.Core.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Hangfire.SqlServer.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\Newtonsoft.Json.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Helpers.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Mvc.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Razor.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.WebPages.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.WebPages.Razor.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\bin\System.Web.Optimization.xml
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.csprojResolveAssemblyReference.cache
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.Areas.Demo.Migrations.DemoModal.InitialDatabaseCreation.resources
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.Migrations.SagletApp.InitialDatabaseCreation.resources
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.Migrations.SagletModel.InitialDatabaseCreation.resources
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.Migrations.SagletModel.InitialDatabaseCreation1.resources
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.csproj.GenerateResource.Cache
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.dll
+C:\Users\Assaf\Documents\Visual Studio 2015\Projects\Saglet\SAGLET\obj\Release\SAGLET.pdb

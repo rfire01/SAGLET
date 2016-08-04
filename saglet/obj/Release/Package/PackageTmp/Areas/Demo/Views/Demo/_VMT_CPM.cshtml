@@ -1,0 +1,33 @@
+﻿@{
+    bool listRoomID = Convert.ToBoolean(ViewData["listRoomID"]);
+    bool listTrigger = Convert.ToBoolean(ViewData["listTrigger"]);
+    bool listTime = Convert.ToBoolean(ViewData["listTime"]);
+}
+
+<div class="table-wrapper">
+    <table class="table">
+        <tr>
+            <th class="th-reviewed">Reviewd?</th>
+            @if (listTime)
+            {
+                <th>Time</th>
+            }
+            @if (listRoomID)
+            {
+                <th>Room</th>
+            }
+            @if (listTrigger)
+            {
+                <th>Trigger</th>
+            }
+            <th class="cp-text">Text</th>
+            @*<th>User</th>
+            <th>Type</th>
+            <th>Priority</th>*@
+            <th style="text-align:right">Feedback</th>
+        </tr>
+    </table>
+</div>
+
+
+

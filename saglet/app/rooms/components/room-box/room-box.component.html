@@ -1,0 +1,31 @@
+﻿<div ng-class="{'col-md-3': vm.overview, 
+                'col-md-12 thisRoomIsOpenMoveItLeft': vm.fullView}"
+     style="padding-right:6px; padding-left:6px; padding-top:15px;">
+    
+    
+
+    <div class="iframe-wrapper"
+         ng-hide="vm.hide"
+         ng-class="{'iframe-wrapper-overview': vm.overview, 
+                    'iframe-wrapper-this-room-is-open': vm.fullView}">
+        <div class="panel panel-default ">
+            <div class="panel-heading" id="iframe-header">
+                Room: {{vm.room.ID}}
+                <button type="button" 
+                        class="btn btn-default btn-sm" 
+                        aria-label="Left Align"
+                       
+                        ng-click="vm.openCloseFullView()"
+                        style="float:right">
+                    <span ng-class="{'glyphicon glyphicon-zoom-in': !vm.fullView, 'glyphicon glyphicon-zoom-out': vm.fullView }" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <iframe ng-class="{'scaled-frame':vm.overview, 'scaled-full-size-frame':vm.fullView }" scrolling="no" ng-src="{{vm.iframeLink(vm.room.ID)}}"></iframe>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--<cp-dashboard ng-if="!vm.overview && vm.fullView" ></cp-dashboard>-->

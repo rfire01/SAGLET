@@ -1,0 +1,18 @@
+﻿@model Dictionary<int, List<SAGLET.Models.CriticalMsgPoints>>
+
+<div id="summary-table">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse-summary" data-priority="-1">
+        <div class="panel-title">
+            <span class="icon-plus-square">Summary Table</span>
+        </div>
+        <div id="collapse-summary" class="panel-collapse collapse">
+            <div class="panel-goroup col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @Html.Partial("_VMT_CPM", modal)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

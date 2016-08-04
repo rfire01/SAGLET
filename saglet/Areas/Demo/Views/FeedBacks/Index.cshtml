@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SAGLET.Areas.Demo.Models.FeedBack>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Download Feedbacks", "DownloadCsv")
+</p>
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.roomID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cpText)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.timeStamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stars)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.roomID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cpText)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.timeStamp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stars)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "Delete", new {  username=item.username, cpText = item.cpText, roomID = item.roomID  })
+        </td>
+    </tr>
+}
+
+</table>

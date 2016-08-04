@@ -1,0 +1,91 @@
+﻿@model IEnumerable<SAGLET.Models.Room>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Sync New Rooms", "SyncNewRooms", null, new { @class = "btn btn-default icon-refresh" })
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+<table class="table">
+    <tr>
+        <th>
+            <i class="icon-key-2" data-toggle="tooltip" data-placement="top" title="Room ID"></i>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sync)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastUpdate)
+        </th>
+        <th>
+            <i class="icon-graduation-cap" data-toggle="tooltip" data-placement="top" title="Nm. of Moderators Allowed"></i>
+        </th>
+        <th>
+            <i class="icon-chat-bubble-two" data-toggle="tooltip" data-placement="top" title="Nm. of Messages"></i>
+        </th>
+        <th>
+            <i class="icon-flash-electric" data-toggle="tooltip" data-placement="top" title="Nm. of Actions"></i>
+        </th>
+        <th>
+            <i class="icon-users" data-toggle="tooltip" data-placement="top" title="Nm. of Users"></i>
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr id="@item.ID">
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomGroup.RoomID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sync)
+        </td>
+        <td>
+            <span class="room-date">
+                @Html.DisplayFor(modelItem => item.LastUpdate)
+            </span>
+        </td>
+        <td>
+            <span class="room-mods">
+                @Html.DisplayFor(modelItem => item.ModeratorsAllowed.Count)
+            </span>
+        </td>
+        <td>
+            <span class="room-msgs">
+                @item.RoomGroup.Msgs.Count(m => m.UserID != "server")
+            </span>
+        </td>
+        <td>
+            <span class="room-actions">
+                @item.RoomGroup.Tabs.Sum(t => t.Actions.Count)
+            </span>
+        </td>
+        <td>
+            <span class="room-users">
+                @Html.DisplayFor(modelItem => item.RoomGroup.GetUsersFromString().Count)
+            </span>
+        </td>
+
+        <td>
+            <a data-toggle="tooltip" title="Enter" data-placement="top" href="@Url.Action("Details", "Rooms", new { id = item.ID })"><i class="icon-log-in"></i></a>
+            @if (ViewBag.Mod == item.Moderator.Username.ToLower())    //only creator can edit or delete room
+            {
+                <text>|</text> <a data-toggle="tooltip" title="Edit" data-placement="top" href="@Url.Action("Edit", "Rooms", new { id = item.ID })"><i class="icon-pencil"></i></a> 
+                <text>|</text>    <a data-toggle="tooltip" title="Delete" data-placement="top" href="@Url.Action("Delete", "Rooms", new { id = item.ID })"><i class="icon-trashcan"></i></a>
+            }
+
+        </td>
+    </tr>
+}
+
+</table>
+
+@section scripts{
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/hub/index-page.js"></script> 
+}

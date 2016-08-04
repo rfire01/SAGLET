@@ -1,0 +1,16 @@
+﻿@using SAGLET.Models;
+@model List<CriticalMsgPoints>
+
+
+<div id="summary-table" class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse-summary" data-priority="-1">
+        <div class="panel-title">
+            <span class="icon-plus-square">Summary Table</span>
+        </div>
+    </div>
+    <div id="collapse-summary" class="panel-collapse collapse">
+        <div class="panel-body summary">
+            @Html.Partial("_VMT_CPM", Model, new ViewDataDictionary { { "listRoomID", true } })
+        </div>
+    </div>
+</div>
