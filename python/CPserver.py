@@ -1,55 +1,86 @@
 from __future__ import print_function
 
-# import time
-import zmq
+import struct
 
-from DictAnalyze import DictAnalyzer
-from tfidfAnalyze import TFIDFAnalyzer
+from critialAnalyze.DictAnalyze import DictAnalyzer
+from critialAnalyze.tfidfAnalyze import TFIDFAnalyzer
+from critialAnalyze.similarityAnalyze import SimAnalyzer
 
 app_signs = open("Dictionaries\\AppTerms.txt", 'r', encoding="utf8").read().split('\n')
 
 rooms = {}
 da = DictAnalyzer()
 tfa = TFIDFAnalyzer()
-context = 'NaN'
+sa = SimAnalyzer()
 
-context = zmq.Context(1)
-server = context.socket(zmq.REP)
-server.bind("tcp://*:5555")
+def checkForRequest():
+    try:
+        f = open(r'\\.\pipe\cpPipe', 'r+b', 0)
 
-while True:
-    request = server.recv().decode()
+        n = struct.unpack('I', f.read(4))[0]  # Read str length
+        s = f.read(n)  # Read str
+        f.seek(0)  # Important!!!
+        print(s)
 
-    req = request.split("\t")
-    if req[0]=="open" and len(req)>2:
-        rooms[req[1]] = req[2]
-        response = "ok"
-    elif req[0]=="input" and len(req)>2:
-        roomID = req[1]
-        message = req[2]
-        if not roomID in rooms:
-            rooms[roomID] = ''
+        request = s.decode('utf-8').split(';')
+        roomID = request[0]
+        message = request[1]
+        try:
+            response = handleRequest(roomID,message)
+        except Exception as e:
+            print(str(e))
+            return
+        print(response)
 
-        appWord = False
-        for word in app_signs:
-            if word in message.lower():
-                appWord = True
-        if appWord:
-            response = 'NaN,0'
+        f.write(struct.pack('I', len(s)) + response.encode())  # Write str length and str
+        f.seek(0)
 
-        group = da.check_group(rooms[roomID])
-        da_tag = da.get_tag(message, context, [rooms[roomID], group])
-        tfa_tag = tfa.get_tag(message, [rooms[roomID], group])
-        if tfa_tag[0] != 'NaN':
-            tag = tfa_tag
+        f.close()
+    except:
+        pass
+
+def handleRequest(roomID,message):
+    if not roomID in rooms:
+        rooms[roomID] = {}
+        rooms[roomID]['answer'] = ''
+        rooms[roomID]['context'] = 'NaN'
+
+    appWord = False
+    for word in app_signs:
+        if word in message.lower():
+            appWord = True
+    if appWord:
+        return 'NaN,0'
+
+    context = rooms[roomID]['context']
+    group = da.check_group(rooms[roomID]['answer'])
+    da_tag,da_code = da.get_tag(message, context, [rooms[roomID]['answer'], group])
+    tfa_tag,tfa_code = tfa.get_tag(message, [rooms[roomID]['answer'], group])
+    sim_tag,sim_code = sa.get_tag(message,context,2)
+
+    ds_count = sum([1 for tag in [da_tag, tfa_tag, sim_tag] if tag == 'DS'])
+    tec_count = sum([1 for tag in [da_tag, tfa_tag, sim_tag] if tag == 'TEC'])
+    nmd_count = sum([1 for tag in [da_tag, tfa_tag] if tag == 'NMD'])
+
+    if ds_count >= nmd_count:
+        if ds_count >= tec_count:
+            tag = 'DS'
         else:
-            tag = da_tag
-        context = tag
-        response = (tag[0] + "," + str(tag[1]))
+            tag = 'TEC'
     else:
-        response = "illegal request"
-    # time.sleep(1) # Do some heavy work - check for cp
-    server.send(response.encode())
+        if nmd_count >= tec_count:
+            tag = 'NMD'
+        else:
+            tag = 'TEC'
+    if ds_count <= 1 and tec_count <= 1 and nmd_count <= 0:
+        tag = 'NaN'
 
-server.close()
-context.term()
+    code = da_code
+
+    rooms[roomID]['context'] = tag
+    return (tag + "," + str(code))
+
+
+if __name__ == '__main__':
+    while True:
+        checkForRequest()
