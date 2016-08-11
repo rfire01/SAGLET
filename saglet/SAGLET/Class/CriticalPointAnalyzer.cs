@@ -12,7 +12,7 @@ namespace SAGLET.Class
     public class CriticalPointAnalyzer
     {
         static string[] priority = { "1", "2" };
-        static int i = 0;
+        static int i=0;
 
         internal static List<CriticalMsgPoints> Analyze(VMsg msg)
         {
@@ -22,7 +22,7 @@ namespace SAGLET.Class
             cp.GroupID = msg.GroupID;
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
-
+            
             // enable for running a demo script
             //switch (msg.Text)
             //{
@@ -79,7 +79,7 @@ namespace SAGLET.Class
 
 
             //TODO replace with eran's code
-
+           
             //cp.Type = CriticalPointTypes.CR;
             //cps.Add(cp);
 
@@ -121,25 +121,34 @@ namespace SAGLET.Class
         private static string GetCriticalPoint(int roomID, string message)
         {
             // Open the named pipe.
-            var server = new NamedPipeServerStream("cpPipe");
+            // exception, if there is a problem with opening pipe - try again until pipe opened successfully
+            while (true)
+            {
+                try
+                {
+                    var server = new NamedPipeServerStream("cpPipe");
 
-            server.WaitForConnection();
+                    server.WaitForConnection();
 
-            var br = new BinaryReader(server);
-            var bw = new BinaryWriter(server);
+                    var br = new BinaryReader(server);
+                    var bw = new BinaryWriter(server);
 
-            var buf = Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message);     // Get ASCII byte array     
-            bw.Write((uint)buf.Length);                // Write string length
-            bw.Write(buf);                              // Write string
+                    var buf = Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message);     // Get ASCII byte array     
+                    bw.Write((uint)buf.Length);                // Write string length
+                    bw.Write(buf);                              // Write string
 
-            System.Threading.Thread.Sleep(100);
-            var len = (int)br.ReadUInt32();            // Read string length
-            var cpResponse = new string(br.ReadChars(len));    // Read string
+                    var len = (int)br.ReadUInt32();            // Read string length
+                    var cpResponse = new string(br.ReadChars(len));    // Read string
 
-            server.Close();
-            server.Dispose();
+                    server.Close();
+                    server.Dispose();
 
-            return cpResponse;
+                    return cpResponse;
+                }
+                catch (System.IO.IOException)
+                {}
+            }
+
         }
 
     }
