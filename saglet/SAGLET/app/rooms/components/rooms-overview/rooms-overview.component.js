@@ -6,32 +6,54 @@
         .component('roomsOverview', {
             templateUrl: 'app/rooms/components/rooms-overview/rooms-overview.component.html',
             bindings: {
-                rooms: '<'
-            
+                rooms: '<',
+                cp: '<',
+                newCp: '<',
+                cpRoom: '<',
+                cpMsg: '<',
+                cpFlag: '<'
             },
             controllerAs: 'vm',
-            controller: controller
+            controller: ['$window', controller]
         })
-    function controller() {
+    function controller($window) {
         var vm = this;
-        
-              
+
+
+
         vm.overview = true;
-        
-
+        vm.screenWidth = '';
         vm.roomsCtrl = [];
+        //vm.cp = {};
+        // vm.handelCriticalPoints = handelCriticalPoints;
 
-       
+
         this.addRoom = addRoom
         this.openFullViewSelectedRoom = openFullViewSelectedRoom;
         this.closeFullViewSelectedRoom = closeFullViewSelectedRoom;
 
 
 
-        this.$onInit = function () { }
+        this.$onInit = function () {
+            if (vm.newCp) {
+                handelCriticalPoints(vm.cp.id, vm.cp.msg)
+            }
+            vm.screenWidth = $window.screen.availWidth
+            console.log($window.screen.availHeight);
+            console.log($window.screen.availWidth);
+        }
 
         this.$onChanges = function (changesObj) {
+            console.log("** overview changes **");
             console.log(changesObj);
+            if (changesObj.cpRoom || changesObj.cpMsg)
+                handelCriticalPoints(this.cpRoom, this.cpMsg);
+            //var room = changesObj.cpRoom.currentValue;
+
+
+
+
+
         }
 
 
@@ -45,7 +67,7 @@
                     vm.roomsCtrl[i].setHide(true);
                 }
             }
-            
+
             vm.overview = false;
         }
 
@@ -65,6 +87,19 @@
         }
 
 
+        function handelCriticalPoints(roomID, msg) {
+            vm.roomsCtrl.forEach(function (roomCtrl) {
+                if (roomCtrl.room.ID == roomID) {
+                    roomCtrl.setCriticalPoint(msg);
+                    return;
+                }
+
+
+
+
+            })
+
+        }
 
 
         //function moveRoomItemToFirstPlace(roomID) {
@@ -77,10 +112,10 @@
 
         //    }
         //}
-        
-        
 
-        
+
+
+
 
 
     }

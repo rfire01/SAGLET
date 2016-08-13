@@ -1,4 +1,4 @@
-from similarity import cosineSim as cs,cataly
+from critialAnalyze import cosineSim as cs,cataly
 import ngram
 
 class SimAnalyzer:

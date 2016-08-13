@@ -35,24 +35,21 @@ namespace SAGLET.Hubs
             UpdateError(roomID, String.Format("Room {0} Update failed", roomID));
         }
 
-        public async Task JoinGroup(string roomID)
+        /// Assaf
+        public void JoinGroup(string roomsFromClient)
         {
-
-            List<int> subRoomList = RegisterToToolBarGroups();
-            // update guauges, wordle, users
-            UpdateRoomAtmosphere(roomID, false);
-            UpdateRoomSTR(roomID, false);
-            UpdateRoomWordle(roomID, false);
-            UpdateUsersGraphOnLoad(roomID);
-            // update users in all of the toolbar rooms
-            Parallel.ForEach(subRoomList, (subRoomID) =>
+            using (SagletModel db = new SagletModel())
             {
-                UpdateUsersToolBarOnload(subRoomID);
-            });
-            await context.Groups.Add(Context.ConnectionId, roomID);
-            // update reg succesfull
-            context.Clients.Client(Context.ConnectionId).registeredComplete("Registered succesfully to Primary room: " + roomID
-                                                                            + ", Toolbar rooms: " + String.Join(",", subRoomList));
+                //List<int> rooms = db.Moderators.Find(AppHelper.GetVmtUser()).RoomsAllowed.Where(r => r.Sync).Select(r => r.ID).ToList();
+                List<String> rooms = roomsFromClient.Split(',').ToList();
+                foreach (string roomID in rooms)
+                {
+                    //int x = Int32.Parse(roomID);
+                    //VmtDevAPI.RegisterLiveChat(x);
+                    Groups.Add(Context.ConnectionId, roomID.ToString());
+                }
+                context.Clients.Client(Context.ConnectionId).registeredComplete("Registered succesfully to rooms: " + roomsFromClient);
+            }
         }
 
         private List<int> RegisterToToolBarGroups()
@@ -70,21 +67,12 @@ namespace SAGLET.Hubs
             return roomsIDs;
         }
 
+       
         internal void UpdateRoomMsgLiveControl(string roomID, VMsg msg)
-        {
-            UpdateRoomMsgLive(roomID, msg);
-            UpdateRoomAtmosphere(roomID, true);
-            UpdateRoomSTR(roomID, true);
-            UpdateRoomWordle(roomID, true);
-            UpdateRoomUser(roomID, msg.UserID, true);
+        {   
+            context.Clients.Group(roomID).updateRoomMsgLive(roomID, msg);
+            //context.Clients.Client(Context.ConnectionId).updateNewMsg(msg);
 
-            if (msg.CriticalPoints == null) return;
-            foreach (CriticalMsgPoints cp in msg.CriticalPoints)
-            {
-                UpdateNewCP(roomID, cp);
-            }
-
-            UpdateCPOutSiteModal(roomID, msg.ID.ToString()); //adds to live chat screen to support cpm injection
         }
 
         internal void UpdateRoomUser(string roomID, string userID, bool isOnline)

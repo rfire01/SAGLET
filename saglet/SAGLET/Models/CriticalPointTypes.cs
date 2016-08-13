@@ -20,5 +20,8 @@ namespace SAGLET.Models
         Cre,
         Cag,
         CH,
+        DS,
+        NMD,
+        TEC,
     }
 }

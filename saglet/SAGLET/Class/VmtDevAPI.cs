@@ -44,7 +44,7 @@ namespace SAGLET.Class
                 Debug.WriteLine(String.Format("GetChatHistory({0}) | (msgs) TIMED OUT!", id));
                 results = null;
             }
-            
+
             socket.Close();
             return results;
         }
@@ -74,11 +74,12 @@ namespace SAGLET.Class
 
             bool signalled = ManualResetEvent.WaitOne(5000, true);       //wait up to 5 secs
             if (signalled) Debug.WriteLine(String.Format("GetActionHistory({0}) | (actions) Released Successfully!", tabID));
-            else {
+            else
+            {
                 Debug.WriteLine(String.Format("GetActionHistory({0}) | (actions) TIMED OUT!", tabID));
                 results = null;
             }
-            
+
             socket.Close();
             return results;
         }
@@ -159,7 +160,7 @@ namespace SAGLET.Class
             List<string> results = new List<string>();
 
             var socket = IO.Socket("http://vmtdev.mathforum.org:80");
-            
+
             socket.On(Socket.EVENT_CONNECT, () =>
             {
                 socket.Emit("getRoomUsers", "room" + roomID);

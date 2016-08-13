@@ -17,13 +17,13 @@
             user: '',
             rooms: { watch: [], rest: [] }
         };
-     
+
         vm.changeWatchStatus = changeWatchStatus;
-        
+
 
         this.$onInit = function () {
 
-            
+
             var indexHub = $.connection.roomIndexHub;
             $.connection.hub.logging = true;
 
@@ -43,7 +43,7 @@
 
                         vm.user.user = _userName;
 
-                        
+
                         indexHub.server.getRooms();
 
                         console.log(" ** User: " + vm.user.user);
@@ -68,10 +68,10 @@
 
         }
 
-        
 
 
-        
+
+
         $.connection.roomIndexHub.client.registeredComplete = function (msg) {
             console.info(msg);
         }
@@ -79,14 +79,14 @@
 
         function returnUser(user) {
             return $q(function (resolve, reject) {
-                
+
                 var name = user;
-                
+
                 if (!$sessionStorage.user || $sessionStorage.user.user != name)
                     $sessionStorage.user = {};
-                        
-                
-                
+
+
+
 
                 resolve(name);
 
@@ -103,11 +103,11 @@
                     rest = list;
 
 
-                
+
 
                 if ($sessionStorage.user.rooms) {
-                    list.forEach(function(room){
-                        checkLastRoomStatus(room.ID).then(function(status){
+                    list.forEach(function (room) {
+                        checkLastRoomStatus(room.ID).then(function (status) {
                             if (status)
                                 watch.push(room);
                             else
@@ -116,12 +116,12 @@
                     })
 
                 }
-                
+
                 resolve({ watch: watch, rest: rest });
-      
+
             })
         }
-        
+
 
         function checkLastRoomStatus(id) {
             return $q(function (resolve, reject) {
@@ -149,7 +149,7 @@
 
             });
         }
-       
+
         function changeWatchStatus(index, status) {
 
             // Add to watch list
@@ -159,7 +159,7 @@
                 vm.user.rooms.rest.splice(index, 1);
             }
 
-            // Remove from watch list       
+                // Remove from watch list       
             else {
                 var thisRoom = vm.user.rooms.watch[index];
                 vm.user.rooms.rest.push(thisRoom)
@@ -168,7 +168,7 @@
 
             $sessionStorage.user.rooms.watch = vm.user.rooms.watch;
             $sessionStorage.user.rooms.rest = vm.user.rooms.rest;
-            
+
             //if (status) {
             //    vm.watchdRoomsList[index].Sync = !vm.watchdRoomsList[index].Sync;
             //    vm.noneWatchdRoomsList.push(vm.watchdRoomsList[index]);
@@ -181,11 +181,11 @@
             //    vm.noneWatchdRoomsList.splice(index, 1);
             //}
 
-            
+
 
         }
 
-        
+
 
     }
 

@@ -25,7 +25,6 @@ namespace SAGLET
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             TrackOnlineRooms();
-
         }
 
         private void TrackOnlineRooms()

@@ -23,67 +23,6 @@ namespace SAGLET.Class
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
             
-            // enable for running a demo script
-            //switch (msg.Text)
-            //{
-            //    case "נראלי שזה מעוין כי האלכסונים שוים זה לזה ומאונכים זה לזה":
-            //    {
-            //        cp.Type = CriticalPointTypes.CR;
-            //        cp.Priority = "1";
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //    case "שימו לב האלכסונים מאונכים ושווים":
-            //    {
-            //        cp.Type = CriticalPointTypes.CM;
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //    case "ללא כול תכונה נוספת":
-            //    {
-            //        cp.Type = CriticalPointTypes.CM;
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //    case "אז זה לא דלתון!!":
-            //    {
-            //        cp.Type = CriticalPointTypes.C;
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //    case "למה":
-            //    {
-            //        cp.Type = CriticalPointTypes.Q;
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //    case "כי אין לו שני זוגות של צלעות שוות כל הזמן!":
-            //    {
-            //        cp.Type = CriticalPointTypes.Cre;
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //    case "זה סתם מרובע עם התכונות...":
-            //    {
-            //        cp.Type = CriticalPointTypes.C;
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //    case "אז אין לו הגדרה כי יש לו את התכונות  והוא לא משהוא":
-            //    {
-            //        cp.Type = CriticalPointTypes.CR;
-            //        cps.Add(cp);
-            //        break;
-            //    }
-            //}
-
-
-            //TODO replace with eran's code
-           
-            //cp.Type = CriticalPointTypes.CR;
-            //cps.Add(cp);
-
-            //TestPipe.test("1;"+msg.Text);
             string cpReply = GetCriticalPoint(msg.GroupID, msg.Text);
             string[] splitReply = cpReply.Split(',');
 
@@ -146,7 +85,7 @@ namespace SAGLET.Class
                     return cpResponse;
                 }
                 catch (System.IO.IOException)
-                {}
+                { }
             }
 
         }

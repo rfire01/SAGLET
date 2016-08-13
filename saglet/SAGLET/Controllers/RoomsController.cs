@@ -69,36 +69,35 @@ namespace SAGLET.Controllers
         }
 
         // GET: Rooms/SyncNewRooms
-        public ActionResult SyncNewRooms()
+        public void SyncNewRooms()
         {
-            try
-            {
+            
+
+            //try
+            //{
                 string user = AppHelper.GetVmtUser();
                 // make HTML request
                 var client = new ExtendedWebClient();
                 string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
-                // sync rooms
-                List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
 
-                foreach (Room room in newRooms)
-                {
-                    //var id = BackgroundJob.Enqueue(() => UpdateRoomHistory(room.ID));
-                    //BackgroundJob.ContinueWith(id, () => hubIndex.UpdateRoomIndex(room.ID.ToString()));
-                    VmtDevAPI.RegisterLiveChat(room.ID);
-                    VmtDevAPI.RegisterLiveActions(room.ID);
-                    //TODO handle errors
-                    //bool isSynced = SyncRoomProcess(room.ID);
-                    //hubIndex.RoomSyncStatus(room.ID.ToString(), isSynced);
-                }
+            // sync rooms
+            List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
+            //newRooms = SyncUserRooms(user.ToLower(), roomsData);
 
-            }
-            catch (Exception e)
+            foreach (Room room in newRooms)
             {
-                throw e;
+                VmtDevAPI.RegisterLiveChat(room.ID);
+                VmtDevAPI.RegisterLiveActions(room.ID);
             }
 
-            return RedirectToAction("app", "Home");
-            //return RedirectToAction("Index");
+            //}
+            // catch (Exception e)
+            //{
+            // throw e;
+            //}
+            //return newRooms.ToString();
+            //return Json(newRooms, JsonRequestBehavior.AllowGet);
+            // return View("Index");
         }
 
         private List<Room> SyncUserRooms(string user, string roomsData)
@@ -459,6 +458,8 @@ namespace SAGLET.Controllers
             base.Dispose(disposing);
         }
 
+
+        //Assaf
         /* Sockets msgs */
         public void HandleLiveMessage(int roomID, string json)
         {
@@ -468,17 +469,10 @@ namespace SAGLET.Controllers
             {
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg);
                 SaveChatMsgToDB(roomID, msg);
-                //hubIndex.UpdateRoomIndex(roomID.ToString());
-                if (msg.UserID == "server") //handle server msg
-                {
-                    KeyValuePair<string, bool> user = GetUserNameFromConnectDisconnectMsg(msg.Text);
-                    if (user.Key != null) hubDetails.UpdateRoomUser(roomID.ToString(), user.Key, user.Value);
-                }
-                else   //handle user regular msg
-                {
+                
+                if (msg.UserID != "server") 
                     hubDetails.UpdateRoomMsgLiveControl(roomID.ToString(), msg);
-                }
-
+               
             }
         }
 

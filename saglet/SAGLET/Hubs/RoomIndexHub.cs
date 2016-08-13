@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Microsoft.Ajax.Utilities;
 using SAGLET.Models;
 using SAGLET.Class;
+using SAGLET.Controllers;
 
 namespace SAGLET.Hubs
 {
@@ -19,6 +20,9 @@ namespace SAGLET.Hubs
         {
             String user = AppHelper.GetVmtUser();
 
+            //RoomsController ctrl = new RoomsController();
+            //ctrl.SyncNewRooms();
+
             context.Clients.Client(Context.ConnectionId).GetUserName(user);
         }
 
@@ -29,6 +33,7 @@ namespace SAGLET.Hubs
 
                 //List<Room> syncedRoomList = new List<Room>();
                 //List<Room> nonSycedRoomList = new List<Room>();
+                
 
                 String user = AppHelper.GetVmtUser();
                 //context.Clients.Client(Context.ConnectionId).GetUserName(user);
@@ -74,19 +79,17 @@ namespace SAGLET.Hubs
             }
         }
 
-        public void JoinGroup(string roomsFromClient)
+        public void UpdateRooms()
         {
-            using (SagletModel db = new SagletModel())
-            {
-                //List<int> rooms = db.Moderators.Find(AppHelper.GetVmtUser()).RoomsAllowed.Where(r => r.Sync).Select(r => r.ID).ToList();
-                List<int> rooms = roomsFromClient.Split(',').Select(int.Parse).ToList();
-                foreach (int roomID in rooms)
-                {
-                    Groups.Add(Context.ConnectionId, roomID.ToString());
-                }
-                context.Clients.Client(Context.ConnectionId).registeredComplete("Registered succesfully to rooms: " + String.Join(",", rooms));
-            }
+            RoomsController ctrl = new RoomsController();
+            ctrl.SyncNewRooms();
+
+
+            //var deNewRooms = JsonConvert.DeserializeObject<Object>(newRooms)
+            context.Clients.Client(Context.ConnectionId).updateRooms();
         }
+
+
 
         public void UpdateRoomIndex(string roomID)
         {
@@ -109,8 +112,5 @@ namespace SAGLET.Hubs
         //    context.Clients.Client(Context.ConnectionId).roomSyncStatus(String.Format("RoomSyncStatus(roomID) - {0}", status));
         //}
     }
-    //struct roomObj
-    //{
-    //    List<String>
-    //}
+    
 }
