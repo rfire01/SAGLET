@@ -27,14 +27,8 @@
         vm.fullView800plus = true;
 
         vm.hide = false;
-        vm.cp = {
-            newcp: false,
-            cp1: false,
-            cp2: false,
-            cp3: false,
-            cp4: false,
-            cp5: false
-        };
+        vm.criticalPoints = [];
+        vm.newCp = false;
         
         //in methods
         vm.iframeLink = iframeLink;
@@ -46,6 +40,35 @@
         this.setHide = setHide;
         this.setCriticalPoint = setCriticalPoint;
         this.$onInit = function () {
+
+            //var cp = {
+            //    cpUser: 'test',
+            //    cpMsg: 'test',
+            //    cpType: '15',
+            //    cpPriority: '1',
+            //    cpTime: '12:00:11'
+            //};
+            //vm.criticalPoints.push(cp)
+
+            //var cp = {
+            //    cpUser: 'test2',
+            //    cpMsg: 'test2',
+            //    cpType: '13',
+            //    cpPriority: '2',
+            //    cpTime: '12:00:15'
+            //};
+            //vm.criticalPoints.push(cp)
+
+            //var cp = {
+            //    cpUser: 'test3',
+            //    cpMsg: 'test3',
+            //    cpType: '14',
+            //    cpPriority: '3',
+            //    cpTime: '12:00:44'
+            //};
+            //vm.criticalPoints.push(cp)
+
+            console.log(vm.criticalPoints);
             this.parent.addRoom(this);
             
             if (vm.screenWidth > 800)
@@ -77,8 +100,8 @@
             if (!vm.fullView){
                 this.parent.openFullViewSelectedRoom(this);
 
-                if (vm.cp.newcp)
-                    vm.cp.newcp = !vm.cp.newcp;
+                if (vm.newcp)
+                    vm.newcp = !vm.newcp;
             }
                 
             else {
@@ -99,21 +122,18 @@
         function setHide(bool) {
             vm.hide = bool;
         }
-        function setCriticalPoint(cp) {
-            
-            vm.cp.newcp = true;
+        function setCriticalPoint(cpMsg, cpType, cpUser, cpTime, cpPriority) {
+            var cp = {
+                cpUser: cpUser,
+                cpMsg: cpMsg,
+                cpType: cpType,
+                cpPriority: cpPriority,
+                cpTime: cpTime
+            };
+            vm.newcp = true;
 
             // just for chekcing
-            if (cp == '1')
-                vm.cp.cp1 = true;
-            if (cp == '2')
-                vm.cp.cp2 = true;
-            if (cp == '3')
-                vm.cp.cp3 = true;
-            if (cp == '4')
-                vm.cp.cp4 = true;
-            if (cp == '5')
-                vm.cp.cp5 = true;
+            vm.criticalPoints.push(cp);
         }
         
     }

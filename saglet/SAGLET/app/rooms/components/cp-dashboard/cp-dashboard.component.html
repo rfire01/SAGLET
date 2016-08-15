@@ -1,21 +1,109 @@
-﻿<div style="outline:1px solid; margin-top:13px; margin-left:-15px; margin-right:-12px;">
-    <div class="modal-header" style="padding:5px;">Dashboard</div>
+﻿<div class="cp-dashboard">
+    <div class="modal-header" style="padding:15px; background-color:white;">Critical Points Dashboard</div>
 
-   <div class="modal-body" style="padding:5px;">
-       <div class="modal-header" style="padding:5px;">
-           <span class="glyphicon glyphicon-exclamation-sign" style="color:red; font-size:14px; float:left" aria-hidden="true"></span> type
-           <div style="float:right" font-size:12px;>toolbar </div>
-       </div>
-       <div font-size:12px;>
-           User:
-       </div>
-       <div font-size:12px;>
-           Message:
-       </div>
-       
-   </div>
-    <div class="modal-footer" style="padding:5px;">
-        INDEX
+    <div class="panel panel-default" ng-repeat="cp in vm.criticalPoints">
+        <div class="panel-heading">
+            <span style="margin-left:-10px; font-weight:bold;">{{cp.cpPriority}} |</span>
+            <cp-icons style="" critical-points="[cp]" dashboard="vm.dashboard"></cp-icons>
 
+            <button class="btn btn-default btn-sm glyphicon glyphicon-bell"
+                    type="button"
+                    role="group"
+                    ng-click=""
+                    style=""></button>
+
+            <!--<button class="btn btn-default btn-sm glyphicon glyphicon-bell "
+                    role="group"
+                    type="button"
+                    aria-label="Left Align"
+                    ng-click="vm.changeWatchStatus($index)"
+                    style=""></button>-->
+
+        </div>
+
+
+
+        <div class="panel-body" style="padding:8px;">
+            <div style="">
+                <label>User: </label>
+                {{cp.cpUser}}
+            </div>
+            <div style="">
+                <label>Time: </label>
+                {{cp.cpTime}}
+            </div>
+            <div style="">
+                <label>Message: </label>
+                 {{cp.cpMsg}}
+            </div>
+        </div>
     </div>
 </div>
+
+
+
+
+
+<!--<div style="outline:1px solid; margin-top:13px; margin-left:-15px; margin-right:-12px;">
+    <div class="modal-header" style="padding:5px;">Critical Points Dashboard</div>
+
+    <div class="modal-body" style="padding:0px;" ng-repeat="cp in vm.criticalPoints">
+        <div class="modal-header" style="padding:0px;">
+            {{cp.cpPriority}}
+            <cp-icons style="" critical-points="[cp]" dashboard="vm.dashboard"></cp-icons>
+            <div class="btn-group" role="group" style="">
+
+
+                <button class="btn btn-default btn-sm glyphicon glyphicon-bell dropdown-toggle"
+                        type="button"
+                        aria-label="Left Align"
+                        role="group"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        ng-click=""
+                        style="">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+                <button class="btn btn-default btn-sm glyphicon glyphicon-bell "
+                        role="group"
+                        type="button"
+                        aria-label="Left Align"
+                        ng-click="vm.changeWatchStatus($index)"
+                        style=""></button>
+
+            </div>
+
+
+        </div>
+
+        <div class="modal-body" style="padding:0px;">
+            <div style="font-size:12px;">
+                User: {{cp.cpUser}}
+            </div>
+            <div style="font-size:12px;">
+                Time: {{cp.cpTime}}
+            </div>
+            <div style="font-size:12px;">
+                Message: {{cp.cpMsg}}
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <div class="modal-footer" style="padding:0px;">
+        INDEX111
+
+    </div>
+</div>-->

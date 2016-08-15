@@ -7,21 +7,18 @@
     <div class="iframe-wrapper"
          ng-hide="vm.hide"
          ng-class="{'iframe-wrapper-overview': vm.overview, 'iframe-wrapper-this-room-is-open': vm.fullView,
-                    'has-new-cp':vm.cp.newcp}">
+                    'has-new-cp':vm.newcp}">
         <div class="panel panel-default ">
 
 
             <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-and-room-is-open':vm.fullView }">
                 Room: {{vm.room.ID}}
 
+                
                 <div class="panel-group" style="float:right">
                     
-                    <span class="glyphicon glyphicon-exclamation-sign" style="color:red; font-size:18px;" ng-if="vm.cp.cp1" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#ff6a00; font-size:18px;" ng-if="vm.cp.cp2" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#0026ff; font-size:18px;" ng-if="vm.cp.cp3" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#ff006e; font-size:18px;" ng-if="vm.cp.cp4" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#00ff21; font-size:18px;" ng-if="vm.cp.cp5" aria-hidden="true"></span>
-
+                    <cp-icons critical-points="vm.criticalPoints" full-view="vm.fullView"></cp-icons>
+                    
                     <button type="button"
                             class="btn btn-default btn-sm"
                             aria-label="Left Align"
@@ -33,7 +30,7 @@
             </div>
 
             <div class="panel-body">
-                <iframe ng-class="{'scaled-frame':vm.overview, 'scaled-full-size-frame-for-800-plus-width-screens':vm.fullView && vm.screenWidth >= 1371, 'scaled-full-size-frame-for-800-minus-width-screens':vm.fullView && vm.screenWidth <= 1370  }" scrolling="no" ng-src="{{vm.iframeLink(vm.room.ID)}}"></iframe>
+                <!--<iframe ng-class="{'scaled-frame':vm.overview, 'scaled-full-size-frame-for-800-plus-width-screens':vm.fullView && vm.screenWidth >= 1371, 'scaled-full-size-frame-for-800-minus-width-screens':vm.fullView && vm.screenWidth <= 1370  }" scrolling="no" ng-src="{{vm.iframeLink(vm.room.ID)}}"></iframe>-->
             </div>
         </div>
 
@@ -41,7 +38,7 @@
 </div>
 <div class="col-md-2" ng-if="!vm.overview && vm.fullView">
     
-    <cp-dashboard></cp-dashboard>
+    <cp-dashboard critical-points="vm.criticalPoints"></cp-dashboard>
     
 </div>
 

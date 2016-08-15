@@ -302,8 +302,10 @@
     <Content Include="app\home\components\rooms-list\rooms-list.component.html" />
     <Content Include="app\home\components\rooms-list\rooms-list.component.js" />
     <Content Include="app\rooms\app.rooms.js" />
+    <Content Include="app\rooms\components\cp-dashboard\cp-dashboard.css" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.html" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.js" />
+    <Content Include="app\rooms\components\cp-icons\cp-icons.css" />
     <Content Include="app\rooms\components\room-box\room-box.component.html" />
     <Content Include="app\rooms\components\room-box\room-box.component.js" />
     <Content Include="app\rooms\components\rooms-overview\rooms-overview.component.html" />

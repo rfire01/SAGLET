@@ -70,7 +70,7 @@ namespace SAGLET.Hubs
        
         internal void UpdateRoomMsgLiveControl(string roomID, VMsg msg)
         {   
-            context.Clients.Group(roomID).updateRoomMsgLive(roomID, msg);
+            context.Clients.Group(roomID).updateRoomMsgLive(roomID, msg.CriticalPoints);
             //context.Clients.Client(Context.ConnectionId).updateNewMsg(msg);
 
         }

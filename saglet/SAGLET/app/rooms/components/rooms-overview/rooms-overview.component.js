@@ -11,7 +11,11 @@
                 newCp: '<',
                 cpRoom: '<',
                 cpMsg: '<',
-                cpFlag: '<'
+                cpType: '<',
+                cpUser: '<',
+                cpTime: '<',
+                cpPriority: '<'
+               
             },
             controllerAs: 'vm',
             controller: ['$window', controller]
@@ -35,9 +39,9 @@
 
 
         this.$onInit = function () {
-            if (vm.newCp) {
-                handelCriticalPoints(vm.cp.id, vm.cp.msg)
-            }
+            //if (vm.newCp) {
+            //    handelCriticalPoints(vm.cpRoom, vm.cp.msg)
+            //}
             vm.screenWidth = $window.screen.availWidth
             console.log($window.screen.availHeight);
             console.log($window.screen.availWidth);
@@ -46,13 +50,13 @@
         this.$onChanges = function (changesObj) {
             console.log("** overview changes **");
             console.log(changesObj);
-            if (changesObj.cpRoom || changesObj.cpMsg)
-                handelCriticalPoints(this.cpRoom, this.cpMsg);
+            if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changeObj.cpUser)
+                handelCriticalPoints(this.cpRoom);
             //var room = changesObj.cpRoom.currentValue;
 
 
 
-
+            
 
         }
 
@@ -87,10 +91,10 @@
         }
 
 
-        function handelCriticalPoints(roomID, msg) {
+        function handelCriticalPoints(roomID) {
             vm.roomsCtrl.forEach(function (roomCtrl) {
                 if (roomCtrl.room.ID == roomID) {
-                    roomCtrl.setCriticalPoint(msg);
+                    roomCtrl.setCriticalPoint(vm.cpMsg, vm.cpType, vm.cpUser, vm.cpTime, vm.cpPriority);
                     return;
                 }
 

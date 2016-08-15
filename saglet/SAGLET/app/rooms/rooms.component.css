@@ -25,13 +25,13 @@
     opacity: 1.0;
     z-index: 2;
     
-    width:95%
+    width: 98%;
 }
 
 .iframe-header {
     position:absolute;
     z-index: 1;
-    
+    width: 98%;
     opacity: 0.0;
     -webkit-transition: all 200ms ease-in-out;
     -moz-transition: all 200ms ease-in-out;
@@ -42,7 +42,7 @@
 }
 
 .scaled-full-size-frame-for-800-minus-width-screens {
-        width: 1750px;
+    width: 1750px;
     height: 2090px;
     border: 0px;
     margin-top: -245px;
@@ -127,7 +127,7 @@
     z-index: 1;
     
     opacity: 1.0;
-    width:95%;
+    width: 98.4%;
     -webkit-transition: all 200ms ease-in-out;
     -moz-transition: all 200ms ease-in-out;
     -ms-transition: all 200ms ease-in-out;

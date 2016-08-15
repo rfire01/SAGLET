@@ -27,7 +27,7 @@
             var detailsHub = $.connection.roomDetailsHub;
 
             if ($sessionStorage.user)
-                vm.roomList = setupCpObject($sessionStorage.user.rooms.watch);
+                vm.roomList = ($sessionStorage.user.rooms.watch);
                   //vm.roomList = $sessionStorage.user.rooms.watch;
                 
 
@@ -43,39 +43,66 @@
             $.connection.hub.logging = true;
             /* Hub Start */
 
-            $.connection.hub.start().done(function () {
+            $.connection.hub.start()
+                .done(function (res) {
                 console.info("************ hub started ************");
+                
+                
+                    
+                    
+                    //detailsHub.server.joinGroup('149');
+                //listenToTheseVmtRooms(vm.roomList);
 
-                //detailsHub.server.joinGroup('149');
-                listenToTheseVmtRooms(vm.roomList);
+                vm.roomList.forEach(function (item) {
+                    detailsHub.server.joinGroup(item.ID);
+                })
 
-                var connectionStatus = angular.element(document.querySelector('#connection-status'));
-                connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
-
-               
+                
+                })
+            .fail(function () {
+                console.log('Could not Connect!');
             });
 
 
 
             detailsHub.client.registeredComplete = function (res) {
                 console.info("************ Registered Complete ************");
-                console.info(res);
+                console.log(res);
+                var connectionStatus = angular.element(document.querySelector('#connection-status'));
+                connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
             };
 
             
 
-            detailsHub.client.updateRoomMsgLive = function (roomID, msg) {
+            detailsHub.client.updateRoomMsgLive = function (roomID, cpObject) {
                 console.info('************ updateRoomMsgLive: ************ ' + roomID);
-                console.info(' ************ msg ************    ' + msg);
+                console.info(' ************ msg ************    ' + cpObject);
                 console.log(roomID);
-                console.log(msg);
+                console.log(cpObject);
                 vm.newCp = false;
-                returnCp(roomID, msg).then(function (cp) {
-                        console.log(cp);
-                        vm.cp = cp;
-                        vm.cpRoom = cp.id;
-                        vm.cpMsg = cp.msg.Text;
+                returnCp(roomID, cpObject).then(function (CriticalPoints) {
+                    console.log(CriticalPoints);
+                    CriticalPoints.forEach(function (cp) {
+
+                        //console.log(cp.Type);
+                        //console.log(cp.Status);
+                        //console.log(cp.Priority);
+
+                        //console.log(cp.Msg.Text);
+                        //console.log(cp.Msg.TimeStamp);
+                        //console.log(cp.Msg.UserID);
+
+                        vm.cpRoom = cp.GroupID;
+                        vm.cpMsg = cp.Msg.Text;
+                        vm.cpType = cp.Type;
+                        vm.cpUser = cp.Msg.UserID;
+                        vm.cpTime = cp.Msg.TimeStamp;
+                        vm.cpPriority = cp.Priority;
+
                         vm.newCp = true;
+                    })
+                        
+                        
                 })
                 
                 //handleCp(roomID, msg)    
@@ -122,11 +149,9 @@
             rooms.forEach(function (item) {
                 item.cp = {
                     newCp: false,
-                    cp1: false,
-                    cp2: false,
-                    cp3: false,
-                    cp4: false,
-                    cp5: false
+                    DS: false,
+                    TEC: false,
+                    NMD: false
                 };
             })
             return rooms;
@@ -134,7 +159,7 @@
 
         function returnCp(id ,cp) {
             return $q(function (resolve, reject) {
-                resolve({id: id, msg:cp});
+                resolve(cp);
 
             })
         }

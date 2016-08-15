@@ -1,11 +1,17 @@
 ﻿<!--<div class="btn-group" role="group" aria-label="true">-->
-
-    <span class="glyphicon glyphicon-exclamation-sign" style="color:red;" aria-hidden="true"></span>
-    <span class="glyphicon glyphicon-exclamation-sign" style="color:#ff6a00;" aria-hidden="true"></span>
-    <span class="glyphicon glyphicon-exclamation-sign" style="color:#0026ff;" aria-hidden="true"></span>
-    <span class="glyphicon glyphicon-exclamation-sign" style="color:#ff006e;" aria-hidden="true"></span>
-    <span class="glyphicon glyphicon-exclamation-sign" style="color:#00ff21;" aria-hidden="true"></span>
-
-   
+<!--<span class="glyphicon glyphicon-exclamation-sign" style="color:red;" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-exclamation-sign" style="color:#ff6a00;" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-exclamation-sign" style="color:#0026ff;" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-exclamation-sign" style="color:#ff006e;" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-exclamation-sign" style="color:#00ff21;" aria-hidden="true"></span>-->
 <!--</div>-->
+
+<span ng-repeat="cp in vm.criticalPoints"
+      class="label "
+      
+      ng-class="{'label-default': cp.cpType == 13, 'label-primary': cp.cpType == 14, 'label-warning': cp.cpType == 15, 'cp-icons': !vm.fullView, 'cp-icons-full-view': vm.fullView, 'cp-icons-dashboard': vm.dashboard}">
+        {{vm.cpTypeChanger(cp.cpType)}}
     
+</span>
+
+
