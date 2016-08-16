@@ -251,7 +251,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Class\FourArgumentsListener.cs" />
+    <Compile Include="Class\IdlenessAnalyzer.cs" />
     <Compile Include="Class\MyRestrictiveAuthorizationFilter.cs" />
+    <Compile Include="Class\roomIdleness.cs" />
     <Compile Include="Class\SentimentAnalyzer.cs" />
     <Compile Include="Class\TempPerformanceCounterManager.cs" />
     <Compile Include="Class\TwoArgumentsListener.cs" />

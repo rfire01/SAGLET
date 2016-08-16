@@ -24,7 +24,19 @@ namespace SAGLET.Controllers
         private static RoomDetailsHub hubDetails = new RoomDetailsHub();
         private static RoomIndexHub hubIndex = new RoomIndexHub();
 
+        //need to update teacher list
+        private static IdlenessAnalyzer idle = new IdlenessAnalyzer(new List<string>());
+        private readonly Object dbLock = new Object();
 
+        public void ResetState()
+        {
+            lock (dbLock)
+            {
+                db = new SagletModel();
+            }
+            hubDetails = new RoomDetailsHub();
+            hubIndex = new RoomIndexHub();
+        }
 
         ////GET: USER LOGIN
         //public ActionResult userLoginStatus()
@@ -295,36 +307,39 @@ namespace SAGLET.Controllers
 
         private void SaveChatMsgToDB(int roomid, List<VMsg> msgs)
         {
-            HashSet<string> existsUsers = new HashSet<string>(db.Users.Select(x => x.Username.ToLower()).ToList(), StringComparer.OrdinalIgnoreCase);
-            List<User> newUsers = msgs.Select(m => m.UserID).Distinct().Where(u => !existsUsers.Contains(u.ToLower())).Select(u => new User(u)).ToList();
-            try
+            lock (dbLock)
             {
-                Room room = db.Rooms.Find(roomid);
-                room.RoomGroup.AddToUsersString(GetUsersFromServerMessages(msgs));      //add according to 'server' msgs
-                room.RoomGroup.AddToUsersString(msgs.Select(m => m.UserID).Distinct()); //add according to user msgs
-                db.Msgs.AddRange(msgs);
-                db.Users.AddRange(newUsers);
-                room.LastUpdate = DateTime.Now;
-                db.SaveChanges();
-            }
-            catch (DbUpdateException ex)
-            {
-                bool shouldThrow = true;
-                SqlException inner = ex.InnerException as SqlException;
-                if (inner != null)
+                HashSet<string> existsUsers = new HashSet<string>(db.Users.Select(x => x.Username.ToLower()).ToList(), StringComparer.OrdinalIgnoreCase);
+                List<User> newUsers = msgs.Select(m => m.UserID).Distinct().Where(u => !existsUsers.Contains(u.ToLower())).Select(u => new User(u)).ToList();
+                try
                 {
-                    SqlException doubleInner = inner.InnerException as SqlException;
-                    if (doubleInner != null && (doubleInner.Number == 2601 || doubleInner.Number == 2627))
-                    {
-                        Debug.WriteLine(String.Format("SaveChatMsgToDB failed -> {0}", doubleInner.Message));
-                        shouldThrow = false;
-                    }
+                    Room room = db.Rooms.Find(roomid);
+                    room.RoomGroup.AddToUsersString(GetUsersFromServerMessages(msgs));      //add according to 'server' msgs
+                    room.RoomGroup.AddToUsersString(msgs.Select(m => m.UserID).Distinct()); //add according to user msgs
+                    db.Msgs.AddRange(msgs);
+                    db.Users.AddRange(newUsers);
+                    room.LastUpdate = DateTime.Now;
+                    db.SaveChanges();
                 }
-                if (shouldThrow) throw ex;
-            }
-            catch (Exception e)
-            {
-                throw e;
+                catch (DbUpdateException ex)
+                {
+                    bool shouldThrow = true;
+                    SqlException inner = ex.InnerException as SqlException;
+                    if (inner != null)
+                    {
+                        SqlException doubleInner = inner.InnerException as SqlException;
+                        if (doubleInner != null && (doubleInner.Number == 2601 || doubleInner.Number == 2627))
+                        {
+                            Debug.WriteLine(String.Format("SaveChatMsgToDB failed -> {0}", doubleInner.Message));
+                            shouldThrow = false;
+                        }
+                    }
+                    if (shouldThrow) throw ex;
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
         }
 
@@ -467,6 +482,7 @@ namespace SAGLET.Controllers
             VMsg msg = VMsg.ConvertLiveMessageJson(roomID, results);
             if (msg != null)
             {
+                HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg);
                 SaveChatMsgToDB(roomID, msg);
                 
@@ -488,10 +504,62 @@ namespace SAGLET.Controllers
             {
                 action.CriticalPoints = CriticalPointAnalyzer.Analyze(action);
                 int roomID = db.Tabs.Find(action.TabID).GroupID;
+                HandleIdleAction(roomID, action.UserID);
                 SaveActionToDB(roomID, action);
                 hubDetails.UpdateRoomActionLiveControl(roomID.ToString(), action);
                 //hubIndex.UpdateRoomIndex(roomID.ToString());
             }
         }
+
+        public void IdlenessOpenRoom(int idleWindow, List<int> roomIDs)
+        {
+            foreach (int roomID in roomIDs)
+            {
+                idle.openRoom(idleWindow, roomID);
+                List<string> users = VmtDevAPI.GetUsersConnected(roomID);
+                foreach(string userID in users)
+                {
+                    idle.user_joined(roomID, userID);
+                }
+            }
+        }
+
+        public void getRoomIdles(List<int> roomIDs)
+        {
+            Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
+            foreach (int roomID in roomIDs)
+            {
+                List<String> idleUsers = idle.whoIsIdle(roomID);
+                idles.Add(roomID, idleUsers);
+            }
+            hubDetails.UpdateIdleness(idles);
+        }
+
+        private void HandleIdleMessage(VMsg msg)
+        {
+            int roomID = msg.GroupID;
+            string message = msg.Text;
+            string userID = msg.UserID;
+            if (message.Contains("joined"))
+            {
+                string user = message.Split(' ')[0];
+                idle.user_joined(roomID, user);
+            }
+            else if (message.Contains("left"))
+            {
+                string user = message.Split(' ')[0];
+                idle.user_left(roomID, user);
+            }
+            else
+            {
+                idle.user_activity(roomID, userID);
+            }
+        }
+
+        private void HandleIdleAction(int roomID,string userID)
+        {
+            idle.user_activity(roomID, userID);
+        }
+
     }
 }

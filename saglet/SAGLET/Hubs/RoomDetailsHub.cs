@@ -466,5 +466,10 @@ namespace SAGLET.Hubs
             }
         }
 
+        public void UpdateIdleness(Dictionary<int,List<string>> idles)
+        {
+            //TODO
+        }
+
     }
 }

@@ -14,6 +14,8 @@ namespace SAGLET.Class
 {
     public class VmtDevAPI
     {
+        private static RoomsController ctrl = new RoomsController();
+
         private static Dictionary<int, Socket> chatSockets = new Dictionary<int, Socket>();
         private static Dictionary<int, Socket> actionSockets = new Dictionary<int, Socket>();
         public static string GetChatHistory(int id, int startIndex)
@@ -121,7 +123,8 @@ namespace SAGLET.Class
             {
                 Debug.WriteLine(String.Format("RegisterLiveChat({0}) | New Msg!", id));
                 string results = data.ToString();
-                RoomsController ctrl = new RoomsController();
+                //RoomsController ctrl = new RoomsController();
+                ctrl.ResetState();
                 ctrl.HandleLiveMessage(id, results);
             });
         }
@@ -147,7 +150,8 @@ namespace SAGLET.Class
             var listener = new FourArgumentsListener((eventName, actID, url, log) =>
             {
                 Debug.WriteLine(String.Format("RegisterLiveActions({0}) | New Action!", roomID));
-                RoomsController ctrl = new RoomsController();
+                //RoomsController ctrl = new RoomsController();
+                ctrl.ResetState();
                 ctrl.HandleLiveAction(actID.ToString(), url.ToString(), log.ToString(), eventName.ToString());
             });
 
@@ -194,6 +198,16 @@ namespace SAGLET.Class
             if (chatSockets[id] != null) chatSockets[id].Close();
             //actionSockets[id].Disconnect();
             if (actionSockets[id] != null) actionSockets[id].Close();
+        }
+
+        public static void OpenIdleRooms(List<int> rooms)
+        {
+            ctrl.IdlenessOpenRoom(10,rooms);
+        }
+
+        public static void HandleIdleness(List<int> rooms)
+        {
+            ctrl.getRoomIdles(rooms);
         }
     }
 }

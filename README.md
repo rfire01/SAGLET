@@ -8,3 +8,5 @@ Required libraries:
  *	pyzmq
  
 To run python server - in python folder "python CPserver.py"
+
+python -m textblob.download_corpora
