@@ -19,14 +19,19 @@
         var vm = this;
 
         vm.dashboard = '';
-        
+        vm.criticalPointsIndex = [];
         
 
         this.$onInit = function () {
             vm.dashboard = true;
+
+            vm.criticalPointsIndex = setCriticalPointsIndex();
+            
         };
 
-       
+        function setCriticalPointsIndex() {
+            return [{ cpType: '13', desc: 'description for 13' }, { cpType: '14', desc: 'description for 14' }, { cpType: '15', desc: 'description for 15' }]
+        }
         
         
     }

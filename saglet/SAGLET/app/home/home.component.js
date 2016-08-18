@@ -12,6 +12,10 @@
 
     function controller($, $q, $sessionStorage, shareData) {
         var vm = this;
+        
+        var indexHub = $.connection.roomIndexHub;
+
+
 
         vm.user = {
             user: '',
@@ -19,12 +23,12 @@
         };
 
         vm.changeWatchStatus = changeWatchStatus;
-
+        //vm.test = function () {
+        //    $.connection.hub.stop();
+        //}
 
         this.$onInit = function () {
 
-
-            var indexHub = $.connection.roomIndexHub;
             $.connection.hub.logging = true;
 
             /* Hub Start */
@@ -35,40 +39,43 @@
             });
 
 
-            //GetUserName Listner
-            indexHub.client.getUserName = function (user) {
-                console.info(" ** getUserName ** ");
-                returnUser(user)
-                    .then(function (_userName) {
-
-                        vm.user.user = _userName;
-
-
-                        indexHub.server.getRooms();
-
-                        console.log(" ** User: " + vm.user.user);
-                    })
-
-            };
-
-
-
-            //GetRooms Listner
-            indexHub.client.getRooms = function (roomList) {
-                console.info(" ** getRooms ** ");
-                returnRooms(roomList)
-                    .then(function (prop) {
-                        vm.user.rooms.watch = prop.watch;
-                        vm.user.rooms.rest = prop.rest;
-
-                        $sessionStorage.user = vm.user;
-                    })
-            };
-
+            
 
         }
+        this.$onDestroy = function () {
+            console.info(" ** $.connection.hub.stop ** ");
+            $.connection.hub.stop();
+        }
+
+        //GetUserName Listner
+        indexHub.client.getUserName = function (user) {
+            console.info(" ** getUserName ** ");
+            returnUser(user)
+                .then(function (_userName) {
+
+                    vm.user.user = _userName;
 
 
+                    indexHub.server.getRooms();
+
+                    console.log(" ** User: " + vm.user.user);
+                })
+
+        };
+
+
+
+        //GetRooms Listner
+        indexHub.client.getRooms = function (roomList) {
+            console.info(" ** getRooms ** ");
+            returnRooms(roomList)
+                .then(function (prop) {
+                    vm.user.rooms.watch = prop.watch;
+                    vm.user.rooms.rest = prop.rest;
+
+                    $sessionStorage.user = vm.user;
+                })
+        };
 
 
 
@@ -167,22 +174,7 @@
             }
 
             $sessionStorage.user.rooms.watch = vm.user.rooms.watch;
-            $sessionStorage.user.rooms.rest = vm.user.rooms.rest;
-
-            //if (status) {
-            //    vm.watchdRoomsList[index].Sync = !vm.watchdRoomsList[index].Sync;
-            //    vm.noneWatchdRoomsList.push(vm.watchdRoomsList[index]);
-            //    vm.watchdRoomsList.splice(index, 1);
-
-            //}
-            //else {
-            //    vm.noneWatchdRoomsList[index].Sync = !vm.noneWatchdRoomsList[index].Sync;
-            //    vm.watchdRoomsList.push(vm.noneWatchdRoomsList[index]);
-            //    vm.noneWatchdRoomsList.splice(index, 1);
-            //}
-
-
-
+            $sessionStorage.user.rooms.rest = vm.user.rooms.rest;    
         }
 
 

@@ -31,10 +31,10 @@
                 return 'DS';
                 
             if (cp == 14)
-                return 'TEC';
+                return 'MND';
 
             if (cp == 15)
-                return 'NMD';
+                return 'TEC';
         }
         
         

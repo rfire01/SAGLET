@@ -15,10 +15,10 @@
                 "parent": "^roomsOverview"
             },
             controllerAs: 'vm',
-            controller: ['$sce','$window', controller]
+            controller: ['$sce', '$window', '$sessionStorage', controller]
         })
 
-    function controller($sce, $window) {
+    function controller($sce, $window,$sessionStorage) {
         var vm = this;
         
 
@@ -29,6 +29,7 @@
         vm.hide = false;
         vm.criticalPoints = [];
         vm.newCp = false;
+        vm.criticalPointsIndex = [];
         
         //in methods
         vm.iframeLink = iframeLink;
@@ -39,6 +40,8 @@
         this.setFullView = setFullView;
         this.setHide = setHide;
         this.setCriticalPoint = setCriticalPoint;
+        
+        
         this.$onInit = function () {
 
             //var cp = {
@@ -50,27 +53,10 @@
             //};
             //vm.criticalPoints.push(cp)
 
-            //var cp = {
-            //    cpUser: 'test2',
-            //    cpMsg: 'test2',
-            //    cpType: '13',
-            //    cpPriority: '2',
-            //    cpTime: '12:00:15'
-            //};
-            //vm.criticalPoints.push(cp)
-
-            //var cp = {
-            //    cpUser: 'test3',
-            //    cpMsg: 'test3',
-            //    cpType: '14',
-            //    cpPriority: '3',
-            //    cpTime: '12:00:44'
-            //};
-            //vm.criticalPoints.push(cp)
-
-            console.log(vm.criticalPoints);
             this.parent.addRoom(this);
             
+            loadLastSession();
+
             if (vm.screenWidth > 800)
                 vm.fullView800plus = true;
             else {
@@ -78,8 +64,13 @@
             }
             
             
-        }
 
+            
+        }
+        this.$onDestroy = function () {
+            
+            saveLastSession();
+        }
         this.$onChanges = function (changes) {
             console.log("** room-box changes **");
             console.log(changes);
@@ -135,6 +126,41 @@
             // just for chekcing
             vm.criticalPoints.push(cp);
         }
+
+        function saveLastSession() {
+            if (!$sessionStorage.rooms)
+                $sessionStorage.rooms = [];
+
+            var roomObj = { id: vm.room.ID, cp: vm.criticalPoints };
+
+            var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
+
+            if (!roomIndex)
+                $sessionStorage.rooms.push(roomObj);
+            else
+                $sessionStorage.rooms[roomIndex] = roomObj;
+        }
+        function loadLastSession() {
+            if ($sessionStorage.rooms) {
+                var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
+
+                if (roomIndex >= 0)
+                    vm.criticalPoints = $sessionStorage.rooms[roomIndex].cp
+            }
+        }
+
+        function getRoomObjectIndex(rooms, id) {
+            var index = -1;
+            rooms.forEach(function (room, i) {
+                if (room.id == id) {
+                    index = i;
+                }
+            })
+
+            return index;
+        }
         
+
+
     }
 })();

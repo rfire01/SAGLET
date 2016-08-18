@@ -10,8 +10,20 @@
                     'has-new-cp':vm.newcp}">
         <div class="panel panel-default ">
 
+            <!--<div class="navbar  navbar-default navbar-fixed-top ">
+                <div class="container-fluid">
+                    <cp-icons critical-points="vm.criticalPoints" full-view="vm.fullView"></cp-icons>
 
-            <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-and-room-is-open':vm.fullView }">
+                    <button type="button"
+                            class="btn btn-default btn-sm"
+                            aria-label="Left Align"
+                            ng-click="vm.openCloseFullView()">
+                        <span ng-class="{'glyphicon glyphicon-zoom-in': !vm.fullView, 'glyphicon glyphicon-zoom-out': vm.fullView }" aria-hidden="true"></span>
+                    </button>
+                </div>
+                </div>
+            </div>-->
+            <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView || vm.newcp }">
                 Room: {{vm.room.ID}}
 
                 

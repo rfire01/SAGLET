@@ -202,12 +202,15 @@ namespace SAGLET.Class
 
         public static void OpenIdleRooms(List<int> rooms)
         {
-            ctrl.IdlenessOpenRoom(10,rooms);
+            ctrl.IdlenessOpenRoom(10, rooms);
         }
 
         public static void HandleIdleness(List<int> rooms)
         {
             ctrl.getRoomIdles(rooms);
         }
+
+        //VmtDevAPI.OpenIdleRooms(roomList)
+        //VmtDevAPI.HnadleIdleness(roomList)
     }
 }

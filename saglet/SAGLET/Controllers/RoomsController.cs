@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Data.SqlClient;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
+using System.Web.Script.Serialization;
 
 namespace SAGLET.Controllers
 {
@@ -62,7 +63,7 @@ namespace SAGLET.Controllers
             Moderator mod = db.Moderators.Find(user);
             if (mod != null)
                 return Json(mod.RoomsAllowed, JsonRequestBehavior.AllowGet);
-            
+
             //return empty room list          
             return Json(new List<Room>(), JsonRequestBehavior.AllowGet);
         }
@@ -83,14 +84,14 @@ namespace SAGLET.Controllers
         // GET: Rooms/SyncNewRooms
         public void SyncNewRooms()
         {
-            
+
 
             //try
             //{
-                string user = AppHelper.GetVmtUser();
-                // make HTML request
-                var client = new ExtendedWebClient();
-                string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
+            string user = AppHelper.GetVmtUser();
+            // make HTML request
+            var client = new ExtendedWebClient();
+            string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
 
             // sync rooms
             List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
@@ -485,10 +486,10 @@ namespace SAGLET.Controllers
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg);
                 SaveChatMsgToDB(roomID, msg);
-                
-                if (msg.UserID != "server") 
+
+                if (msg.UserID != "server")
                     hubDetails.UpdateRoomMsgLiveControl(roomID.ToString(), msg);
-               
+
             }
         }
 
@@ -517,7 +518,7 @@ namespace SAGLET.Controllers
             {
                 idle.openRoom(idleWindow, roomID);
                 List<string> users = VmtDevAPI.GetUsersConnected(roomID);
-                foreach(string userID in users)
+                foreach (string userID in users)
                 {
                     idle.user_joined(roomID, userID);
                 }
@@ -526,13 +527,27 @@ namespace SAGLET.Controllers
 
         public void getRoomIdles(List<int> roomIDs)
         {
-            Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
+            
+            string idles2;
             foreach (int roomID in roomIDs)
             {
+                Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
                 List<String> idleUsers = idle.whoIsIdle(roomID);
+   
                 idles.Add(roomID, idleUsers);
+
+                string json2 = JsonConvert.SerializeObject(idles);
+                hubDetails.UpdateIdleness(roomID.ToString(), json2);
             }
-            hubDetails.UpdateIdleness(idles);
+
+            //JavaScriptSerializer serializer = new JavaScriptSerializer();
+            //string jsonString = serializer.Serialize(idles);
+            
+          //  string json = new JavaScriptSerializer().Serialize(idles.ToDictionary(item => item.Key.ToString(), item => item.Value.ToString()));
+
+           // string json = (new JavaScriptSerializer()).Serialize(idles);
+
+            
         }
 
         private void HandleIdleMessage(VMsg msg)
@@ -556,7 +571,7 @@ namespace SAGLET.Controllers
             }
         }
 
-        private void HandleIdleAction(int roomID,string userID)
+        private void HandleIdleAction(int roomID, string userID)
         {
             idle.user_activity(roomID, userID);
         }

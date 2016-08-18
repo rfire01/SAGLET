@@ -41,13 +41,14 @@ namespace SAGLET.Hubs
             using (SagletModel db = new SagletModel())
             {
                 //List<int> rooms = db.Moderators.Find(AppHelper.GetVmtUser()).RoomsAllowed.Where(r => r.Sync).Select(r => r.ID).ToList();
-                List<String> rooms = roomsFromClient.Split(',').ToList();
-                foreach (string roomID in rooms)
-                {
-                    //int x = Int32.Parse(roomID);
-                    //VmtDevAPI.RegisterLiveChat(x);
-                    Groups.Add(Context.ConnectionId, roomID.ToString());
-                }
+                //List<String> rooms = roomsFromClient.Split(',').ToList();
+                //foreach (string roomID in rooms)
+                //{
+                //    //int x = Int32.Parse(roomID);
+                //    //VmtDevAPI.RegisterLiveChat(x);
+                //    Groups.Add(Context.ConnectionId, roomID.ToString());
+                //}
+                Groups.Add(Context.ConnectionId, roomsFromClient.ToString());
                 context.Clients.Client(Context.ConnectionId).registeredComplete("Registered succesfully to rooms: " + roomsFromClient);
             }
         }
@@ -104,6 +105,29 @@ namespace SAGLET.Hubs
                 UpdateNewCP(roomID, cp);
             }
         }
+
+        public void CheckIdleness(string rooms) {
+            List<int> roomList = rooms.Split(',').Select(Int32.Parse).ToList();
+            VmtDevAPI.HandleIdleness(roomList);
+        }
+
+        public void StartIdleness(string rooms) {
+            List<int> roomList = rooms.Split(',').Select(Int32.Parse).ToList();
+            VmtDevAPI.OpenIdleRooms(roomList);
+            //VmtDevAPI.HnadleIdleness(roomList)
+        }
+
+        public void UpdateIdleness(string roomID, string idles)
+        {
+            
+            context.Clients.Group(roomID).updateIdlenessLive(idles);
+            //context.Clients.Client(Context.ConnectionId).updateIdlenessLive(idles);
+
+        }
+
+
+
+
 
         internal void UpdateRoomActionLive(string roomID, VAction act)
         {
@@ -464,11 +488,6 @@ namespace SAGLET.Hubs
                 this.actions = actions;
                 this.sentiment = sentiment;
             }
-        }
-
-        public void UpdateIdleness(Dictionary<int,List<string>> idles)
-        {
-            //TODO
         }
 
     }

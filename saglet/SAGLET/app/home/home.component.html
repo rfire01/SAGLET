@@ -3,17 +3,34 @@
 
         <div class="panel-body">
             <div class="col-md-6 container">
-                <div class="panel-heading">Active Rooms</div>
+                <div class="panel-heading">
+                    Active Rooms
+
+                    <div class="btn-group" style="float:right;">
+                        <!--<butotn class="btn btn-default btn-sm" ng-click="vm.test()">ddd</butotn>-->
+                    </div>
+
+                </div>
+
+
                 <rooms-list rooms="vm.user.rooms.watch" watch="true" on-status-change="vm.changeWatchStatus(index, status)"></rooms-list>
-                
+
             </div>
 
             <div class="col-md-6 container">
-                <div class="panel-heading">Archive Rooms</div>
+                <div class="panel-heading">
+                    Archive Rooms
+                    <div class="btn-group" style="float:right;">
+                        <butotn class="btn btn-default " ng-click="vm.updateRooms()">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>Sync new rooms
+</butotn>
+
+                    </div>
+                </div>
                 <rooms-list rooms="vm.user.rooms.rest" watch="false" on-status-change="vm.changeWatchStatus(index, status)"></rooms-list>
             </div>
 
-            <butotn class=" btn btn-default" ng-click="vm.updateRooms()" >Sync new rooms</butotn>
+
         </div>
     </div>
 

@@ -12,5 +12,6 @@
         'app.common'
         // 3rd Party Modules
         
-    ]);
+    ])
+   
 })();
