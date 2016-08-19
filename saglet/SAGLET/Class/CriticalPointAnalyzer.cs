@@ -14,7 +14,7 @@ namespace SAGLET.Class
         static string[] priority = { "1", "2" };
         static int i=0;
 
-        internal static List<CriticalMsgPoints> Analyze(VMsg msg)
+        internal static List<CriticalMsgPoints> Analyze(VMsg msg, string solution)
         {
             List<CriticalMsgPoints> cps = new List<CriticalMsgPoints>();
 
@@ -23,17 +23,24 @@ namespace SAGLET.Class
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
             
-            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text);
+            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, solution);
             string[] splitReply = cpReply.Split(',');
 
             if (splitReply[0].CompareTo("DS") == 0)
-                cp.Type = CriticalPointTypes.DS;
+                if(splitReply[1].CompareTo("0")==0)
+                    cp.Type = CriticalPointTypes.WDS;
+                else if(splitReply[1].CompareTo("1")==0)
+                    cp.Type = CriticalPointTypes.CDS;
+                else
+                    cp.Type = CriticalPointTypes.DS;
             else if (splitReply[0].CompareTo("TEC") == 0)
                 cp.Type = CriticalPointTypes.TEC;
             else if (splitReply[0].CompareTo("NMD") == 0)
                 cp.Type = CriticalPointTypes.NMD;
             else
                 cp.Type = CriticalPointTypes.None;
+
+            System.Diagnostics.Debug.WriteLine("new msg:" + cp.Type.ToString());
 
             cps.Add(cp);
 
@@ -57,7 +64,7 @@ namespace SAGLET.Class
             //return cps;
         }
 
-        private static string GetCriticalPoint(int roomID, string message)
+        private static string GetCriticalPoint(int roomID, string message, string solution)
         {
             // Open the named pipe.
             // exception, if there is a problem with opening pipe - try again until pipe opened successfully
@@ -72,7 +79,7 @@ namespace SAGLET.Class
                     var br = new BinaryReader(server);
                     var bw = new BinaryWriter(server);
 
-                    var buf = Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message);     // Get ASCII byte array     
+                    var buf = Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message + ";" + solution);     // Get ASCII byte array     
                     bw.Write((uint)buf.Length);                // Write string length
                     bw.Write(buf);                              // Write string
 

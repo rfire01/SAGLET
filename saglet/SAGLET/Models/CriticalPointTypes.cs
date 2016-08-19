@@ -21,6 +21,8 @@ namespace SAGLET.Models
         Cag,
         CH,
         DS,
+        CDS,
+        WDS,
         NMD,
         TEC,
     }

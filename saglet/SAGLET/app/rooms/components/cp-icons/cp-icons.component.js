@@ -27,13 +27,13 @@
         this.$onInit = function () {};
 
         function cpTypeChanger(cp) {
-            if (cp == 13)
+            if (cp == 13 || cp == 14 || cp == 15)
                 return 'DS';
                 
-            if (cp == 14)
+            if (cp == 16)
                 return 'MND';
 
-            if (cp == 15)
+            if (cp == 17)
                 return 'TEC';
         }
         

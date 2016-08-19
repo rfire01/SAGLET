@@ -28,6 +28,7 @@ namespace SAGLET.Controllers
         //need to update teacher list
         private static IdlenessAnalyzer idle = new IdlenessAnalyzer(new List<string>());
         private readonly Object dbLock = new Object();
+        private Dictionary<int, int> solutionIndex = new Dictionary<int, int>();
 
         public void ResetState()
         {
@@ -483,8 +484,9 @@ namespace SAGLET.Controllers
             VMsg msg = VMsg.ConvertLiveMessageJson(roomID, results);
             if (msg != null)
             {
+                string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
-                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg);
+                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
                 SaveChatMsgToDB(roomID, msg);
 
                 if (msg.UserID != "server")
@@ -512,6 +514,21 @@ namespace SAGLET.Controllers
             }
         }
 
+        public void RestartSolutionIndex(List<int> roomIDs)
+        {
+            this.solutionIndex.Clear();
+            foreach (int roomID in roomIDs)
+                this.solutionIndex.Add(roomID, 0);
+        }
+
+        private string GetSolution(string msg,int roomID)
+        {
+            if (msg.Contains("next"))
+                this.solutionIndex[roomID]++;
+
+            return VmtDevAPI.getSolutions(roomID)[this.solutionIndex[roomID]];
+        }
+
         public void IdlenessOpenRoom(int idleWindow, List<int> roomIDs)
         {
             foreach (int roomID in roomIDs)
@@ -527,8 +544,6 @@ namespace SAGLET.Controllers
 
         public void getRoomIdles(List<int> roomIDs)
         {
-            
-            string idles2;
             foreach (int roomID in roomIDs)
             {
                 Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
@@ -537,17 +552,8 @@ namespace SAGLET.Controllers
                 idles.Add(roomID, idleUsers);
 
                 string json2 = JsonConvert.SerializeObject(idles);
-                hubDetails.UpdateIdleness(roomID.ToString(), json2);
-            }
-
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //string jsonString = serializer.Serialize(idles);
-            
-          //  string json = new JavaScriptSerializer().Serialize(idles.ToDictionary(item => item.Key.ToString(), item => item.Value.ToString()));
-
-           // string json = (new JavaScriptSerializer()).Serialize(idles);
-
-            
+                hubDetails.UpdateIdleness(roomID.ToString(), json2);    
+            }   
         }
 
         private void HandleIdleMessage(VMsg msg)
