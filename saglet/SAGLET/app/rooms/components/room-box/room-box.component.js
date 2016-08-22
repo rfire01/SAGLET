@@ -8,33 +8,37 @@
             bindings: {
                 room: '<',
                 overview: '<',
-                screenWidth: '<'
+                screenWidthHeight: '<'
                 
             },
             require: {
                 "parent": "^roomsOverview"
             },
             controllerAs: 'vm',
-            controller: ['$sce', '$window', '$sessionStorage', controller]
+            controller: ['$sce', '$window', '$sessionStorage', '$timeout', controller]
         })
 
-    function controller($sce, $window,$sessionStorage) {
+    function controller($sce, $window, $sessionStorage, $timeout) {
         var vm = this;
         
 
         //props
         vm.fullView = false;
-        vm.fullView800plus = true;
+       // vm.fullView800plus = true;
+        
 
+        vm.scaledInit = true;
         vm.hide = false;
         vm.criticalPoints = [];
         vm.newCp = false;
         vm.criticalPointsIndex = [];
         
+
+
         //in methods
         vm.iframeLink = iframeLink;
         vm.openCloseFullView = openCloseFullView;
-        
+        vm.getScaledRules = getScaledRules;
         
         //out methods
         this.setFullView = setFullView;
@@ -43,7 +47,7 @@
         
         
         this.$onInit = function () {
-
+            
             //var cp = {
             //    cpUser: 'test',
             //    cpMsg: 'test',
@@ -56,24 +60,28 @@
             this.parent.addRoom(this);
             
             loadLastSession();
+           
 
-            if (vm.screenWidth > 800)
-                vm.fullView800plus = true;
-            else {
-                vm.fullView800plus = false;
-            }
+
+           
+            
+            var initScaledIframe = $timeout(function () {
+                vm.scaledInit = false;
+                console.info("***** scale " + vm.scaledInit + " ****");
+            }, 10000);
+
+
+           
             
             
 
             
         }
+        
+        this.$onChanges = function (changes) { }
         this.$onDestroy = function () {
-            
+
             saveLastSession();
-        }
-        this.$onChanges = function (changes) {
-            console.log("** room-box changes **");
-            console.log(changes);
         }
 
         function iframeLink(_index) {
@@ -123,30 +131,27 @@
             };
             vm.newcp = true;
 
-            // just for chekcing
+            
             vm.criticalPoints.push(cp);
+            saveLastSession();
         }
 
         function saveLastSession() {
-            if (!$sessionStorage.rooms)
-                $sessionStorage.rooms = [];
-
+            
             var roomObj = { id: vm.room.ID, cp: vm.criticalPoints };
 
             var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
 
-            if (!roomIndex)
+            if (roomIndex < 0)
                 $sessionStorage.rooms.push(roomObj);
             else
                 $sessionStorage.rooms[roomIndex] = roomObj;
         }
         function loadLastSession() {
-            if ($sessionStorage.rooms) {
-                var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
+            var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
 
-                if (roomIndex >= 0)
-                    vm.criticalPoints = $sessionStorage.rooms[roomIndex].cp
-            }
+            if (roomIndex >= 0)
+                vm.criticalPoints = $sessionStorage.rooms[roomIndex].cp
         }
 
         function getRoomObjectIndex(rooms, id) {
@@ -160,7 +165,13 @@
             return index;
         }
         
+        function getScaledRules(screenRes) {
+            var rules = '';
 
+            if (screenRes == '1600x900')
+                return 
+        }
+        
 
     }
 })();

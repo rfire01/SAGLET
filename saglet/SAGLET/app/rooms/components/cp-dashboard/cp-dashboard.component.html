@@ -1,17 +1,17 @@
 ﻿<div class="cp-dashboard">
-    <div class="panel panel-primary">
-        <div class="panel-heading" style="padding:0px;">Critical Points Dashboard</div>
+    <div class="panel panel-primary" id="cp-dashboard-primary">
+        <div class="panel-heading" id="cp-dashboard-heading">Critical Points Dashboard</div>
         <div class="panel-body" style="padding:0px;">
             <div class="panel panel-default" ng-repeat="cp in vm.criticalPoints">
                 <div class="panel-heading" style="padding:0px;">
                     <span style="font-weight:bold;">{{cp.cpPriority}} |</span>
                     <cp-icons style="" critical-points="[cp]" dashboard="vm.dashboard"></cp-icons>
 
-                    <button class="btn btn-default btn-sm glyphicon glyphicon-bell"
+                    <!--<button class="btn btn-default btn-sm glyphicon glyphicon-bell"
                             type="button"
                             role="group"
                             ng-click=""
-                            style=""></button>
+                            style=""></button>-->
                 </div>
                 <div class="panel-body" style="padding:0px;">
                     <ul class="list-group">
@@ -25,29 +25,13 @@
                         </li>
                         <li class="list-group-item" style="padding:5px; 10px;">
                             <label>Message: </label>
-                            <div style="direction:rtl;">  
-                               {{cp.cpMsg}}
+                            <div style="direction:rtl;">
+                                {{cp.cpMsg}}
                             </div>
 
                         </li>
 
-                    </ul>
-                    <!--<div style="">
-                        <label>User: </label>
-                        <span style="direction:rtl; float:right;">{{cp.cpUser}}</span>
-                    </div>
-
-
-                    <div style="text-decoration:underline; text-decoration-color:cadetblue">
-                        <label>Time: </label>
-                        <span style="direction:rtl; float:right;"> {{cp.cpTime}}</span>
-                    </div>
-
-                    <label>Message: </label>
-                    <div style="direction:rtl;">
-                        {{cp.cpMsg}}
-                    </div>-->
-
+                    </ul>   
                 </div>
                 <div class="panel-footer" style="padding:0px;">
                 </div>
@@ -58,148 +42,19 @@
         <div class="panel-footer" style="padding:0px;">
             <div class="panel panel-default">
                 <div class="panel-heading">Index</div>
-                <div class="panel-body">
-                    <div ng-repeat="cp in vm.criticalPointsIndex">
+                <div class="panel-body" style="padding:0px;">
+                    <ul class="list-group">
+                        <li class="list-group-item" style="padding:5px; 10px;" ng-repeat="cp in vm.criticalPointsIndex">
+                            <cp-icons style="" critical-points="[cp]"></cp-icons> - {{cp.desc}}
+                        </li>
 
-                        <cp-icons style="" critical-points="[cp]" dashboard="vm.dashboard"></cp-icons> - cp.desc
-                    </div>
+                    </ul>
                 </div>
+
             </div>
-
-
-
-
 
         </div>
     </div>
+
 </div>
-    <!--<div class="cp-dashboard">
-        <div class="modal-header" style="padding:15px; background-color:white;">Critical Points Dashboard</div>
 
-        <div class="panel panel-default" ng-repeat="cp in vm.criticalPoints">
-            <div class="panel-heading">
-                <span style="margin-left:-10px; font-weight:bold;">{{cp.cpPriority}} |</span>
-                <cp-icons style="" critical-points="[cp]" dashboard="vm.dashboard"></cp-icons>
-
-                <button class="btn btn-default btn-sm glyphicon glyphicon-bell"
-                        type="button"
-                        role="group"
-                        ng-click=""
-                        style=""></button>
-
-                <button class="btn btn-default btn-sm glyphicon glyphicon-bell "
-                        role="group"
-                        type="button"
-                        aria-label="Left Align"
-                        ng-click="vm.changeWatchStatus($index)"
-                        style=""></button>
-
-            </div>
-
-
-
-            <div class="panel-body" style="padding:8px; min-height:300px;">
-
-
-                <div style="">
-                    <label>User: </label>
-                    <span style="direction:rtl; float:right;">{{cp.cpUser}}</span>
-                </div>
-
-
-                <div style="text-decoration:underline; text-decoration-color:cadetblue">
-                    <label>Time: </label>
-                    <span style="direction:rtl; float:right;"> {{cp.cpTime}}</span>
-                </div>
-
-                <label>Message: </label>
-                <div style="direction:rtl;">
-                    {{cp.cpMsg}}
-                </div>
-            </div>
-            <div class="panel-footer" style="padding:0px;">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Index</div>
-                    <div class="panel-body">
-                        <div ng-repeat="cp in vm.criticalPointsIndex">
-
-                            <cp-icons style="" critical-points="[cp]" dashboard="vm.dashboard"></cp-icons> - cp.desc
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-            </div>
-        </div>
-    </div>-->
-
-
-
-
-
-    <!--<div style="outline:1px solid; margin-top:13px; margin-left:-15px; margin-right:-12px;">
-        <div class="modal-header" style="padding:5px;">Critical Points Dashboard</div>
-
-        <div class="modal-body" style="padding:0px;" ng-repeat="cp in vm.criticalPoints">
-            <div class="modal-header" style="padding:0px;">
-                {{cp.cpPriority}}
-                <cp-icons style="" critical-points="[cp]" dashboard="vm.dashboard"></cp-icons>
-                <div class="btn-group" role="group" style="">
-
-
-                    <button class="btn btn-default btn-sm glyphicon glyphicon-bell dropdown-toggle"
-                            type="button"
-                            aria-label="Left Align"
-                            role="group"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            ng-click=""
-                            style="">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                    <button class="btn btn-default btn-sm glyphicon glyphicon-bell "
-                            role="group"
-                            type="button"
-                            aria-label="Left Align"
-                            ng-click="vm.changeWatchStatus($index)"
-                            style=""></button>
-
-                </div>
-
-
-            </div>
-
-            <div class="modal-body" style="padding:0px;">
-                <div style="font-size:12px;">
-                    User: {{cp.cpUser}}
-                </div>
-                <div style="font-size:12px;">
-                    Time: {{cp.cpTime}}
-                </div>
-                <div style="font-size:12px;">
-                    Message: {{cp.cpMsg}}
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-
-        <div class="modal-footer" style="padding:0px;">
-            INDEX111
-
-        </div>
-    </div>-->

@@ -30,7 +30,7 @@
         };
 
         function setCriticalPointsIndex() {
-            return [{ cpType: '13', desc: 'description for 13' }, { cpType: '14', desc: 'description for 14' }, { cpType: '15', desc: 'description for 15' }]
+            return [{ cpType: '13', desc: 'Direct solution' }, { cpType: '14', desc: 'None mathematical conversation' }, { cpType: '15', desc: 'Technical conversation' }]
         }
         
         

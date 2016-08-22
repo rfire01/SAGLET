@@ -1,4 +1,6 @@
-﻿<div ng-class="{'col-md-3': vm.overview,
+﻿<!--<iframe ng-class="{'iframe-test': vm.overview}" style="height:82vh;" ng-src="{{vm.iframeLink(vm.room.ID)}}"></iframe>-->
+<!--<div class="col-md-2" ng-if="!vm.overview && vm.fullView">
+<div ng-class="{'col-md-3': vm.overview,
                 'col-md-10 thisRoomIsOpenMoveItLeft': vm.fullView}"
      style="padding-right:6px; padding-left:6px; padding-top:15px;">
 
@@ -23,17 +25,31 @@
                 </div>
                 </div>
             </div>-->
+<div ng-class="{'col-md-3': vm.overview, 'col-md-9': vm.fullView}"
+     style="padding-right:6px; padding-left:6px; padding-top:15px;">
+
+
+
+    <div class="iframe-wrapper"
+         ng-hide="vm.hide"
+         ng-class="{'iframe-wrapper-overview': vm.overview, 'iframe-wrapper-this-room-is-open': vm.fullView,
+                    'has-new-cp':vm.newcp}">
+        <div class="panel panel-default ">
+
+
+
             <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView || vm.newcp }">
                 Room: {{vm.room.ID}}
 
-                
+
                 <div class="panel-group" style="float:right">
-                    
+
                     <cp-icons critical-points="vm.criticalPoints" full-view="vm.fullView"></cp-icons>
-                    
+
                     <button type="button"
                             class="btn btn-default btn-sm"
                             aria-label="Left Align"
+                            style="margin-top:-5px;"
                             ng-click="vm.openCloseFullView()">
                         <span ng-class="{'glyphicon glyphicon-zoom-in': !vm.fullView, 'glyphicon glyphicon-zoom-out': vm.fullView }" aria-hidden="true"></span>
                     </button>
@@ -41,16 +57,38 @@
 
             </div>
 
-            <div class="panel-body">
+            <div class="panel-body" style="padding:0px;">
                 <!--<iframe ng-class="{'scaled-frame':vm.overview, 'scaled-full-size-frame-for-800-plus-width-screens':vm.fullView && vm.screenWidth >= 1371, 'scaled-full-size-frame-for-800-minus-width-screens':vm.fullView && vm.screenWidth <= 1370  }" scrolling="no" ng-src="{{vm.iframeLink(vm.room.ID)}}"></iframe>-->
+                <!--<iframe ng-src="{{vm.iframeLink(vm.room.ID)}}"
+                        scrolling="no"
+                        ng-class="{
+                        'scaled-init-1920x1080': (vm.scaledInit && vm.screenWidthHeight == '1920x'),
+                        'scaled-init-1600x900': (vm.scaledInit && vm.screenWidthHeight == '1600x'),
+                        'scaled-init-1366x728': (vm.scaledInit && vm.screenWidthHeight == '1366x'),
+                        'scaled-init-1280x1024': (vm.scaledInit && vm.screenWidthHeight == '1280x'),
+                        'scaled-to-full-size-1920x1080': (vm.fullView && vm.screenWidthHeight == '1920x'),
+                        'scaled-to-full-size-1600x900': (vm.fullView && vm.screenWidthHeight == '1600x'),
+                        'scaled-to-full-size-1366x728': (vm.fullView && vm.screenWidthHeight == '1366x'),
+                        'scaled-to-full-size-1280x1024': (vm.fullView && vm.screenWidthHeight == '1280x'),
+                        'scaled-to-room-box-1920x1080': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1920x'),
+                        'scaled-to-room-box-1600x900': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1600x'),
+                        'scaled-to-room-box-1366x728': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1366x'),
+                        'scaled-to-room-box-1280x1024': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1280x')
+                        }"></iframe>-->
             </div>
         </div>
 
     </div>
 </div>
-<div class="col-md-2" ng-if="!vm.overview && vm.fullView">
-    
+<div class="col-md-3" ng-if="!vm.overview && vm.fullView">
+
     <cp-dashboard critical-points="vm.criticalPoints"></cp-dashboard>
-    
+
 </div>
+
+
+
+
+
+
 

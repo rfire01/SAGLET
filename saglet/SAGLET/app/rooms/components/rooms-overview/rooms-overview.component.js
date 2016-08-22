@@ -26,7 +26,7 @@
 
 
         vm.overview = true;
-        vm.screenWidth = '';
+        vm.screenWidthHeight = {}
         vm.roomsCtrl = [];
         //vm.cp = {};
         // vm.handelCriticalPoints = handelCriticalPoints;
@@ -39,25 +39,15 @@
 
 
         this.$onInit = function () {
-            //if (vm.newCp) {
-            //    handelCriticalPoints(vm.cpRoom, vm.cp.msg)
-            //}
-            vm.screenWidth = $window.screen.availWidth
-            console.log($window.screen.availHeight);
-            console.log($window.screen.availWidth);
+            
+            vm.screenWidthHeight = setScreenWidthHeight();
+            
         }
 
         this.$onChanges = function (changesObj) {
-            console.log("** overview changes **");
-            console.log(changesObj);
+          
             if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changeObj.cpUser)
-                handelCriticalPoints(this.cpRoom);
-            //var room = changesObj.cpRoom.currentValue;
-
-
-
-            
-
+                handelCriticalPoints(this.cpRoom);  
         }
 
 
@@ -105,7 +95,17 @@
 
         }
 
+        function setScreenWidthHeight() {
+            
+            var width = $window.screen.availWidth;
+            var height = $window.screen.availHeight;
 
+            console.log(width + 'x' + height);
+
+            return width + 'x';
+            
+        }
+        
         //function moveRoomItemToFirstPlace(roomID) {
         //    for (var i in vm.rooms) {
         //        if (roomID == vm.rooms[i].ID) {

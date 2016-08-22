@@ -36,7 +36,7 @@ namespace SAGLET.Controllers
 
         public void addUser(string user)
         {
-            this.userIdleness.Add(user, DateTime.Now);
+            //this.userIdleness.Add(user, DateTime.Now);
         }
 
         public void removeUser(string user)
