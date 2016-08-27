@@ -31,7 +31,7 @@
                 return 'DS';
                 
             if (cp == 16)
-                return 'MND';
+                return 'NMD';
 
             if (cp == 17)
                 return 'TEC';

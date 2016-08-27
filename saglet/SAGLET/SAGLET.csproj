@@ -246,12 +246,14 @@
     <Compile Include="Areas\Demo\Models\DemoModal.cs" />
     <Compile Include="Areas\Demo\Models\FeedBack.cs" />
     <Compile Include="Class\AppHelper.cs" />
+    <Compile Include="Class\CpAlarm.cs" />
     <Compile Include="Class\CriticalPointAnalyzer.cs" />
     <Compile Include="Class\ExtendedWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Class\FourArgumentsListener.cs" />
     <Compile Include="Class\IdlenessAnalyzer.cs" />
+    <Compile Include="Class\LevenshteinDistance.cs" />
     <Compile Include="Class\MyRestrictiveAuthorizationFilter.cs" />
     <Compile Include="Class\roomIdleness.cs" />
     <Compile Include="Class\SentimentAnalyzer.cs" />
@@ -379,6 +381,10 @@
     <Content Include="Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="configuration\CriticalPointValues.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="configuration\SAGLET.config" />
     <None Include="package.json" />
     <None Include="Scripts\jquery-3.1.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
@@ -415,9 +421,11 @@
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>

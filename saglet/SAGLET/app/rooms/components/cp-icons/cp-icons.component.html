@@ -9,7 +9,7 @@
 <span ng-repeat="cp in vm.criticalPoints"
       class="label "
       
-      ng-class="{'label-default': cp.cpType == 13, 'label-primary': cp.cpType == 14, 'label-warning': cp.cpType == 15, 'cp-icons': !vm.fullView, 'cp-icons-full-view': vm.fullView, 'cp-icons-dashboard': vm.dashboard}">
+      ng-class="{'label-default': cp.cpType == 13, 'label-primary': cp.cpType == 16, 'label-warning': cp.cpType == 17,'cp-icons': !vm.fullView, 'cp-icons-full-view': vm.fullView, 'cp-icons-dashboard': vm.dashboard}">
         {{vm.cpTypeChanger(cp.cpType)}}
     
 </span>

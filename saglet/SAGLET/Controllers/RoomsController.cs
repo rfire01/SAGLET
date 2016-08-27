@@ -29,6 +29,7 @@ namespace SAGLET.Controllers
         private static IdlenessAnalyzer idle = new IdlenessAnalyzer(new List<string>());
         private readonly Object dbLock = new Object();
         private Dictionary<int, int> solutionIndex = new Dictionary<int, int>();
+        private CpAlarm criticalPointAlert = new CpAlarm(10, 8, 6);
 
         public void ResetState()
         {
@@ -487,6 +488,7 @@ namespace SAGLET.Controllers
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
+                msg.CriticalPoints.Add(criticalPointAlert.NewCp((List<CriticalMsgPoints>)msg.CriticalPoints));
                 SaveChatMsgToDB(roomID, msg);
 
                 if (msg.UserID != "server")
@@ -523,10 +525,21 @@ namespace SAGLET.Controllers
 
         private string GetSolution(string msg,int roomID)
         {
-            if (msg.Contains("next"))
-                this.solutionIndex[roomID]++;
+            if (this.solutionIndex.ContainsKey(roomID))
+            {
+                string nq = "next";
+                if (LevenshteinDistance.Compute(nq,msg) <= nq.Length / 2.0)
+                    this.solutionIndex[roomID]++;
 
-            return VmtDevAPI.getSolutions(roomID)[this.solutionIndex[roomID]];
+                List<string> solList = VmtDevAPI.getSolutions(roomID);
+                if (this.solutionIndex[roomID] < solList.Count() - 1)
+                    return VmtDevAPI.getSolutions(roomID)[this.solutionIndex[roomID]];
+                else
+                    return VmtDevAPI.getSolutions(roomID)[solList.Count() - 1];
+            }
+            else
+                return "";
+
         }
 
         public void IdlenessOpenRoom(int idleWindow, List<int> roomIDs)
