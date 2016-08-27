@@ -20,7 +20,8 @@
         vm.newCp = false;
         vm.cpRoom = '';
         vm.cpMsg = '';
-
+        vm.idlenessRoom = '';
+        vm.idlenessUsers = [];
 
         vm.onNewCriticalPoints = onNewCriticalPoints;
 
@@ -32,16 +33,8 @@
             if ($sessionStorage.user)
                 vm.roomList = ($sessionStorage.user.rooms.watch);
             //vm.roomList = $sessionStorage.user.rooms.watch;
-
-
-            $.connection.hub.disconnected(function () {
-
-                console.log(" **** Hub: disconnected **** ");
-                var connectionStatus = angular.element(document.querySelector('#connection-status'));
-                connectionStatus.removeClass('label-success').text('Offline').addClass('label-danger label-warning');
-            });
-
-
+            if (!$sessionStorage.rooms)
+                $sessionStorage.rooms = [];
 
             $.connection.hub.logging = true;
             /* Hub Start */
@@ -63,28 +56,62 @@
             .fail(function () {
                 console.log('Could not Connect!');
             });
-
+         
             var check = $interval(function () {
                 var strRoomsList = getStrRoomsList(vm.roomList);
                 detailsHub.server.checkIdleness(strRoomsList);
-                console.log('** check **');
             }, 5000);
 
         }
 
-        detailsHub.client.updateIdlenessLive = function (res) {
-            console.info("************ Registered Complete ************");
-            console.log(res);
+        $.connection.hub.connected = function () {
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
+        }
+
+        $.connection.hub.reconnecting = function () {
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-success label-danger').text('Reconnecting').addClass('label-warning');
+        }
+
+
+
+        $.connection.hub.disconnected(function () {
+
+            console.log(" **** Hub: disconnected **** ");
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-success').text('Offline').addClass('label-danger label-warning');
+        });
+
+
+
+        detailsHub.client.updateIdlenessLive = function (idelenssData) {
+            console.info("************ updateIdlenessLive ************");
+            var idel = JSON.parse(idelenssData);
+            for (var room in idel) {
+                vm.idlenessRoom = room;
+                vm.idlenessUsers = idel[room];
+                
+            }
             
+
         };
 
+        detailsHub.client.registeredComplete = function (res) {
+            console.info("************ Registered Complete ************");
+            console.log("************" + res + "************");
+
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
+            
+        };
+        
 
 
         detailsHub.client.updateRoomMsgLive = function (roomID, cpObject) {
             console.info('************ updateRoomMsgLive: ************ ' + roomID);
             console.info(' ************ msg ************    ' + cpObject);
-            console.log(roomID);
-            console.log(cpObject);
+           
             vm.newCp = false;
             returnCp(roomID, cpObject).then(function (CriticalPoints) {
                 console.log(CriticalPoints);

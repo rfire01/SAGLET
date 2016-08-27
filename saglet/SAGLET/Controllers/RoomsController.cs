@@ -540,6 +540,11 @@ namespace SAGLET.Controllers
             else
                 return "";
 
+<<<<<<< HEAD
+=======
+            return "";
+            //return VmtDevAPI.getSolutions(roomID)[this.solutionIndex[roomID]];
+>>>>>>> 8f8db6a9b331891c9575287b6b7daba4f3b45e24
         }
 
         public void IdlenessOpenRoom(int idleWindow, List<int> roomIDs)

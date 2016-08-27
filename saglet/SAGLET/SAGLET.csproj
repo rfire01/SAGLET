@@ -310,6 +310,8 @@
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.html" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.js" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.css" />
+    <Content Include="app\rooms\components\room-box\room-box-scaled-rules.component.css" />
+    <Content Include="app\rooms\components\room-box\room-box.component.css" />
     <Content Include="app\rooms\components\room-box\room-box.component.html" />
     <Content Include="app\rooms\components\room-box\room-box.component.js" />
     <Content Include="app\rooms\components\rooms-overview\rooms-overview.component.html" />

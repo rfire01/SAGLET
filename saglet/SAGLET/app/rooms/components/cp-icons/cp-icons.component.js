@@ -7,10 +7,14 @@
         .component('cpIcons', {
             templateUrl: "/app/rooms/components/cp-icons/cp-icons.component.html",
             bindings: {
+                criticalPoint: '<',
+                criticalPointIndex: '<',
+                
+
                 criticalPoints: '<',
                 dashboard: '<',
-                fullView: '<'
-                
+                fullView: '<',
+                cpIdle: '<'
                 
             },
             controllerAs: 'vm',
@@ -24,10 +28,12 @@
         
         vm.cpTypeChanger = cpTypeChanger;
 
-        this.$onInit = function () {};
+        this.$onInit = function () {
+            console.log();
+        };
 
         function cpTypeChanger(cp) {
-            if (cp == 13 || cp == 14 || cp == 15)
+            if (cp == 13)
                 return 'DS';
                 
             if (cp == 16)
@@ -35,6 +41,9 @@
 
             if (cp == 17)
                 return 'TEC';
+
+            if (cp == 'idle')
+                return 'idle';
         }
         
         

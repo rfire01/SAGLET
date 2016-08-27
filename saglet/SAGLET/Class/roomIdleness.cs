@@ -39,12 +39,12 @@ namespace SAGLET.Controllers
             if (!this.userIdleness.ContainsKey(user))
             {
                 this.userIdleness.Add(user, DateTime.Now);
-                //System.Diagnostics.Debug.WriteLine("user added first: " + user + "; room:" + roomID);
+                System.Diagnostics.Debug.WriteLine("user added first: " + user + "; room:" + roomID);
             }
             else
             {
                 this.userIdleness[user] = DateTime.Now;
-                //System.Diagnostics.Debug.WriteLine("user added second: " + user + "; room:" + roomID);
+                System.Diagnostics.Debug.WriteLine("user added second: " + user + "; room:" + roomID);
             }
         }
 
@@ -53,7 +53,7 @@ namespace SAGLET.Controllers
             if (this.userIdleness.ContainsKey(user) == true)
             {
                 this.userIdleness.Remove(user);
-                //System.Diagnostics.Debug.WriteLine("user remove: " + user + "; room:" + roomID);
+                System.Diagnostics.Debug.WriteLine("user remove: " + user + "; room:" + roomID);
             }
         }
 
@@ -61,7 +61,7 @@ namespace SAGLET.Controllers
         {
             if (this.userIdleness.ContainsKey(user) == true)
             {
-                //System.Diagnostics.Debug.WriteLine("user activity: " + user + "; room:" + roomID);
+                System.Diagnostics.Debug.WriteLine("user activity: " + user + "; room:" + roomID);
                 this.userIdleness[user] = DateTime.Now;
                 this.lastActivity = DateTime.Now;
             }
