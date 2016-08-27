@@ -20,7 +20,8 @@
         vm.newCp = false;
         vm.cpRoom = '';
         vm.cpMsg = '';
-
+        vm.idlenessRoom = '';
+        vm.idlenessUsers = [];
 
         vm.onNewCriticalPoints = onNewCriticalPoints;
 
@@ -55,14 +56,10 @@
             .fail(function () {
                 console.log('Could not Connect!');
             });
-
-
-            
-
+         
             var check = $interval(function () {
                 var strRoomsList = getStrRoomsList(vm.roomList);
                 detailsHub.server.checkIdleness(strRoomsList);
-                console.log('** check **');
             }, 5000);
 
         }
@@ -88,9 +85,16 @@
 
 
 
-        detailsHub.client.updateIdlenessLive = function (res) {
+        detailsHub.client.updateIdlenessLive = function (idelenssData) {
             console.info("************ updateIdlenessLive ************");
-            console.info(res);
+            var idel = JSON.parse(idelenssData);
+            for (var room in idel) {
+                vm.idlenessRoom = room;
+                vm.idlenessUsers = idel[room];
+                
+            }
+            
+
         };
 
         detailsHub.client.registeredComplete = function (res) {

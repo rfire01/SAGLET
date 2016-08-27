@@ -200,14 +200,23 @@ namespace SAGLET.Class
             if (actionSockets[id] != null) actionSockets[id].Close();
         }
 
-        public static void OpenIdleRooms(List<int> rooms)
+        public static void OpenAnalyzeRooms(List<int> rooms)
         {
             ctrl.IdlenessOpenRoom(10, rooms);
+            ctrl.RestartSolutionIndex(rooms);
         }
 
         public static void HandleIdleness(List<int> rooms)
         {
             ctrl.getRoomIdles(rooms);
+        }
+
+        public static List<string> getSolutions(int roomID)
+        {
+            List<string> sol = new List<string>();
+            sol.Add("דלתון");
+            sol.Add("מעוין");
+            return sol;
         }
 
         //VmtDevAPI.OpenIdleRooms(roomList)

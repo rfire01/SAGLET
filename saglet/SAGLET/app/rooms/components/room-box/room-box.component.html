@@ -42,9 +42,13 @@
                 Room: {{vm.room.ID}}
 
 
-                <div class="panel-group" style="float:right">
+                <div class="panel-group" style="float:right;">
 
-                    <cp-icons critical-points="vm.criticalPoints" full-view="vm.fullView"></cp-icons>
+                    <span ng-repeat="cp in vm.criticalPoints track by $index">
+                        <cp-icons critical-point="cp" critical-point-index="$index"></cp-icons>
+                      <!--<span class="badge">{{$index + 1}}</span>-->
+                    </span>
+                    
 
                     <button type="button"
                             class="btn btn-default btn-sm"
@@ -82,7 +86,7 @@
 </div>
 <div class="col-md-3" ng-if="!vm.overview && vm.fullView">
 
-    <cp-dashboard critical-points="vm.criticalPoints"></cp-dashboard>
+    <cp-dashboard critical-points-idleness="vm.idleness" critical-points-messages="vm.criticalPointsMessages" critical-points="vm.criticalPoints"></cp-dashboard>
 
 </div>
 

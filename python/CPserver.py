@@ -20,13 +20,14 @@ def checkForRequest():
         n = struct.unpack('I', f.read(4))[0]  # Read str length
         s = f.read(n)  # Read str
         f.seek(0)  # Important!!!
-        print(s)
+        print(s.decode('utf-8'))
 
         request = s.decode('utf-8').split(';')
         roomID = request[0]
         message = request[1]
+        solution = request[2]
         try:
-            response = handleRequest(roomID,message)
+            response = handleRequest(roomID,message,solution)
         except Exception as e:
             print(str(e))
             return
@@ -39,10 +40,10 @@ def checkForRequest():
     except:
         pass
 
-def handleRequest(roomID,message):
+def handleRequest(roomID,message,solution):
     if not roomID in rooms:
         rooms[roomID] = {}
-        rooms[roomID]['answer'] = ''
+        # rooms[roomID]['answer'] = ''
         rooms[roomID]['context'] = 'NaN'
 
     appWord = False
@@ -53,9 +54,9 @@ def handleRequest(roomID,message):
         return 'NaN,0'
 
     context = rooms[roomID]['context']
-    group = da.check_group(rooms[roomID]['answer'])
-    da_tag,da_code = da.get_tag(message, context, [rooms[roomID]['answer'], group])
-    tfa_tag,tfa_code = tfa.get_tag(message, [rooms[roomID]['answer'], group])
+    group = da.check_group(solution)
+    da_tag,da_code = da.get_tag(message, context, [solution, group])
+    tfa_tag,tfa_code = tfa.get_tag(message, [solution, group])
     sim_tag,sim_code = sa.get_tag(message,context,2)
 
     ds_count = sum([1 for tag in [da_tag, tfa_tag, sim_tag] if tag == 'DS'])
@@ -75,7 +76,10 @@ def handleRequest(roomID,message):
     if ds_count <= 1 and tec_count <= 1 and nmd_count <= 0:
         tag = 'NaN'
 
-    code = da_code
+    if da_code == 3:
+        code = tfa_code
+    else:
+        code = da_code
 
     rooms[roomID]['context'] = tag
     return (tag + "," + str(code))

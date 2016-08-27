@@ -36,19 +36,32 @@ namespace SAGLET.Controllers
 
         public void addUser(string user)
         {
-            //this.userIdleness.Add(user, DateTime.Now);
+            if (!this.userIdleness.ContainsKey(user))
+            {
+                this.userIdleness.Add(user, DateTime.Now);
+                System.Diagnostics.Debug.WriteLine("user added first: " + user + "; room:" + roomID);
+            }
+            else
+            {
+                this.userIdleness[user] = DateTime.Now;
+                System.Diagnostics.Debug.WriteLine("user added second: " + user + "; room:" + roomID);
+            }
         }
 
         public void removeUser(string user)
         {
             if (this.userIdleness.ContainsKey(user) == true)
+            {
                 this.userIdleness.Remove(user);
+                System.Diagnostics.Debug.WriteLine("user remove: " + user + "; room:" + roomID);
+            }
         }
 
         public void newActivity(string user)
         {
             if (this.userIdleness.ContainsKey(user) == true)
             {
+                System.Diagnostics.Debug.WriteLine("user activity: " + user + "; room:" + roomID);
                 this.userIdleness[user] = DateTime.Now;
                 this.lastActivity = DateTime.Now;
             }
@@ -61,7 +74,8 @@ namespace SAGLET.Controllers
             foreach (KeyValuePair<string, DateTime> pair in this.userIdleness)
             {
                 diff = DateTime.Now.Subtract(this.userIdleness[pair.Key]);
-                if(diff.Seconds >= this.idleWindow)
+                int seoncdsPassed = diff.Seconds + diff.Minutes * 60 + diff.Hours * 3600 + diff.Days * 3600 * 24;
+                if (seoncdsPassed >= this.idleWindow)
                     res.Add(pair.Key);
             }
             return res;
@@ -83,7 +97,7 @@ namespace SAGLET.Controllers
 
         private void checkNoActivity(object source, System.Timers.ElapsedEventArgs e) 
         {
-            if(DateTime.Now.Subtract(this.lastActivity).Hours>=24)
+            if(DateTime.Now.Subtract(this.lastActivity).Days>=1)
             {
                 this.closeRoom();
             }

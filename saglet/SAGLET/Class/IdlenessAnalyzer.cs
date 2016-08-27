@@ -64,9 +64,13 @@ namespace SAGLET.Controllers
         public List<string> whoIsIdle(int roomID)
         {
             if (this.rooms.ContainsKey(roomID) == true)
+            {
                 return this.rooms[roomID].idleUsers();
+            }
             else
+            {
                 return new List<string>();
+            }
         }
 
         private void checkNoActivity(object source, System.Timers.ElapsedEventArgs e)
