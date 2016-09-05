@@ -18,6 +18,7 @@ namespace SAGLET.Hubs
     {
         IHubContext context = GlobalHost.ConnectionManager.GetHubContext<RoomDetailsHub>();
         static string toolbarStr = "-ToolBar";
+        private int idlenessAlertFrequency = 1000 * Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["idlenessAlertFrequency"]);
 
 
         internal void UpdateComplete(string roomID)
@@ -117,6 +118,11 @@ namespace SAGLET.Hubs
             List<int> roomList = rooms.Split(',').Select(Int32.Parse).ToList();
             VmtDevAPI.OpenAnalyzeRooms(roomList);
             //VmtDevAPI.HnadleIdleness(roomList)
+        }
+
+        public int GetIdleAlertFreq()
+        {
+            return this.idlenessAlertFrequency;
         }
 
         public void UpdateIdleness(string roomID, string idles)

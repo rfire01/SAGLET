@@ -17,6 +17,8 @@ using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Web.Script.Serialization;
 
+using System.IO;
+
 namespace SAGLET.Controllers
 {
     public class RoomsController : Controller
@@ -25,11 +27,13 @@ namespace SAGLET.Controllers
         private static RoomDetailsHub hubDetails = new RoomDetailsHub();
         private static RoomIndexHub hubIndex = new RoomIndexHub();
 
-        //need to update teacher list
-        private static IdlenessAnalyzer idle = new IdlenessAnalyzer(new List<string>());
+        private static IdlenessAnalyzer idle = new IdlenessAnalyzer();
         private readonly Object dbLock = new Object();
         private Dictionary<int, int> solutionIndex = new Dictionary<int, int>();
-        private CpAlarm criticalPointAlert = new CpAlarm(10, 8, 6);
+        private CpAlarm criticalPointAlert = new CpAlarm();
+
+        private AlertAnalyzer criticalPointAlerts = new AlertAnalyzer();
+
 
         public void ResetState()
         {
@@ -488,8 +492,11 @@ namespace SAGLET.Controllers
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
-                msg.CriticalPoints.Add(criticalPointAlert.NewCp((List<CriticalMsgPoints>)msg.CriticalPoints));
-                SaveChatMsgToDB(roomID, msg);
+                msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID,msg.UserID,(List<CriticalMsgPoints>)msg.CriticalPoints));
+                //msg.CriticalPoints.Add(criticalPointAlert.NewCp((List<CriticalMsgPoints>)msg.CriticalPoints));
+
+                //temporary canceled
+                //SaveChatMsgToDB(roomID, msg); 
 
                 if (msg.UserID != "server")
                     hubDetails.UpdateRoomMsgLiveControl(roomID.ToString(), msg);
@@ -509,8 +516,12 @@ namespace SAGLET.Controllers
             {
                 action.CriticalPoints = CriticalPointAnalyzer.Analyze(action);
                 int roomID = db.Tabs.Find(action.TabID).GroupID;
+                action.CriticalPoints.Add(criticalPointAlerts.user_action(roomID, action.UserID, (List<CriticalActionPoints>)action.CriticalPoints));
+
                 HandleIdleAction(roomID, action.UserID);
-                SaveActionToDB(roomID, action);
+
+                //temporary canceled
+                //SaveActionToDB(roomID, action);
                 hubDetails.UpdateRoomActionLiveControl(roomID.ToString(), action);
                 //hubIndex.UpdateRoomIndex(roomID.ToString());
             }
@@ -527,8 +538,7 @@ namespace SAGLET.Controllers
         {
             if (this.solutionIndex.ContainsKey(roomID))
             {
-                string nq = "next";
-                if (LevenshteinDistance.Compute(nq,msg) <= nq.Length / 2.0)
+                if (PassQuestion(msg))
                     this.solutionIndex[roomID]++;
 
                 List<string> solList = VmtDevAPI.getSolutions(roomID);
@@ -540,21 +550,30 @@ namespace SAGLET.Controllers
             else
                 return "";
 
-<<<<<<< HEAD
-=======
-            return "";
-            //return VmtDevAPI.getSolutions(roomID)[this.solutionIndex[roomID]];
->>>>>>> 8f8db6a9b331891c9575287b6b7daba4f3b45e24
+        }
+
+        private Boolean PassQuestion(string msg)
+        {
+            string line;
+            //System.IO.StreamReader file = new System.IO.StreamReader("config\\NextQuestionTerms.txt");
+            //while ((line = file.ReadLine()) != null)
+            //{
+            //    if (LevenshteinDistance.Compute(line, msg) <= line.Length / 2.0)
+            //        return true;
+            //}
+            return false;
         }
 
         public void IdlenessOpenRoom(int idleWindow, List<int> roomIDs)
         {
             foreach (int roomID in roomIDs)
             {
+                criticalPointAlerts.openRoom(roomID);
                 idle.openRoom(idleWindow, roomID);
                 List<string> users = VmtDevAPI.GetUsersConnected(roomID);
                 foreach (string userID in users)
                 {
+                    criticalPointAlerts.user_joined(roomID, userID);
                     idle.user_joined(roomID, userID);
                 }
             }

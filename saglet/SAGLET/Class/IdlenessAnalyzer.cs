@@ -12,9 +12,11 @@ namespace SAGLET.Controllers
         private List<string> teachers;
         private System.Timers.Timer Timer;
 
-        public IdlenessAnalyzer(List<string> teachers)
+        public IdlenessAnalyzer()
         {
-            this.teachers = teachers;
+            string teachersString = System.Configuration.ConfigurationManager.AppSettings["teacherUserNames"];
+            string[] teachersTmp = teachersString.Replace(" ","").Split(',');
+            this.teachers = teachersTmp.ToList();
             this.rooms = new Dictionary<int, roomIdleness>();
 
             /* start timer to tick once per hour

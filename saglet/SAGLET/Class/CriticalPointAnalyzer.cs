@@ -57,10 +57,10 @@ namespace SAGLET.Class
             CriticalActionPoints cp = new CriticalActionPoints();
             cp.TabID = action.TabID;
             cp.Priority = priority[i++ % priority.Length];
-            cp.Type = CriticalPointTypes.I;
+            cp.Type = CriticalPointTypes.None;
             cps.Add(cp);
 
-            return null;
+            return cps;
             //return cps;
         }
 

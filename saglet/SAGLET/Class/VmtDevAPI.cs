@@ -202,7 +202,8 @@ namespace SAGLET.Class
 
         public static void OpenAnalyzeRooms(List<int> rooms)
         {
-            ctrl.IdlenessOpenRoom(10, rooms);
+            int idleWindow = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["idlenessWindow"]);
+            ctrl.IdlenessOpenRoom(idleWindow, rooms);
             ctrl.RestartSolutionIndex(rooms);
         }
 
@@ -219,7 +220,5 @@ namespace SAGLET.Class
             return sol;
         }
 
-        //VmtDevAPI.OpenIdleRooms(roomList)
-        //VmtDevAPI.HnadleIdleness(roomList)
     }
 }

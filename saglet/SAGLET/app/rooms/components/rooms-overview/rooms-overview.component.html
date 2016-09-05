@@ -1,4 +1,5 @@
-﻿<room-box ng-repeat="room in vm.rooms track by $index" ng-hide="vm.roomsCtrl[$index].hide" room="room" overview="vm.overview" screen-width-height="vm.screenWidthHeight"></room-box>
+﻿<div class="row">
+    <room-box ng-repeat="room in vm.rooms track by $index" ng-hide="vm.roomsCtrl[$index].hide" room="room" overview="vm.overview" screen-width="vm.screenWidth"></room-box>
 
-
-
+    
+</div>

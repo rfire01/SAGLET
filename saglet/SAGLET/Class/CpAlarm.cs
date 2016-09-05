@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using SAGLET.Models;
+using System.Configuration;
+
+using System.IO;
 
 namespace SAGLET.Class
 {
@@ -15,15 +18,14 @@ namespace SAGLET.Class
         private int dsAlert;
         private int nmdAlert;
 
-        public CpAlarm(int windowSize,int ds,int nmd)
+        public CpAlarm()
         {
             this.cpWindow = new Queue<CriticalPointTypes>();
-            string tmp = System.Configuration.ConfigurationManager.AppSettings["message"];
-            this.windowSize = windowSize;
+            this.windowSize = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["cpWindowSize"]);
             this.cpCount = new int[3]{0,0,0}; // {DS,NMD,other}
             this.lastAlert = "None";
-            this.dsAlert = ds;
-            this.nmdAlert = nmd;
+            this.dsAlert = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DSinARow"]);
+            this.nmdAlert = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["NMDinARow"]);
         }
 
         public CriticalMsgPoints NewCp(List<CriticalMsgPoints> cps)

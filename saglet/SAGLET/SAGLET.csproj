@@ -245,6 +245,7 @@
     <Compile Include="Areas\Demo\Migrations\DemoModal\Configuration.cs" />
     <Compile Include="Areas\Demo\Models\DemoModal.cs" />
     <Compile Include="Areas\Demo\Models\FeedBack.cs" />
+    <Compile Include="Class\AlertAnalyzer.cs" />
     <Compile Include="Class\AppHelper.cs" />
     <Compile Include="Class\CpAlarm.cs" />
     <Compile Include="Class\CriticalPointAnalyzer.cs" />
@@ -252,10 +253,14 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Class\FourArgumentsListener.cs" />
+    <Compile Include="Class\IdleAlert.cs" />
     <Compile Include="Class\IdlenessAnalyzer.cs" />
     <Compile Include="Class\LevenshteinDistance.cs" />
     <Compile Include="Class\MyRestrictiveAuthorizationFilter.cs" />
+    <Compile Include="Class\NmdAlert.cs" />
+    <Compile Include="Class\RoomAnalyzer.cs" />
     <Compile Include="Class\roomIdleness.cs" />
+    <Compile Include="Class\RoomUser.cs" />
     <Compile Include="Class\SentimentAnalyzer.cs" />
     <Compile Include="Class\TempPerformanceCounterManager.cs" />
     <Compile Include="Class\TwoArgumentsListener.cs" />
@@ -310,8 +315,6 @@
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.html" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.js" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.css" />
-    <Content Include="app\rooms\components\room-box\room-box-scaled-rules.component.css" />
-    <Content Include="app\rooms\components\room-box\room-box.component.css" />
     <Content Include="app\rooms\components\room-box\room-box.component.html" />
     <Content Include="app\rooms\components\room-box\room-box.component.js" />
     <Content Include="app\rooms\components\rooms-overview\rooms-overview.component.html" />
@@ -328,6 +331,7 @@
     <Content Include="ClearScript.V8\ClearScriptV8-64.dll" />
     <Content Include="ClearScript.V8\v8-ia32.dll" />
     <Content Include="ClearScript.V8\v8-x64.dll" />
+    <Content Include="config\NextQuestionTerms.txt" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -383,10 +387,9 @@
     <Content Include="Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="configuration\CriticalPointValues.config">
+    <Content Include="config\SAGLET.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="configuration\SAGLET.config" />
     <None Include="package.json" />
     <None Include="Scripts\jquery-3.1.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
@@ -505,7 +508,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\common\components\" />
-    <Folder Include="config\" />
+    <Folder Include="config\solutions\" />
     <Folder Include="node_modules\" />
     <Folder Include="typings\" />
   </ItemGroup>
