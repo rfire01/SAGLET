@@ -5,7 +5,7 @@
         .module('app.home')
         .constant('$', window.jQuery)
         .component('homeComponent', {
-            templateUrl: "/app/home/home.component.html",
+            templateUrl: "app/home/home.component.html",
             controllerAs: "vm",
             controller: ['$', '$q', '$sessionStorage', 'shareData', controller]
         });

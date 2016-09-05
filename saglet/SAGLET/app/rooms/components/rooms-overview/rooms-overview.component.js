@@ -15,6 +15,7 @@
                 cpUser: '<',
                 cpTime: '<',
                 cpPriority: '<',
+                cpAlertType: '<',
                 idlenessUsers: '<',
                 idlenessRoom: '<'
 
@@ -40,8 +41,8 @@
 
 
 
-        this.$onInit = function () {
-            
+        this.$onInit = function (bindings) {
+            console.log(bindings);
             vm.screenWidthHeight = setScreenWidthHeight();
             //var time = ['3000', '2000', '5000', '8000', '10000', '180000', '200000', '220000'];
             //var cpsss = $interval(function () {
@@ -68,13 +69,13 @@
 
         this.$onChanges = function (changesObj) {
 
-            if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changesObj.cpUser)
+            if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changesObj.cpUser || changesObj.cpAlertType || changesObj.cpTime)
                 handelCriticalPoints(this.cpRoom, changesObj.cpType);
                 
             
             //handelCriticalPoints
 
-            if (changesObj.idlenessRoom || changesObj.idlenessUsers.currentValue.length > 0)
+            if (changesObj.idlenessRoom && changesObj.idlenessUsers.currentValue.length > 0)
                 handelIdleness(vm.idlenessRoom);
                 
                 //handelCriticalPoints(this.idlenessRoom, 'idle');
@@ -131,7 +132,7 @@
 
             vm.roomsCtrl.forEach(function (roomCtrl) {
                 if (roomCtrl.room.ID == roomID) {
-                    roomCtrl.setCriticalPointMessages(type, msg, vm.cpUser, vm.cpTime, vm.cpPriority);
+                    roomCtrl.setCriticalPointMessages(type, msg, vm.cpUser, vm.cpTime, vm.cpPriority, vm.cpAlertType);
                     return;
                 }
             })

@@ -1,29 +1,17 @@
-﻿<!--<span ng-repeat="cp in vm.criticalPoints"
-      class="label "
-<<<<<<< HEAD
-      
-      ng-class="{'label-default': cp.cpType == 13, 'label-primary': cp.cpType == 16, 'label-warning': cp.cpType == 17,'cp-icons': !vm.fullView, 'cp-icons-full-view': vm.fullView, 'cp-icons-dashboard': vm.dashboard}">
-=======
-
-      ng-class="{'label-info': cp.cpType == 13, 'label-primary': cp.cpType == 16, 'label-warning': cp.cpType == 17, 'label-default':cp.cpType == 'idle', 'cp-icons': !vm.fullView, 'cp-icons-full-view': vm.fullView, 'cp-icons-dashboard': vm.dashboard}">
->>>>>>> 8f8db6a9b331891c9575287b6b7daba4f3b45e24
-        {{vm.cpTypeChanger(cp.cpType)}}
-
-</span>-->
-<!--<span ng-if="vm.cpIdle.length > 0" class="label label-default">idle</span>-->
-
-
-<span class="label "
+﻿<span class="label "
       ng-class="{'label-info': vm.criticalPoint.cpType == 13,
+                 'label-success': vm.criticalPoint.cpType == 14,
+                 'label-danger': vm.criticalPoint.cpType == 15,
                  'label-primary': vm.criticalPoint.cpType == 16,
                  'label-warning': vm.criticalPoint.cpType == 17,
-                 'label-default':vm.criticalPoint.cpType == 'idle',
+                 'label-default': vm.criticalPoint.cpType == 'idle',
 
                  'cp-icons': !vm.fullView,
                  'cp-icons-full-view': vm.fullView,
                  'cp-icons-dashboard': vm.dashboard
       }">
-    <span ng-if="vm.criticalPointIndex != null" class="badge" style="background-color:white; color:black; font-size:smaller;">{{vm.criticalPointIndex + 1}}</span>
-    {{vm.cpTypeChanger(vm.criticalPoint.cpType)}}
-
+    <!--<span ng-show="vm.criticalPoint.cpType && vm.criticalPoint.cpAlertType > 0" style="color:white">{{vm.criticalPointIndex + 1}}</span>-->
+    <!--<sapn ng-show="vm.criticalPoint.cpType && vm.criticalPoint.cpAlertType > 0 &&  vm.fullView"> {{vm.cpTypeChanger(vm.criticalPoint.cpType)}} </sapn>-->
+    <sapn> {{vm.cpTypeChangerShorts(vm.criticalPoint.cpType)}} </sapn>
 </span>
+

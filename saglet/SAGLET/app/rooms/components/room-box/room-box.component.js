@@ -33,11 +33,13 @@
 
         vm.scaledInit = true;
         vm.hide = false;
-        vm.criticalPoints = [];
+        vm.newCriticalPoints = [];
+        vm.oldCriticalPoints = [];
         vm.criticalPointsMessages = [];
         vm.criticalPointsForRoomBoxToolbar = [];
         vm.idleness = [];
-        vm.newCp = false;
+        vm.newcp = false;
+        vm.newCpBorderAlertType = '';
         vm.criticalPointsIndex = [];
         
 
@@ -85,17 +87,25 @@
 
 
         function openCloseFullView() {
-            if (!vm.fullView){
+            if (!vm.fullView)
                 this.parent.openFullViewSelectedRoom(this);
-
-                if (vm.newcp)
-                    vm.newcp = !vm.newcp;
-            }
-                
             else {
                 this.parent.closeFullViewSelectedRoom(this);
                 
+
+                vm.newCriticalPoints.forEach(function (cp) {
+                    vm.oldCriticalPoints.push(cp);
+                })
+
+                vm.newCriticalPoints = [];
+                
             }
+                
+                
+            if (vm.newcp)
+                vm.newcp = !vm.newcp;
+
+            
                 
         }
         
@@ -110,27 +120,55 @@
         function setHide(bool) {
             vm.hide = bool;
         }
-        function setCriticalPointMessages(cpType, cpMsg, cpUser, cpTime, cpPriority) {
+        function setCriticalPointMessages(cpType, cpMsg, cpUser, cpTime, cpPriority, cpAlertType) {
+
+            console.log(cpType);
+            console.log(cpMsg);
+
+            console.log(cpAlertType);
+
             var cp = {
                 cpUser: cpUser,
                 cpMsg: cpMsg,
                 cpType: cpType,
                 cpPriority: cpPriority,
                 cpTime: cpTime,
+                cpAlertType: cpAlertType,
                 cpCount: false
             };
             
+            vm.newcp = true;
+            vm.newCpBorderAlertType = cpType;
+
+            vm.criticalPointsMessages.push(cp);
+
+            if (cpAlertType > 0)
+                vm.newCriticalPoints.push(cp);
+
 
             
-            vm.criticalPointsMessages.push(cp);
-            updateCriticalPointsTenLastMessages(cp);
-            //criticalPointsAlert(vm.criticalPointsMessages)
             saveLastSession();
         }
-        function setIdleness(idel) {
-            vm.idleness = idel;
+        function setIdleness(idle) {
+            vm.idleness = idle;
+
+            if (vm.idleness.length > 0)
+                vm.cpAlertIdleType = 'idle';
+            else
+                vm.cpAlertIdleType = '';
+
+
+            vm.newcp = true;
+            vm.newCpBorderAlertType = 'idle';
+
+
+            var cpIdle = { cpType: 'idle', idleUsers: idle }
+            vm.newCriticalPoints.push(cpIdle);
+
             console.log(vm.idleness);
-            saveLastSession();
+            console.log(vm.cpAlertIdleType);
+
+            //saveLastSession();
         }
         function saveLastSession() {
             
@@ -150,73 +188,7 @@
                 vm.criticalPoints = $sessionStorage.rooms[roomIndex].cp
         }
 
-        function criticalPointsAlert(cpMessages) {
-
-            var cp = {
-                cpType: '',
-                cpMessages: [],
-            }
-
-            var nmdMessages = [];
-            var nmdCounter = 0;
-
-            var ds = [];
-            var tec = [];
-
-            
-            
-            var counter = 0;
-            for (var i = cpMessages.length - 1; counter < 11; i--) {
-                counter++;
-
-                if (!cpMessages[i].cpCount) {
-
-                    vm.criticalPointsMessages[i].cpCount = true;
-
-                    if (cpMessages[i].cpType == 16) {
-                        nmdCounter++;
-
-                       
-
-                    }
-                        
-                    if (cpMessages[i].cpType == 17)
-                        tec.push(cpMessages[i])
-                    if (cpMessages[i].cpType == 13)
-                        ds.push(cpMessages[i])
-
-                }
-                
-
-
-            }
-            console.log('nmd', nmd.length);
-            console.log('tec', tec.length)
-            console.log('ds', ds.length)
-
-            if (nmd.length > 5) {
-                cp.cpType = "NMD";
-                cp.cpMessages = nmd;
-                vm.criticalPoints.push(cp);
-            }
-
-            if (tec.length > 8) {
-                cp.cpType = "TEC";
-                cp.cpMessages = nmd;
-                vm.criticalPoints.push(cp);
-            }
-
-            if (ds.length > 8) {
-                cp.cpType = "DS";
-                cp.cpMessages = ds;
-                vm.criticalPoints.push(cp);
-            }
-
-
-            
-
-
-        }
+       
 
         function getRoomObjectIndex(rooms, id) {
             var index = -1;
@@ -236,78 +208,7 @@
                 return 
         }
 
-        function updateCriticalPointsTenLastMessages(cpMsg) {
-            
-            if(criticalPointsTenLastMessages.length >= 10)
-                criticalPointsTenLastMessages.splice(0, 1)
-
-            criticalPointsTenLastMessages.push(cpMsg)
-
-
-            var cp = {
-                cpType: '',
-                cpMessages: [],
-            }
-
-            var nmd = [];
-            var tec = [];
-            var ds = [];
-            criticalPointsTenLastMessages.forEach(function (cp,i) {
-                if (cp.cpType == 16) 
-                    nmd.push(i);
-                
-                if (cp.cpType == 17)
-                    tec.push(i);
-
-                if (cp.cpType == 16)
-                    ds.push(i);
-            })
-
-            if (nmd.length > 5) {
-                cp.cpType = 16;
-                nmd.forEach(function (i) {
-                    cp.cpMessages.push(criticalPointsTenLastMessages[i]);
-           
-                })
-                vm.criticalPoints.push(cp);
-
-                nmd.forEach(function (i) {
-                    criticalPointsTenLastMessages.splice(i, 1);
-                })
-                vm.newcp = true;
-
-                
-            }
-
-            if (tec.length > 8) {
-                cp.cpType = 17;
-                tec.forEach(function (i) {
-                    cp.cpMessages.push(criticalPointsTenLastMessages[i]);
-
-                })
-                vm.criticalPoints.push(cp);
-
-                tec.forEach(function (i) {
-                    criticalPointsTenLastMessages.splice(i, 1);
-                })
-                vm.newcp = true;
-            }
-
-            if (ds.length > 8) {
-                cp.cpType = 17;
-                ds.forEach(function (i) {
-                    cp.cpMessages.push(criticalPointsTenLastMessages[i]);
-
-                })
-                vm.criticalPoints.push(cp);
-
-                ds.forEach(function (i) {
-                    criticalPointsTenLastMessages.splice(i, 1);
-                })
-                vm.newcp = true;
-            }
-
-        }
+        
        
 
     }

@@ -2,7 +2,9 @@
     width: auto;
     padding: 0;
     overflow: hidden;
-    outline: 3px solid rgb(128, 128, 128);
+    /*outline: 3px solid rgb(128, 128, 128);*/
+    
+    outline: 3px solid rgb(232, 229, 229);
     
 }
 .iframe-wrapper-overview {
@@ -31,9 +33,6 @@
 
 }
 
-.has-new-cp{
-    outline: 3px solid rgb(255, 0, 0);
-}
 .iframe-header-has-new-cp-or-room-is-open{
     position:relative;
     z-index: 1;
@@ -47,4 +46,22 @@
     transition: all 200ms ease-in-out;
 }
 
+.has-new-cp{
+    outline: 5px solid #428bca;
+}
+.has-new-cp-tec{
+    outline: 5px solid #f0ad4e;
+}
+.has-new-cp-nmd{
+    outline: 5px solid #5bc0de;
+}
+.has-new-cp-wds{
+    outline: 5px solid #d9534f;
+}
+.has-new-cp-cds{
+    outline: 5px solid #5cb85c;
+}
+.has-new-cp-idle{
+    outline: 5px solid #999999;
+}
 

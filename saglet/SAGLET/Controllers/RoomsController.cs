@@ -29,7 +29,7 @@ namespace SAGLET.Controllers
         private static IdlenessAnalyzer idle = new IdlenessAnalyzer(new List<string>());
         private readonly Object dbLock = new Object();
         private Dictionary<int, int> solutionIndex = new Dictionary<int, int>();
-        private CpAlarm criticalPointAlert = new CpAlarm(10, 8, 6);
+        private CpAlarm criticalPointAlert = new CpAlarm(1, 1, 1);
 
         public void ResetState()
         {
@@ -489,7 +489,7 @@ namespace SAGLET.Controllers
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
                 msg.CriticalPoints.Add(criticalPointAlert.NewCp((List<CriticalMsgPoints>)msg.CriticalPoints));
-                SaveChatMsgToDB(roomID, msg);
+                //SaveChatMsgToDB(roomID, msg);
 
                 if (msg.UserID != "server")
                     hubDetails.UpdateRoomMsgLiveControl(roomID.ToString(), msg);
@@ -540,11 +540,9 @@ namespace SAGLET.Controllers
             else
                 return "";
 
-<<<<<<< HEAD
-=======
             return "";
             //return VmtDevAPI.getSolutions(roomID)[this.solutionIndex[roomID]];
->>>>>>> 8f8db6a9b331891c9575287b6b7daba4f3b45e24
+
         }
 
         public void IdlenessOpenRoom(int idleWindow, List<int> roomIDs)
