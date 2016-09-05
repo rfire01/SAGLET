@@ -12,20 +12,26 @@ namespace SAGLET.Class
         private int roomID;
         private Dictionary<string, RoomUser> usersInfo;
         private NmdAlert nmdAlert;
+        private IdleAlert idleAlert;
 
         public RoomAnalyzer(int roomID)
         {
             this.roomID = roomID;
             this.usersInfo = new Dictionary<string, RoomUser>();
             this.nmdAlert = new NmdAlert();
+            this.idleAlert = new IdleAlert();
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, string user)
         {
+            //in case missed a user joined room
+            AddUserToRoom(user);
+            //
+            idleAlert.activity();
             CriticalPointTypes nmdRes = nmdAlert.HandleMessage(tag);
-            CriticalPointTypes userRes = usersInfo[user].HandleMessage(tag);
+            CriticalPointTypes userRes = usersInfo[user].HandleMessage(tag, nmdAlert.NmdStarted());
 
-            if (nmdRes == CriticalPointTypes.NMD || userRes == CriticalPointTypes.NMD)
+            if (nmdRes == CriticalPointTypes.NMD || (userRes == CriticalPointTypes.NMD && !nmdAlert.NmdInAlertWaitTime()))
                 return CriticalPointTypes.NMD;
             else
                 return CriticalPointTypes.None;
@@ -33,8 +39,14 @@ namespace SAGLET.Class
 
         public CriticalPointTypes HandleAction(string user)
         {
+            idleAlert.activity();
             CriticalPointTypes userRes = usersInfo[user].HandleAction();
             return CriticalPointTypes.None;
+        }
+
+        public CriticalPointTypes CheckForIdle()
+        {
+            return idleAlert.CheckIdle(usersInfo);
         }
 
         public void AddUserToRoom(string userID)

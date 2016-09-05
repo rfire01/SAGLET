@@ -1,7 +1,18 @@
 ﻿.cp-dashboard {
- outline:1px solid; 
- margin-top:13px; 
- margin-left:-15px; 
- margin-right:-12px;
+    /*outline:1px solid;*/
+    
+    margin-top:11px; 
+    margin-left:-17px; 
+    margin-right:-14px;
 }
 
+#cp-dashboard-primary {
+    border-color:#999;
+
+}
+
+#cp-dashboard-heading {
+    padding:0px; 
+    background-color:#777b80; 
+    border-color:#eeeeee;
+}

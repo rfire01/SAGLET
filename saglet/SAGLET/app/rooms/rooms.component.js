@@ -20,7 +20,17 @@
         vm.newCp = false;
         vm.cpRoom = '';
         vm.cpMsg = '';
+        
+        
+        vm.cpUser = ''
+        vm.cpTime = new Date();
+        
+        vm.cpType = ''
+        vm.cpPriority = ''
+        vm.cpAlertType = ''
 
+        vm.idlenessRoom = '';
+        vm.idlenessUsers = [];
 
         vm.onNewCriticalPoints = onNewCriticalPoints;
 
@@ -32,16 +42,8 @@
             if ($sessionStorage.user)
                 vm.roomList = ($sessionStorage.user.rooms.watch);
             //vm.roomList = $sessionStorage.user.rooms.watch;
-
-
-            $.connection.hub.disconnected(function () {
-
-                console.log(" **** Hub: disconnected **** ");
-                var connectionStatus = angular.element(document.querySelector('#connection-status'));
-                connectionStatus.removeClass('label-success').text('Offline').addClass('label-danger label-warning');
-            });
-
-
+            if (!$sessionStorage.rooms)
+                $sessionStorage.rooms = [];
 
             $.connection.hub.logging = true;
             /* Hub Start */
@@ -58,51 +60,106 @@
                         detailsHub.server.joinGroup(item.ID);
                     })
 
+                    var check = $interval(function () {
+                        var strRoomsList = getStrRoomsList(vm.roomList);
+                        detailsHub.server.checkIdleness(strRoomsList);
+                    }, 5000);
 
                 })
             .fail(function () {
                 console.log('Could not Connect!');
             });
-
-            var idleAlertFreq = detailsHub.server.GetIdleAlertFreq();
-            var check = $interval(function () {
-                var strRoomsList = getStrRoomsList(vm.roomList);
-                detailsHub.server.checkIdleness(strRoomsList);
-                console.log('** check **');
-            }, idleAlertFreq);
+         
+            
 
         }
 
-        detailsHub.client.updateIdlenessLive = function (res) {
-            console.info("************ Registered Complete ************");
-            console.log(res);
+        this.$onChanges = function (c) { };
+
+
+        $.connection.hub.connected = function () {
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
+        }
+
+        $.connection.hub.reconnecting = function () {
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-success label-danger').text('Reconnecting').addClass('label-warning');
+        }
+
+
+
+        $.connection.hub.disconnected(function () {
+
+            console.log(" **** Hub: disconnected **** ");
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-success').text('Offline').addClass('label-danger label-warning');
+        });
+
+
+
+        detailsHub.client.updateIdlenessLive = function (idelenssData) {
+            console.info("************ updateIdlenessLive ************");
+            var idel = JSON.parse(idelenssData);
+            for (var room in idel) {
+                vm.idlenessRoom = room;
+                vm.idlenessUsers = idel[room];
+                
+            }
             
+
         };
 
+        detailsHub.client.registeredComplete = function (res) {
+            console.info("************ Registered Complete ************");
+            console.log("************" + res + "************");
+
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
+            
+        };
+        
 
 
         detailsHub.client.updateRoomMsgLive = function (roomID, cpObject) {
             console.info('************ updateRoomMsgLive: ************ ' + roomID);
-            console.info(' ************ msg ************    ' + cpObject);
-            console.log(roomID);
-            console.log(cpObject);
-            vm.newCp = false;
-            returnCp(roomID, cpObject).then(function (CriticalPoints) {
-                console.log(CriticalPoints);
-                CriticalPoints.forEach(function (cp) {
 
-                    if (cp.Type == 0)
-                        return;
+            returnCp(cpObject).then(function (cp) {
+                if (cp.CriticalPoints[0].Type == 0)
+                    return;
 
-                    vm.cpRoom = cp.GroupID;
-                    vm.cpMsg = cp.Msg.Text;
-                    vm.cpType = cp.Type;
-                    vm.cpUser = cp.Msg.UserID;
-                    vm.cpTime = new Date(cp.Msg.TimeStamp).toTimeString().substring(0, 8);
-                    vm.cpPriority = cp.Priority;
+                if (cp.CriticalPoints[0].Type > 0)
+                    vm.newCp = true;
 
-                })
+               
+
+                vm.cpRoom = cp.GroupID;
+                vm.cpMsg = cp.Text;
+                vm.cpUser = cp.UserID;
+                vm.cpTime = new Date().toTimeString().substring(0, 8);
+                //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
+
+                vm.cpType = cp.CriticalPoints[0].Type;
+                vm.cpPriority = cp.CriticalPoints[0].Priority;
+
+                vm.cpAlertType = cp.CriticalPoints[1].Type;
+                // vm.cpAlertPriority = cp.CriticalPoints[0].Priority;
+
+                if (cp.CriticalPoints[0].Type == 0)
+                    return;
+
+                if (cp.CriticalPoints[0].Type > 0)
+                    vm.newCp = true;
+
             })
+           
+            
+
+            
+
+          
+
+           
         };
 
 
@@ -111,21 +168,11 @@
                 $.connection.roomDetailsHub.server.joinGroup(item.ID);
             })
         }
-        function setupCpObject(rooms) {
-            rooms.forEach(function (item) {
-                item.cp = {
-                    newCp: false,
-                    DS: false,
-                    TEC: false,
-                    NMD: false
-                };
-            })
-            return rooms;
-        }
+        
 
-        function returnCp(id, cp) {
+        function returnCp(cp) {
             return $q(function (resolve, reject) {
-                resolve(cp);
+                resolve(JSON.parse(cp));
 
             })
         }

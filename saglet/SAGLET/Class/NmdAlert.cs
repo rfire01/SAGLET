@@ -26,9 +26,23 @@ namespace SAGLET.Class
             this.startRoomWaitTime = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["startRoomWaitTime"]);
             this.AlertWaitTime = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["nmdAlertWaitTime"]);
             this.startRoomTime = new DateTime();
+            this.messagesTime = new Queue<DateTime>();
+            this.messagesType = new Queue<CriticalPointTypes>();
             this.roomOpen = false;
             this.nmdCount = 0;
             this.lastAlertTime = new DateTime();
+        }
+
+        public Boolean NmdStarted()
+        {
+            return roomOpen;
+        }
+        
+        public Boolean NmdInAlertWaitTime()
+        {
+            DateTime currentTime = DateTime.Now;
+            int secondsPass = calculateTimeDiffInSeconds(lastAlertTime, currentTime);
+            return ((secondsPass < AlertWaitTime) && lastAlertTime != DateTime.MinValue);
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag)
@@ -70,6 +84,8 @@ namespace SAGLET.Class
 
         private void checkRoomNeedToOpen()
         {
+            if (startRoomTime == DateTime.MinValue)
+                startRoomTime = DateTime.Now;
             //check if room hasn't started yet
             if (!roomOpen)
             {
@@ -95,7 +111,7 @@ namespace SAGLET.Class
         private Boolean HandleNMDWindow(CriticalPointTypes newTag)
         {
             DateTime currentTime = DateTime.Now;
-            while (calculateTimeDiffInSeconds(messagesTime.Peek(), currentTime) > nmdTimeWindow)
+            while (messagesTime.Count>0 && calculateTimeDiffInSeconds(messagesTime.Peek(), currentTime) > nmdTimeWindow)
             {
                 messagesTime.Dequeue();
                 messagesType.Dequeue();
@@ -107,7 +123,7 @@ namespace SAGLET.Class
             int count = 0;
             foreach (CriticalPointTypes tag in messagesType)
             {
-                if (tag.CompareTo("NMD") == 0)
+                if (tag.CompareTo(CriticalPointTypes.NMD) == 0)
                     count++;
             }
 

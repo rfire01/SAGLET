@@ -14,6 +14,8 @@ namespace SAGLET.Class
 {
     public class VmtDevAPI
     {
+        private static System.Timers.Timer Timer;
+
         private static RoomsController ctrl = new RoomsController();
 
         private static Dictionary<int, Socket> chatSockets = new Dictionary<int, Socket>();
@@ -104,6 +106,17 @@ namespace SAGLET.Class
 
         public static void RegisterLiveChat(int id)
         {
+
+            //string data = ;
+
+            
+
+            //Timer = new System.Timers.Timer();
+            //Timer.Elapsed += new System.Timers.ElapsedEventHandler(ctrl.HandleLiveMessage(, data));
+            //Timer.Interval = 10000; // 1000 ms * 60 seconds * 60 minutes : timer interval of 1 hour
+            //Timer.Start();
+
+
             var socket = IO.Socket("http://vmtdev.mathforum.org:80");
             chatSockets[id] = socket;
 

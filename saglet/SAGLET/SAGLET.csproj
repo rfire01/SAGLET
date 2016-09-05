@@ -300,6 +300,8 @@
     <Content Include="app\app.component.js" />
     <Content Include="app\appController.js" />
     <Content Include="app\common\app.common.js" />
+    <Content Include="app\rooms\components\cp-index\cp-index.component.html" />
+    <Content Include="app\rooms\components\cp-index\cp-index.component.js" />
     <Content Include="app\rooms\components\cp-dashboard\cp-dashboard.component.html" />
     <Content Include="app\rooms\components\cp-dashboard\cp-dashboard.component.js" />
     <Content Include="app\common\data\localStorage.service.js" />

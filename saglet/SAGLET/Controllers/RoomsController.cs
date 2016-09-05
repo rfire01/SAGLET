@@ -34,7 +34,6 @@ namespace SAGLET.Controllers
 
         private AlertAnalyzer criticalPointAlerts = new AlertAnalyzer();
 
-
         public void ResetState()
         {
             lock (dbLock)
@@ -492,7 +491,25 @@ namespace SAGLET.Controllers
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
-                msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID,msg.UserID,(List<CriticalMsgPoints>)msg.CriticalPoints));
+                if (msg.Text.Contains("joined"))
+                {
+                    criticalPointAlerts.user_joined(roomID, msg.UserID);
+                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                    serverCp.Type = CriticalPointTypes.None;
+                    msg.CriticalPoints.Add(serverCp);
+                }
+                else if (msg.Text.Contains("left"))
+                {
+                    criticalPointAlerts.user_left(roomID, msg.UserID);
+                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                    serverCp.Type = CriticalPointTypes.None;
+                    msg.CriticalPoints.Add(serverCp);
+                }
+                else
+                {
+                    msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID, msg.UserID, (List<CriticalMsgPoints>)msg.CriticalPoints));
+                }
+                //msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID,msg.UserID,(List<CriticalMsgPoints>)msg.CriticalPoints));
                 //msg.CriticalPoints.Add(criticalPointAlert.NewCp((List<CriticalMsgPoints>)msg.CriticalPoints));
 
                 //temporary canceled
@@ -583,6 +600,8 @@ namespace SAGLET.Controllers
         {
             foreach (int roomID in roomIDs)
             {
+                CriticalPointTypes res = criticalPointAlerts.IsIdle(roomID);
+
                 Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
                 List<String> idleUsers = idle.whoIsIdle(roomID);
    

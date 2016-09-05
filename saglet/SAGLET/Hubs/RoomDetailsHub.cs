@@ -9,7 +9,7 @@ using SAGLET.Models;
 using Hangfire;
 using System.Threading.Tasks;
 using SAGLET.Class;
-
+using System.Web.Script.Serialization;
 
 namespace SAGLET.Hubs
 {
@@ -71,8 +71,9 @@ namespace SAGLET.Hubs
 
        
         internal void UpdateRoomMsgLiveControl(string roomID, VMsg msg)
-        {   
-            context.Clients.Group(roomID).updateRoomMsgLive(roomID, msg.CriticalPoints);
+        {
+            var json = new JavaScriptSerializer().Serialize(msg);
+            context.Clients.Group(roomID).updateRoomMsgLive(roomID, json);
             //context.Clients.Client(Context.ConnectionId).updateNewMsg(msg);
 
         }

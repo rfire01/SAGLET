@@ -20,10 +20,13 @@ namespace SAGLET.Class
             this.nmdCount = 0;
         }
 
-        public CriticalPointTypes HandleMessage(CriticalPointTypes tag)
+        public CriticalPointTypes HandleMessage(CriticalPointTypes tag,Boolean nmdStarted)
         {
             lastMessageTime = DateTime.Now;
-            if (tag == CriticalPointTypes.None)
+            if(!nmdStarted)
+                return CriticalPointTypes.None;
+
+            if (tag == CriticalPointTypes.NMD)
                 nmdCount++;
             else
                 nmdCount = 0;

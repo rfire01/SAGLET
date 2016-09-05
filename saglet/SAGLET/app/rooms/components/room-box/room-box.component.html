@@ -1,5 +1,4 @@
-﻿<div ng-class="{'col-md-3': vm.overview,
-                'col-md-10 thisRoomIsOpenMoveItLeft': vm.fullView}"
+﻿<div ng-class="{'col-md-3': vm.overview, 'col-md-9': vm.fullView}"
      style="padding-right:6px; padding-left:6px; padding-top:15px;">
 
 
@@ -7,33 +6,33 @@
     <div class="iframe-wrapper"
          ng-hide="vm.hide"
          ng-class="{'iframe-wrapper-overview': vm.overview, 'iframe-wrapper-this-room-is-open': vm.fullView,
-                    'has-new-cp':vm.newcp}">
+                    'has-new-cp-nmd':vm.newcp && vm.newCpBorderAlertType == '16',
+                    'has-new-cp-tec':vm.newcp && vm.newCpBorderAlertType == '17',
+                    'has-new-cp-idle':vm.newcp && vm.newCpBorderAlertType == 'idle',
+                    'has-new-cp-wds':vm.newcp && vm.newCpBorderAlertType == '15',
+                    'has-new-cp-cds':vm.newcp && vm.newCpBorderAlertType == '14'
+                   
+         }">
         <div class="panel panel-default ">
 
-            <!--<div class="navbar  navbar-default navbar-fixed-top ">
-                <div class="container-fluid">
-                    <cp-icons critical-points="vm.criticalPoints" full-view="vm.fullView"></cp-icons>
 
-                    <button type="button"
-                            class="btn btn-default btn-sm"
-                            aria-label="Left Align"
-                            ng-click="vm.openCloseFullView()">
-                        <span ng-class="{'glyphicon glyphicon-zoom-in': !vm.fullView, 'glyphicon glyphicon-zoom-out': vm.fullView }" aria-hidden="true"></span>
-                    </button>
-                </div>
-                </div>
-            </div>-->
+
             <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView || vm.newcp }">
                 Room: {{vm.room.ID}}
 
-                
-                <div class="panel-group" style="float:right">
-                    
-                    <cp-icons critical-points="vm.criticalPoints" full-view="vm.fullView"></cp-icons>
-                    
+
+                <div class="panel-group" style="float:right;">
+
+                    <span ng-repeat="cp in vm.newCriticalPoints track by $index">
+                        <cp-icons full-view="vm.fullView" critical-point="cp" critical-point-index="$index"></cp-icons>
+                      
+                    </span>
+                    <span><cp-icons critical-point="vm.cpAlertIdleType"></cp-icons></span>
+
                     <button type="button"
                             class="btn btn-default btn-sm"
                             aria-label="Left Align"
+                            style="margin-top:-5px;"
                             ng-click="vm.openCloseFullView()">
                         <span ng-class="{'glyphicon glyphicon-zoom-in': !vm.fullView, 'glyphicon glyphicon-zoom-out': vm.fullView }" aria-hidden="true"></span>
                     </button>
@@ -41,16 +40,38 @@
 
             </div>
 
-            <div class="panel-body">
-                <iframe ng-class="{'scaled-frame':vm.overview, 'scaled-full-size-frame-for-800-plus-width-screens':vm.fullView && vm.screenWidth >= 1371, 'scaled-full-size-frame-for-800-minus-width-screens':vm.fullView && vm.screenWidth <= 1370  }" scrolling="no" ng-src="{{vm.iframeLink(vm.room.ID)}}"></iframe>
+            <div class="panel-body" style="padding:0px;">
+                <!--<iframe ng-class="{'scaled-frame':vm.overview, 'scaled-full-size-frame-for-800-plus-width-screens':vm.fullView && vm.screenWidth >= 1371, 'scaled-full-size-frame-for-800-minus-width-screens':vm.fullView && vm.screenWidth <= 1370  }" scrolling="no" ng-src="{{vm.iframeLink(vm.room.ID)}}"></iframe>-->
+                <iframe ng-src="{{vm.iframeLink(vm.room.ID)}}"
+                        scrolling="no"
+                        ng-class="{
+                        'scaled-init-1920x1080': (vm.scaledInit && vm.screenWidthHeight == '1920x'),
+                        'scaled-init-1600x900': (vm.scaledInit && vm.screenWidthHeight == '1600x'),
+                        'scaled-init-1366x728': (vm.scaledInit && vm.screenWidthHeight == '1366x'),
+                        'scaled-init-1280x1024': (vm.scaledInit && vm.screenWidthHeight == '1280x'),
+                        'scaled-to-full-size-1920x1080': (vm.fullView && vm.screenWidthHeight == '1920x'),
+                        'scaled-to-full-size-1600x900': (vm.fullView && vm.screenWidthHeight == '1600x'),
+                        'scaled-to-full-size-1366x728': (vm.fullView && vm.screenWidthHeight == '1366x'),
+                        'scaled-to-full-size-1280x1024': (vm.fullView && vm.screenWidthHeight == '1280x'),
+                        'scaled-to-room-box-1920x1080': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1920x'),
+                        'scaled-to-room-box-1600x900': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1600x'),
+                        'scaled-to-room-box-1366x728': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1366x'),
+                        'scaled-to-room-box-1280x1024': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1280x')
+                        }"></iframe>
             </div>
         </div>
 
     </div>
 </div>
-<div class="col-md-2" ng-if="!vm.overview && vm.fullView">
-    
-    <cp-dashboard critical-points="vm.criticalPoints"></cp-dashboard>
-    
+<div class="col-md-3" ng-if="!vm.overview && vm.fullView">
+
+    <cp-dashboard  critical-points-idleness="vm.idleness" critical-points-messages="vm.criticalPointsMessages" new-critical-points="vm.newCriticalPoints" old-critical-points="vm.oldCriticalPoints"></cp-dashboard>
+
 </div>
+
+
+
+
+
+
 

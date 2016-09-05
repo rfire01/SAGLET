@@ -46,6 +46,7 @@ namespace SAGLET.Class
             CriticalPointTypes alert = CriticalPointTypes.None;
             if (this.rooms.ContainsKey(roomID) == true)
             {
+
                 alert = this.rooms[roomID].HandleMessage(cps[0].Type, user);
             }
 
@@ -65,6 +66,18 @@ namespace SAGLET.Class
             CriticalActionPoints res = new CriticalActionPoints();
             res.Type = alert;
             return res;
+        }
+
+        public CriticalPointTypes IsIdle(int roomID)
+        {
+            if (this.rooms.ContainsKey(roomID) == true)
+            {
+                return this.rooms[roomID].CheckForIdle();
+            }
+            else
+            {
+                return CriticalPointTypes.None;
+            }
         }
 
     }

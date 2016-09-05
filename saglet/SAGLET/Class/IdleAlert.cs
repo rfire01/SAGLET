@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using SAGLET.Models;
+
 namespace SAGLET.Class
 {
     public class IdleAlert
@@ -24,9 +26,12 @@ namespace SAGLET.Class
                 StartTime = currentTime;
         }
 
-        public Boolean CheckIdle(Dictionary<string, RoomUser> usersInfo)
+        public CriticalPointTypes CheckIdle(Dictionary<string, RoomUser> usersInfo)
         {
-            return false;
+            if (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo))
+                return CriticalPointTypes.IDLE;
+            else
+                return CriticalPointTypes.None;
         }
 
         private int calculateTimeDiffInSeconds(DateTime oldTime, DateTime newTime)

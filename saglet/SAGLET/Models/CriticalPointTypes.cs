@@ -25,5 +25,6 @@ namespace SAGLET.Models
         WDS,
         NMD,
         TEC,
+        IDLE,
     }
 }

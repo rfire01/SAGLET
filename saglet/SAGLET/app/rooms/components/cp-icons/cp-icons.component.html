@@ -1,17 +1,17 @@
-﻿<!--<div class="btn-group" role="group" aria-label="true">-->
-<!--<span class="glyphicon glyphicon-exclamation-sign" style="color:red;" aria-hidden="true"></span>
-<span class="glyphicon glyphicon-exclamation-sign" style="color:#ff6a00;" aria-hidden="true"></span>
-<span class="glyphicon glyphicon-exclamation-sign" style="color:#0026ff;" aria-hidden="true"></span>
-<span class="glyphicon glyphicon-exclamation-sign" style="color:#ff006e;" aria-hidden="true"></span>
-<span class="glyphicon glyphicon-exclamation-sign" style="color:#00ff21;" aria-hidden="true"></span>-->
-<!--</div>-->
+﻿<span class="label "
+      ng-class="{'label-info': vm.criticalPoint.cpType == 13,
+                 'label-success': vm.criticalPoint.cpType == 14,
+                 'label-danger': vm.criticalPoint.cpType == 15,
+                 'label-primary': vm.criticalPoint.cpType == 16,
+                 'label-warning': vm.criticalPoint.cpType == 17,
+                 'label-default': vm.criticalPoint.cpType == 'idle',
 
-<span ng-repeat="cp in vm.criticalPoints"
-      class="label "
-      
-      ng-class="{'label-default': cp.cpType == 13, 'label-primary': cp.cpType == 16, 'label-warning': cp.cpType == 17,'cp-icons': !vm.fullView, 'cp-icons-full-view': vm.fullView, 'cp-icons-dashboard': vm.dashboard}">
-        {{vm.cpTypeChanger(cp.cpType)}}
-    
+                 'cp-icons': !vm.fullView,
+                 'cp-icons-full-view': vm.fullView,
+                 'cp-icons-dashboard': vm.dashboard
+      }">
+    <!--<span ng-show="vm.criticalPoint.cpType && vm.criticalPoint.cpAlertType > 0" style="color:white">{{vm.criticalPointIndex + 1}}</span>-->
+    <!--<sapn ng-show="vm.criticalPoint.cpType && vm.criticalPoint.cpAlertType > 0 &&  vm.fullView"> {{vm.cpTypeChanger(vm.criticalPoint.cpType)}} </sapn>-->
+    <sapn> {{vm.cpTypeChangerShorts(vm.criticalPoint.cpType)}} </sapn>
 </span>
-
 
