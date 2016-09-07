@@ -14,7 +14,7 @@
         var vm = this;
         
         var indexHub = $.connection.roomIndexHub;
-
+        vm.loader = true;
 
 
         vm.user = {
@@ -35,6 +35,7 @@
             $.connection.hub.start().done(function () {
                 console.info(" ** hub started ** ");
                 indexHub.server.getUserName();
+                vm.loader = false;
                 //indexHub.server.getRooms();
             });
 

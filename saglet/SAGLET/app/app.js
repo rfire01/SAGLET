@@ -9,9 +9,9 @@
         'app.home',
         'app.rooms',
         'app.actions',
-        'app.common'
+        'app.common',
         // 3rd Party Modules
-        
+        'angularSpinner'
     ])
    
 })();

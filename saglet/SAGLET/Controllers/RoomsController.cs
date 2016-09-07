@@ -44,20 +44,6 @@ namespace SAGLET.Controllers
             hubIndex = new RoomIndexHub();
         }
 
-        ////GET: USER LOGIN
-        //public ActionResult userLoginStatus()
-        //{
-        //    string user = AppHelper.GetVmtUser();
-        //    bool login = String.IsNullOrEmpty(user);
-        //    //if ( user)
-        //    //    ViewBag.Mod = true;
-        //    //else
-        //    //    ViewBag.Mod = false
-        //    //        ;
-        //    return View(login);
-        //}
-
-
         // API CONTROLLER //
 
         // GET: Rooms

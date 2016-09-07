@@ -6,18 +6,18 @@
     <div class="iframe-wrapper"
          ng-hide="vm.hide"
          ng-class="{'iframe-wrapper-overview': vm.overview, 'iframe-wrapper-this-room-is-open': vm.fullView,
-                    'has-new-cp-nmd':vm.newcp && vm.newCpBorderAlertType == '16',
-                    'has-new-cp-tec':vm.newcp && vm.newCpBorderAlertType == '17',
-                    'has-new-cp-idle':vm.newcp && vm.newCpBorderAlertType == 'idle',
-                    'has-new-cp-wds':vm.newcp && vm.newCpBorderAlertType == '15',
-                    'has-new-cp-cds':vm.newcp && vm.newCpBorderAlertType == '14'
-                   
+                    'has-new-cp-nmd':vm.newCpBorderAlertType == '16',
+                    'has-new-cp-tec':vm.newCpBorderAlertType == '17',
+                    'has-new-cp-idle':vm.newCpBorderAlertType == 'idle',
+                    'has-new-cp-wds':vm.newCpBorderAlertType == '15',
+                    'has-new-cp-cds':vvm.newCpBorderAlertType == '14'
+
          }">
         <div class="panel panel-default ">
 
 
 
-            <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView || vm.newcp }">
+            <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView }">
                 Room: {{vm.room.ID}}
 
 
@@ -25,7 +25,7 @@
 
                     <span ng-repeat="cp in vm.newCriticalPoints track by $index">
                         <cp-icons full-view="vm.fullView" critical-point="cp" critical-point-index="$index"></cp-icons>
-                      
+
                     </span>
                     <span><cp-icons critical-point="vm.cpAlertIdleType"></cp-icons></span>
 
@@ -45,29 +45,33 @@
                 <iframe ng-src="{{vm.iframeLink(vm.room.ID)}}"
                         scrolling="no"
                         ng-class="{
-                        'scaled-init-1920x1080': (vm.scaledInit && vm.screenWidthHeight == '1920x'),
-                        'scaled-init-1600x900': (vm.scaledInit && vm.screenWidthHeight == '1600x'),
-                        'scaled-init-1366x728': (vm.scaledInit && vm.screenWidthHeight == '1366x'),
-                        'scaled-init-1280x1024': (vm.scaledInit && vm.screenWidthHeight == '1280x'),
-                        'scaled-to-full-size-1920x1080': (vm.fullView && vm.screenWidthHeight == '1920x'),
-                        'scaled-to-full-size-1600x900': (vm.fullView && vm.screenWidthHeight == '1600x'),
-                        'scaled-to-full-size-1366x728': (vm.fullView && vm.screenWidthHeight == '1366x'),
-                        'scaled-to-full-size-1280x1024': (vm.fullView && vm.screenWidthHeight == '1280x'),
-                        'scaled-to-room-box-1920x1080': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1920x'),
-                        'scaled-to-room-box-1600x900': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1600x'),
-                        'scaled-to-room-box-1366x728': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1366x'),
-                        'scaled-to-room-box-1280x1024': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1280x')
-                        }"></iframe>
+                        'scaled-init-1920x1080': (vm.scaledInit && vm.screenWidthHeight == '1920x1080'),
+                        'scaled-init-1600x900': (vm.scaledInit && vm.screenWidthHeight == '1600x900'),
+                        'scaled-init-1366x728': (vm.scaledInit && vm.screenWidthHeight == '1366x768'),
+                        'scaled-init-1280x1024': (vm.scaledInit && vm.screenWidthHeight == '1280x1024'),
+                        'scaled-to-full-size-1920x1080': (vm.fullView && vm.screenWidthHeight == '1920x1080'),
+                        'scaled-to-full-size-1600x900': (vm.fullView && vm.screenWidthHeight == '1600x900'),
+                        'scaled-to-full-size-1366x728': (vm.fullView && vm.screenWidthHeight == '1366x768'),
+                        'scaled-to-full-size-1280x1024': (vm.fullView && vm.screenWidthHeight == '1280x1024'),
+                        'scaled-to-room-box-1920x1080': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1920x1080'),
+                        'scaled-to-room-box-1600x900': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1600x900'),
+                        'scaled-to-room-box-1366x728': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1366x768'),
+                        'scaled-to-room-box-1280x1024': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1280x1024')
+                        }">
+
+                </iframe>
             </div>
         </div>
-
+        
     </div>
 </div>
+
 <div class="col-md-3" ng-if="!vm.overview && vm.fullView">
 
-    <cp-dashboard  critical-points-idleness="vm.idleness" critical-points-messages="vm.criticalPointsMessages" new-critical-points="vm.newCriticalPoints" old-critical-points="vm.oldCriticalPoints"></cp-dashboard>
+    <cp-dashboard critical-points-idleness="vm.idleness" critical-points-messages="vm.criticalPointsMessages" new-critical-points="vm.newCriticalPoints" old-critical-points="vm.oldCriticalPoints"></cp-dashboard>
 
 </div>
+
 
 
 

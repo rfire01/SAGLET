@@ -23,7 +23,7 @@
             controllerAs: 'vm',
             controller: ['$window', '$interval', controller]
         })
-    function controller($window,$interval) {
+    function controller($window, $interval) {
         var vm = this;
 
 
@@ -31,6 +31,7 @@
         vm.overview = true;
         vm.screenWidthHeight = {}
         vm.roomsCtrl = [];
+
         //vm.cp = {};
         // vm.handelCriticalPoints = handelCriticalPoints;
 
@@ -46,7 +47,7 @@
             vm.screenWidthHeight = setScreenWidthHeight();
             //var time = ['3000', '2000', '5000', '8000', '10000', '180000', '200000', '220000'];
             //var cpsss = $interval(function () {
-                
+
             //    var message = ['msg1', 'msg2', 'במכבי ת"א מודאגים לקראת המפגש בספליט‏', "קוז'יקרו פוטר מחיפה"];
             //    var type = ['13', '16', '17'];
             //    var isers = ['אבי נמני', 'berko', 'איציק הסיני', 'assad', 'sadam']
@@ -71,17 +72,17 @@
 
             if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changesObj.cpUser || changesObj.cpAlertType || changesObj.cpTime)
                 handelCriticalPoints(this.cpRoom, changesObj.cpType);
-                
-            
+
+
             //handelCriticalPoints
 
             if (changesObj.idlenessRoom && changesObj.idlenessUsers.currentValue.length > 0)
                 handelIdleness(vm.idlenessRoom);
-                
-                //handelCriticalPoints(this.idlenessRoom, 'idle');
-                
-            
-                
+
+            //handelCriticalPoints(this.idlenessRoom, 'idle');
+
+
+
         }
 
 
@@ -128,7 +129,7 @@
                 type = 'idle';
                 msg = vm.idlenessUsers;
             }
-                
+
 
             vm.roomsCtrl.forEach(function (roomCtrl) {
                 if (roomCtrl.room.ID == roomID) {
@@ -140,12 +141,13 @@
 
         function setScreenWidthHeight() {
 
-            var width = $window.screen.availWidth;
-            var height = $window.screen.availHeight;
+            var width = $window.screen.width;
+            var height = $window.screen.height;
 
+            console.log("*** screen ***");
             console.log(width + 'x' + height);
 
-            return width + 'x';
+            return width + 'x' + height;
 
         }
 
@@ -154,7 +156,7 @@
                 if (roomCtrl.room.ID == roomID) {
                     roomCtrl.setIdleness(vm.idlenessUsers);
                     return;
-                    
+
                 }
             })
 

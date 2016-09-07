@@ -7,6 +7,7 @@
     "angular": "^1.5.7",
     "angular-route": "^1.5.7",
     "angular-signalr-hub": "^1.6.2",
+    "angular-spinner": "^0.8.1",
     "bootstrap-material-design": "^0.5.10",
     "ngstorage": "^0.3.10"
   },

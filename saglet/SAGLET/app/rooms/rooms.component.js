@@ -13,7 +13,7 @@
         var vm = this;
 
         var detailsHub = $.connection.roomDetailsHub;
-
+        vm.loader = true;
         vm.user;
         vm.roomList = [];
         vm.cp = {};
@@ -34,6 +34,7 @@
 
         vm.onNewCriticalPoints = onNewCriticalPoints;
 
+        vm.hubConnectionStauts = '';
 
         this.$onInit = function () {
 
@@ -52,7 +53,8 @@
                 .done(function (res) {
                     console.info("************ hub started ************");
 
-
+                    vm.loader = false;
+                    
                     var strRoomsList = getStrRoomsList(vm.roomList);
                     detailsHub.server.startIdleness(strRoomsList);
 
@@ -68,6 +70,8 @@
                 })
             .fail(function () {
                 console.log('Could not Connect!');
+                vm.loader = false;
+                vm.hubConnectionStauts = 'fail'
             });
          
             
@@ -78,11 +82,13 @@
 
 
         $.connection.hub.connected = function () {
+            vm.hubConnectionStauts = 'connected';
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
         }
 
         $.connection.hub.reconnecting = function () {
+
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-success label-danger').text('Reconnecting').addClass('label-warning');
         }
@@ -92,8 +98,15 @@
         $.connection.hub.disconnected(function () {
 
             console.log(" **** Hub: disconnected **** ");
+
+            vm.hubConnectionStauts = 'disconnected';
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-success').text('Offline').addClass('label-danger label-warning');
+            
+            setTimeout(function () {
+                $.connection.hub.start();
+            }, 5000);
+
         });
 
 
@@ -123,7 +136,7 @@
 
         detailsHub.client.updateRoomMsgLive = function (roomID, cpObject) {
             console.info('************ updateRoomMsgLive: ************ ' + roomID);
-
+           
             returnCp(cpObject).then(function (cp) {
                 if (cp.CriticalPoints[0].Type == 0)
                     return;

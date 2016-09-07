@@ -1,2 +1,8 @@
-﻿<rooms-overview rooms="vm.roomList" new-cp="vm.newCp" idleness-room="vm.idlenessRoom" idleness-users="vm.idlenessUsers" cp-room="vm.cpRoom" cp-msg="vm.cpMsg" cp-type="vm.cpType" cp-user="vm.cpUser" cp-time="vm.cpTime" cp-priority="vm.cpPriority" cp-alert-type="vm.cpAlertType"></rooms-overview>
+﻿<span ng-show="vm.loader && vm.hubConnectionStauts != 'fail'" us-spinner="{radius:55, width:8, length: 16}"></span>
+<!--<div ng-show="!vm.loader">-->
 
+<rooms-overview rooms="vm.roomList" new-cp="vm.newCp" idleness-room="vm.idlenessRoom" idleness-users="vm.idlenessUsers" cp-room="vm.cpRoom" cp-msg="vm.cpMsg" cp-type="vm.cpType" cp-user="vm.cpUser" cp-time="vm.cpTime" cp-priority="vm.cpPriority" cp-alert-type="vm.cpAlertType"></rooms-overview>
+
+<!--</div>-->
+
+<span ng-show="vm.hubConnectionStauts == 'fail'">VMT connection fail. Please reload this page.</span>
