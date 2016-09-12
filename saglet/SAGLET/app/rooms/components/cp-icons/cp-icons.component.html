@@ -10,8 +10,14 @@
                  'cp-icons-full-view': vm.fullView,
                  'cp-icons-dashboard': vm.dashboard
       }">
-    <!--<span ng-show="vm.criticalPoint.cpType && vm.criticalPoint.cpAlertType > 0" style="color:white">{{vm.criticalPointIndex + 1}}</span>-->
-    <!--<sapn ng-show="vm.criticalPoint.cpType && vm.criticalPoint.cpAlertType > 0 &&  vm.fullView"> {{vm.cpTypeChanger(vm.criticalPoint.cpType)}} </sapn>-->
-    <sapn> {{vm.cpTypeChangerShorts(vm.criticalPoint.cpType)}} </sapn>
+    <i ng-class="{
+       'glyphicon glyphicon-ok fa-lg': vm.criticalPoint.cpType == 14,
+       'glyphicon glyphicon-remove fa-lg': vm.criticalPoint.cpType == 15,
+       'fa fa-question fa-lg': vm.criticalPoint.cpType == 16,
+       'glyphicon glyphicon-wrench fa-lg':  vm.criticalPoint.cpType == 17,
+       'fa fa-bed fa-lg': vm.criticalPoint.cpType == 'idle',
+
+       }"></i>
+    <!--<sapn> {{vm.cpTypeChangerShorts(vm.criticalPoint.cpType)}} </sapn>-->
 </span>
 

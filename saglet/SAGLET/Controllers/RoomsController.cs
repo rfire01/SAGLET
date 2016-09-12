@@ -77,9 +77,9 @@ namespace SAGLET.Controllers
         {
 
 
-            //try
-            //{
-            string user = AppHelper.GetVmtUser();
+            try
+            {
+                string user = AppHelper.GetVmtUser();
             // make HTML request
             var client = new ExtendedWebClient();
             string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
@@ -93,12 +93,13 @@ namespace SAGLET.Controllers
                 VmtDevAPI.RegisterLiveChat(room.ID);
                 VmtDevAPI.RegisterLiveActions(room.ID);
             }
+                //GetRoomsList();
 
-            //}
-            // catch (Exception e)
-            //{
-            // throw e;
-            //}
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
             //return newRooms.ToString();
             //return Json(newRooms, JsonRequestBehavior.AllowGet);
             // return View("Index");
@@ -477,26 +478,29 @@ namespace SAGLET.Controllers
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
-                if (msg.Text.Contains("joined"))
-                {
-                    criticalPointAlerts.user_joined(roomID, msg.UserID);
-                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
-                    serverCp.Type = CriticalPointTypes.None;
-                    msg.CriticalPoints.Add(serverCp);
-                }
-                else if (msg.Text.Contains("left"))
-                {
-                    criticalPointAlerts.user_left(roomID, msg.UserID);
-                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
-                    serverCp.Type = CriticalPointTypes.None;
-                    msg.CriticalPoints.Add(serverCp);
-                }
-                else
-                {
-                    msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID, msg.UserID, (List<CriticalMsgPoints>)msg.CriticalPoints));
-                }
-                //msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID,msg.UserID,(List<CriticalMsgPoints>)msg.CriticalPoints));
-                //msg.CriticalPoints.Add(criticalPointAlert.NewCp((List<CriticalMsgPoints>)msg.CriticalPoints));
+
+                //if (msg.Text.Contains("joined"))
+                //{
+                //    criticalPointAlerts.user_joined(roomID, msg.UserID);
+                //    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                //    serverCp.Type = CriticalPointTypes.None;
+                //    msg.CriticalPoints.Add(serverCp);
+                //}
+                //else if (msg.Text.Contains("left"))
+                //{
+                //    criticalPointAlerts.user_left(roomID, msg.UserID);
+                //    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                //    serverCp.Type = CriticalPointTypes.None;
+                //    msg.CriticalPoints.Add(serverCp);
+                //}
+                //else
+                //{
+                //    msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID, msg.UserID, (List<CriticalMsgPoints>)msg.CriticalPoints));
+                //}
+
+                //temp for test
+                msg.CriticalPoints.Add(((List<CriticalMsgPoints>)msg.CriticalPoints)[0]);
+
 
                 //temporary canceled
                 //SaveChatMsgToDB(roomID, msg); 
@@ -588,13 +592,15 @@ namespace SAGLET.Controllers
             {
                 CriticalPointTypes res = criticalPointAlerts.IsIdle(roomID);
 
-                Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
-                List<String> idleUsers = idle.whoIsIdle(roomID);
-   
-                idles.Add(roomID, idleUsers);
+                
+                //Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
+                //List<String> idleUsers = idle.whoIsIdle(roomID);
+                //idles.Add(roomID, idleUsers);
+                //string json2 = JsonConvert.SerializeObject(idles);
 
-                string json2 = JsonConvert.SerializeObject(idles);
-                hubDetails.UpdateIdleness(roomID.ToString(), json2);    
+                string jsonRes = JsonConvert.SerializeObject(res);
+
+                hubDetails.UpdateIdleness(roomID.ToString(), jsonRes);    
             }   
         }
 

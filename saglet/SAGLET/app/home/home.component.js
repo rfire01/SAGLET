@@ -23,6 +23,7 @@
         };
 
         vm.changeWatchStatus = changeWatchStatus;
+        vm.updateRooms = updateRooms;
         //vm.test = function () {
         //    $.connection.hub.stop();
         //}
@@ -178,7 +179,9 @@
             $sessionStorage.user.rooms.rest = vm.user.rooms.rest;    
         }
 
-
+        function updateRooms() {
+            indexHub.server.updateRooms();
+        }
 
     }
 
