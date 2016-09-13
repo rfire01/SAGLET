@@ -120,18 +120,24 @@ namespace SAGLET.Hubs
                 return;
             List<int> roomList = rooms.Split(',').Select(Int32.Parse).ToList();
             VmtDevAPI.OpenAnalyzeRooms(roomList);
+
+            context.Clients.Client(Context.ConnectionId).updateIdlenessAlertFrequency(this.idlenessAlertFrequency);
+            //GetIdleAlertFreq();
             //VmtDevAPI.HnadleIdleness(roomList)
         }
 
-        public int GetIdleAlertFreq()
+        public void GetIdleAlertFreq()
         {
-            return this.idlenessAlertFrequency;
+
+            context.Clients.Client(Context.ConnectionId).updateIdlenessAlertFrequency(this.idlenessAlertFrequency);
+           // context.Clients.Group(roomID).updateRoomMsgLive(this.idlenessAlertFrequency);
+
         }
 
         public void UpdateIdleness(string roomID, string idles)
         {
             
-            context.Clients.Group(roomID).updateIdlenessLive(idles);
+            context.Clients.Group(roomID).updateIdlenessLive(roomID, idles);
             //context.Clients.Client(Context.ConnectionId).updateIdlenessLive(idles);
 
         }

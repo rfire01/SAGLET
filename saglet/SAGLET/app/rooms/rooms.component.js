@@ -13,6 +13,8 @@
         var vm = this;
 
         var detailsHub = $.connection.roomDetailsHub;
+        var idleAlertFreq = 5000;
+
         vm.loader = true;
         vm.user;
         vm.roomList = [];
@@ -61,11 +63,20 @@
                     vm.roomList.forEach(function (item) {
                         detailsHub.server.joinGroup(item.ID);
                     })
+                    
+                    //console.log(idleAlertFreq);
+
+                    //detailsHub.client.updateIdlenessAlertFrequency = function (freq) {
+                    //    console.log("freq " + freq);
+                    //    idleAlertFreq = freq;
+                    //}
 
                     var check = $interval(function () {
                         var strRoomsList = getStrRoomsList(vm.roomList);
                         detailsHub.server.checkIdleness(strRoomsList);
-                    }, 15000);
+
+                        console.log("check " + idleAlertFreq);
+                    }, idleAlertFreq);
 
                 })
             .fail(function () {
@@ -78,7 +89,9 @@
 
         }
 
-        this.$onChanges = function (c) { };
+        this.$onChanges = function (c) {
+            console.log(c);
+        };
 
 
         $.connection.hub.connected = function () {
@@ -111,18 +124,38 @@
 
 
 
-        detailsHub.client.updateIdlenessLive = function (idelenssData) {
+        detailsHub.client.updateIdlenessLive = function (idleRoom, idelenssData) {
             console.info("************ updateIdlenessLive ************");
-            console.info(idelenssData);
-            var idel = JSON.parse(idelenssData);
-            console.info(idel);
-            for (var room in idel) {
-                vm.idlenessRoom = room;
-                vm.idlenessUsers = idel[room];
-                
-            }
             
+            var idel = JSON.parse(idelenssData);
+            console.log(idel);
 
+            returnCp(idelenssData).then(function (idle) {
+                if (idel.Key == '18') {
+                    vm.newCp = true;
+
+                    vm.cpRoom = idleRoom;
+                    vm.cpMsg = '';
+                    vm.cpUser = idle.Value;
+                    vm.cpTime = new Date().toTimeString().substring(0, 8);
+                    //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
+
+                    vm.cpType = 18;
+                    vm.cpPriority = '';
+
+                    vm.cpAlertType = 18;
+
+
+                }
+            })
+            //if (idel.Key == '18') {
+            //    console.log(idel.Key);
+            //    vm.idlenessRoom = idleRoom;
+            //    vm.idlenessUsers = idel.Value;
+            //}
+            
+            console.log(vm.idlenessRoom);
+            console.log(vm.idlenessUsers);
         };
 
         detailsHub.client.registeredComplete = function (res) {
@@ -160,22 +193,17 @@
                 vm.cpAlertType = cp.CriticalPoints[1].Type;
                 // vm.cpAlertPriority = cp.CriticalPoints[0].Priority;
 
-                if (cp.CriticalPoints[0].Type == 0)
-                    return;
+                //if (cp.CriticalPoints[0].Type == 0)
+                //    return;
 
-                if (cp.CriticalPoints[0].Type > 0)
-                    vm.newCp = true;
+                //if (cp.CriticalPoints[0].Type > 0)
+                //    vm.newCp = true;
 
-            })
-           
-            
-
-            
-
-          
-
-           
+            })        
         };
+
+        
+      
 
 
         function listenToTheseVmtRooms(rooms) {

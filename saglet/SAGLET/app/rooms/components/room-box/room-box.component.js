@@ -123,10 +123,10 @@
         }
         function setCriticalPointMessages(cpType, cpMsg, cpUser, cpTime, cpPriority, cpAlertType) {
 
-            console.log(cpType);
-            console.log(cpMsg);
+            //console.log(cpType);
+            //console.log(cpMsg);
 
-            console.log(cpAlertType);
+            //console.log(cpAlertType);
 
             var cp = {
                 cpUser: cpUser,

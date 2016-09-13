@@ -76,8 +76,8 @@
 
             //handelCriticalPoints
 
-            if (changesObj.idlenessRoom && changesObj.idlenessUsers.currentValue.length > 0)
-                handelIdleness(vm.idlenessRoom);
+            //if (changesObj.idlenessRoom && changesObj.idlenessUsers.currentValue.length > 0)
+            //    handelIdleness(vm.idlenessRoom);
 
             //handelCriticalPoints(this.idlenessRoom, 'idle');
 
@@ -118,22 +118,22 @@
 
         function handelCriticalPoints(roomID, newCpType) {
 
-            var type = vm.cpType;
-            var msg = vm.cpMsg;
+            //var type = vm.cpType;
+            //var msg = vm.cpMsg;
 
 
-            if (newCpType == 'idle') {
-                if (!vm.idlenessUsers.length || vm.idlenessUsers.length == 0)
-                    return;
+            //if (newCpType == 18) {
+            //    if (!vm.idlenessUsers.length || vm.idlenessUsers.length == 0)
+            //        return;
 
-                type = 'idle';
-                msg = vm.idlenessUsers;
-            }
+            //    type = 'idle';
+            //    msg = vm.idlenessUsers;
+            //}
 
 
             vm.roomsCtrl.forEach(function (roomCtrl) {
                 if (roomCtrl.room.ID == roomID) {
-                    roomCtrl.setCriticalPointMessages(type, msg, vm.cpUser, vm.cpTime, vm.cpPriority, vm.cpAlertType);
+                    roomCtrl.setCriticalPointMessages(vm.cpType, vm.cpMsg, vm.cpUser, vm.cpTime, vm.cpPriority, vm.cpAlertType);
                     return;
                 }
             })

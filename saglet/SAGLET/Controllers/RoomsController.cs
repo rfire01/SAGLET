@@ -611,7 +611,7 @@ namespace SAGLET.Controllers
 
                 string jsonRes = JsonConvert.SerializeObject(res);
 
-                hubDetails.UpdateIdleness(roomID.ToString(), jsonRes + ";" + roomID.ToString());    
+                hubDetails.UpdateIdleness(roomID.ToString(), jsonRes);    
             }   
         }
 
