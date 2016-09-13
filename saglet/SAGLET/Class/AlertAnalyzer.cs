@@ -68,7 +68,7 @@ namespace SAGLET.Class
             return res;
         }
 
-        public CriticalPointTypes IsIdle(int roomID)
+        public KeyValuePair<CriticalPointTypes, List<string>> IsIdle(int roomID)
         {
             if (this.rooms.ContainsKey(roomID) == true)
             {
@@ -76,7 +76,7 @@ namespace SAGLET.Class
             }
             else
             {
-                return CriticalPointTypes.None;
+                return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.None,new List<string>());
             }
         }
 

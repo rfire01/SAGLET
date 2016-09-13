@@ -31,12 +31,13 @@ namespace SAGLET.Class
             CleanMessages();
         }
 
-        public CriticalPointTypes CheckIdle(Dictionary<string, RoomUser> usersInfo)
+        public KeyValuePair<CriticalPointTypes, List<string>> CheckIdle(Dictionary<string, RoomUser> usersInfo)
         {
-            if (StartTime!=DateTime.Now && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || GetIdleUsersInInterval(usersInfo.Keys.ToList())))
-                return CriticalPointTypes.IDLE;
+            KeyValuePair<Boolean, List<string>> idleUsers = GetIdleUsersInInterval(usersInfo.Keys.ToList());
+            if (StartTime!=DateTime.Now && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || idleUsers.Key))
+                return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE,idleUsers.Value);
             else
-                return CriticalPointTypes.None;
+                return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.None, idleUsers.Value);
         }
 
         private int calculateTimeDiffInSeconds(DateTime oldTime, DateTime newTime)
@@ -96,7 +97,7 @@ namespace SAGLET.Class
         ///if someone idle returns true
         ///otherwise returns false;
         ///list of idle users is ready, only need to return it.
-        public Boolean GetIdleUsersInInterval(List<string> users)
+        public KeyValuePair<Boolean, List<string>> GetIdleUsersInInterval(List<string> users)
         {
             CleanMessages();
 
@@ -123,8 +124,8 @@ namespace SAGLET.Class
             }
 
             if (idleUsers.Count > 0)
-                return true;
-            return false;
+                return new KeyValuePair<Boolean, List<string>>(true, idleUsers);
+            return new KeyValuePair<Boolean, List<string>>(false, idleUsers);
         }
 
     }
