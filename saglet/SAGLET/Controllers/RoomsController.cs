@@ -479,27 +479,36 @@ namespace SAGLET.Controllers
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
 
-                //if (msg.Text.Contains("joined"))
-                //{
-                //    criticalPointAlerts.user_joined(roomID, msg.UserID);
-                //    CriticalMsgPoints serverCp = new CriticalMsgPoints();
-                //    serverCp.Type = CriticalPointTypes.None;
-                //    msg.CriticalPoints.Add(serverCp);
-                //}
-                //else if (msg.Text.Contains("left"))
-                //{
-                //    criticalPointAlerts.user_left(roomID, msg.UserID);
-                //    CriticalMsgPoints serverCp = new CriticalMsgPoints();
-                //    serverCp.Type = CriticalPointTypes.None;
-                //    msg.CriticalPoints.Add(serverCp);
-                //}
-                //else
-                //{
-                //    msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID, msg.UserID, (List<CriticalMsgPoints>)msg.CriticalPoints));
-                //}
+                if (msg.Text.Contains("joined"))
+                {
+                    string user = msg.Text.Split(' ')[0];
+                    criticalPointAlerts.user_joined(roomID, user);
+                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                    serverCp.Type = CriticalPointTypes.None;
+                    msg.CriticalPoints.Add(serverCp);
+                }
+                else if (msg.Text.Contains("left"))
+                {
+                    string user = msg.Text.Split(' ')[0];
+                    criticalPointAlerts.user_left(roomID, user);
+                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                    serverCp.Type = CriticalPointTypes.None;
+                    msg.CriticalPoints.Add(serverCp);
+                }
+                else
+                {
+                    if (msg.UserID != "server")
+                        msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID, msg.UserID, (List<CriticalMsgPoints>)msg.CriticalPoints));
+                    else
+                    {
+                        CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                        serverCp.Type = CriticalPointTypes.None;
+                        msg.CriticalPoints.Add(serverCp);
+                    }
+                }
 
                 //temp for test
-                msg.CriticalPoints.Add(((List<CriticalMsgPoints>)msg.CriticalPoints)[0]);
+                //msg.CriticalPoints.Add(((List<CriticalMsgPoints>)msg.CriticalPoints)[0]);
 
 
                 //temporary canceled

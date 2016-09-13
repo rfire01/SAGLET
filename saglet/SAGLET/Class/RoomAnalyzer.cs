@@ -24,12 +24,17 @@ namespace SAGLET.Class
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, string user)
         {
+            int a;
+            if (user.CompareTo("server") == 0)
+                a = 1;
             //in case missed a user joined room
             AddUserToRoom(user);
             //
             idleAlert.HandleMessage(user);
             CriticalPointTypes nmdRes = nmdAlert.HandleMessage(tag);
             CriticalPointTypes userRes = usersInfo[user].HandleMessage(tag, nmdAlert.NmdStarted());
+
+            return CriticalPointTypes.None;
 
             if (nmdRes == CriticalPointTypes.NMD || (userRes == CriticalPointTypes.NMD && !nmdAlert.NmdInAlertWaitTime()))
                 return CriticalPointTypes.NMD;
@@ -39,6 +44,12 @@ namespace SAGLET.Class
 
         public CriticalPointTypes HandleAction(string user)
         {
+            int a;
+            if (user.CompareTo("server") == 0)
+                a = 1;
+            //in case missed a user joined room
+            AddUserToRoom(user);
+            //
             CriticalPointTypes userRes = usersInfo[user].HandleAction();
             return CriticalPointTypes.None;
         }

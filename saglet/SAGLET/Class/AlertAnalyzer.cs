@@ -31,6 +31,9 @@ namespace SAGLET.Class
 
         public void user_joined(int roomID, string user)
         {
+            int a;
+            if (user.CompareTo("server") == 0)
+                a = 1;
             if (this.rooms.ContainsKey(roomID) == true)
                 this.rooms[roomID].AddUserToRoom(user);
         }

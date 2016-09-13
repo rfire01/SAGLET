@@ -33,7 +33,7 @@ namespace SAGLET.Class
 
         public CriticalPointTypes CheckIdle(Dictionary<string, RoomUser> usersInfo)
         {
-            if (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || GetIdleUsersInInterval(usersInfo.Keys.ToList()))
+            if (StartTime!=DateTime.Now && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || GetIdleUsersInInterval(usersInfo.Keys.ToList())))
                 return CriticalPointTypes.IDLE;
             else
                 return CriticalPointTypes.None;
@@ -72,7 +72,9 @@ namespace SAGLET.Class
                 {
                     messagePassed = calculateTimeDiffInSeconds(pair.Value.getLastMessageTime(), currentTime);
                     actionPassed = calculateTimeDiffInSeconds(pair.Value.getLastActionTime(), currentTime);
-                    onlyGeoIdle = onlyGeoIdle && (actionPassed >= noActionTime) && (messagePassed < noActionTime);
+                    Boolean noActionYet = (pair.Value.getLastActionTime() == DateTime.MinValue);
+                    Boolean noMessageYet = (pair.Value.getLastMessageTime() == DateTime.MinValue);
+                    onlyGeoIdle = onlyGeoIdle && (actionPassed >= noActionTime || noActionYet) && (messagePassed < noActionTime && !noMessageYet);
                 }
                 if(usersInfo.Count==0)
                     return false;
