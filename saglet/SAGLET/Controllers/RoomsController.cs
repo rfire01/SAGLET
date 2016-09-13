@@ -557,13 +557,15 @@ namespace SAGLET.Controllers
 
         private Boolean PassQuestion(string msg)
         {
+            string base_folder = System.AppDomain.CurrentDomain.BaseDirectory;
+            string file_path = base_folder + "\\config\\NextQuestionTerms.txt";
             string line;
-            //System.IO.StreamReader file = new System.IO.StreamReader("config\\NextQuestionTerms.txt");
-            //while ((line = file.ReadLine()) != null)
-            //{
-            //    if (LevenshteinDistance.Compute(line, msg) <= line.Length / 2.0)
-            //        return true;
-            //}
+            System.IO.StreamReader file = new System.IO.StreamReader(file_path);
+            while ((line = file.ReadLine()) != null)
+            {
+                if (LevenshteinDistance.Compute(line, msg) <= line.Length / 2.0)
+                    return true;
+            }
             return false;
         }
 
