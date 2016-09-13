@@ -601,7 +601,7 @@ namespace SAGLET.Controllers
         {
             foreach (int roomID in roomIDs)
             {
-                CriticalPointTypes res = criticalPointAlerts.IsIdle(roomID);
+                KeyValuePair<CriticalPointTypes, List<string>> res = criticalPointAlerts.IsIdle(roomID);
 
                 
                 //Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
@@ -611,7 +611,7 @@ namespace SAGLET.Controllers
 
                 string jsonRes = JsonConvert.SerializeObject(res);
 
-                hubDetails.UpdateIdleness(roomID.ToString(), jsonRes);    
+                hubDetails.UpdateIdleness(roomID.ToString(), jsonRes + ";" + roomID.ToString());    
             }   
         }
 

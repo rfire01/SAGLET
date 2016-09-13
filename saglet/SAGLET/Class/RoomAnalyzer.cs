@@ -46,7 +46,7 @@ namespace SAGLET.Class
             return CriticalPointTypes.None;
         }
 
-        public CriticalPointTypes CheckForIdle()
+        public KeyValuePair<CriticalPointTypes, List<string>> CheckForIdle()
         {
             return idleAlert.CheckIdle(usersInfo);
         }
