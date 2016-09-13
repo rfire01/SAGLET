@@ -27,7 +27,7 @@ namespace SAGLET.Class
             //in case missed a user joined room
             AddUserToRoom(user);
             //
-            idleAlert.activity();
+            idleAlert.HandleMessage(user);
             CriticalPointTypes nmdRes = nmdAlert.HandleMessage(tag);
             CriticalPointTypes userRes = usersInfo[user].HandleMessage(tag, nmdAlert.NmdStarted());
 
@@ -39,7 +39,9 @@ namespace SAGLET.Class
 
         public CriticalPointTypes HandleAction(string user)
         {
-            idleAlert.activity();
+            //in case missed a user joined room
+            AddUserToRoom(user);
+            //
             CriticalPointTypes userRes = usersInfo[user].HandleAction();
             return CriticalPointTypes.None;
         }

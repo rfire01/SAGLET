@@ -109,6 +109,8 @@ namespace SAGLET.Hubs
         }
 
         public void CheckIdleness(string rooms) {
+            if (rooms.CompareTo("") == 0)
+                return;
             List<int> roomList = rooms.Split(',').Select(Int32.Parse).ToList();
             VmtDevAPI.HandleIdleness(roomList);
         }

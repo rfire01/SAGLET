@@ -65,7 +65,7 @@
                     var check = $interval(function () {
                         var strRoomsList = getStrRoomsList(vm.roomList);
                         detailsHub.server.checkIdleness(strRoomsList);
-                    }, 5000);
+                    }, 15000);
 
                 })
             .fail(function () {

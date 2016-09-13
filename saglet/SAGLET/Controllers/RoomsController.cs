@@ -479,27 +479,36 @@ namespace SAGLET.Controllers
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
 
-                //if (msg.Text.Contains("joined"))
-                //{
-                //    criticalPointAlerts.user_joined(roomID, msg.UserID);
-                //    CriticalMsgPoints serverCp = new CriticalMsgPoints();
-                //    serverCp.Type = CriticalPointTypes.None;
-                //    msg.CriticalPoints.Add(serverCp);
-                //}
-                //else if (msg.Text.Contains("left"))
-                //{
-                //    criticalPointAlerts.user_left(roomID, msg.UserID);
-                //    CriticalMsgPoints serverCp = new CriticalMsgPoints();
-                //    serverCp.Type = CriticalPointTypes.None;
-                //    msg.CriticalPoints.Add(serverCp);
-                //}
-                //else
-                //{
-                //    msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID, msg.UserID, (List<CriticalMsgPoints>)msg.CriticalPoints));
-                //}
+                if (msg.Text.Contains("joined"))
+                {
+                    string user = msg.Text.Split(' ')[0];
+                    criticalPointAlerts.user_joined(roomID, user);
+                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                    serverCp.Type = CriticalPointTypes.None;
+                    msg.CriticalPoints.Add(serverCp);
+                }
+                else if (msg.Text.Contains("left"))
+                {
+                    string user = msg.Text.Split(' ')[0];
+                    criticalPointAlerts.user_left(roomID, user);
+                    CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                    serverCp.Type = CriticalPointTypes.None;
+                    msg.CriticalPoints.Add(serverCp);
+                }
+                else
+                {
+                    if (msg.UserID != "server")
+                        msg.CriticalPoints.Add(criticalPointAlerts.user_msg(msg.GroupID, msg.UserID, (List<CriticalMsgPoints>)msg.CriticalPoints));
+                    else
+                    {
+                        CriticalMsgPoints serverCp = new CriticalMsgPoints();
+                        serverCp.Type = CriticalPointTypes.None;
+                        msg.CriticalPoints.Add(serverCp);
+                    }
+                }
 
                 //temp for test
-                msg.CriticalPoints.Add(((List<CriticalMsgPoints>)msg.CriticalPoints)[0]);
+                //msg.CriticalPoints.Add(((List<CriticalMsgPoints>)msg.CriticalPoints)[0]);
 
 
                 //temporary canceled
@@ -561,13 +570,15 @@ namespace SAGLET.Controllers
 
         private Boolean PassQuestion(string msg)
         {
+            string base_folder = System.AppDomain.CurrentDomain.BaseDirectory;
+            string file_path = base_folder + "\\config\\NextQuestionTerms.txt";
             string line;
-            //System.IO.StreamReader file = new System.IO.StreamReader("config\\NextQuestionTerms.txt");
-            //while ((line = file.ReadLine()) != null)
-            //{
-            //    if (LevenshteinDistance.Compute(line, msg) <= line.Length / 2.0)
-            //        return true;
-            //}
+            System.IO.StreamReader file = new System.IO.StreamReader(file_path);
+            while ((line = file.ReadLine()) != null)
+            {
+                if (LevenshteinDistance.Compute(line, msg) <= line.Length / 2.0)
+                    return true;
+            }
             return false;
         }
 
