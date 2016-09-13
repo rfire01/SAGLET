@@ -3,12 +3,12 @@
         <div class="panel-heading" id="cp-dashboard-heading">Alerts Dashboard</div>
 
         <div class="panel panel-default" style="margin-bottom:0px; height:530px;">
-            <div class="panel-heading" style="padding:1px;">
+            <!--<div class="panel-heading" style="padding:1px;">
                 New critical points:
-            </div>
-            <div class="panel-body" style="padding:0px; min-height:300px; max-height:300px; overflow-y:scroll;">
+            </div>-->
+            <div class="panel-body" style="padding:0px; min-height:527px; max-height:527px; overflow-y:scroll;">
                 <ul class="list-group" style="margin-bottom:7px;">
-                    <li class="list-group-item" style="padding:2px 10px; margin-bottom:0px;" ng-repeat="cp in vm.newCriticalPoints track by $index">
+                    <li class="list-group-item" style="padding:2px 10px; margin-bottom:0px; background-color:beige; " ng-repeat="cp in vm.newCriticalPoints track by $index">
                         <div class="">
 
                             <cp-icons style="float:left;" critical-point="cp" critical-point-index="$index" dashboard="true"></cp-icons> | <span ng-if="!(cp.cpType == 'idle')">{{::cp.cpTime}}</span>
@@ -20,12 +20,21 @@
 
                     </li>
 
+                    <!--Treated-->
+                    <li class="list-group-item" style="padding:2px; 10px; margin-bottom:0px;" ng-repeat="cpTreated in vm.oldCriticalPoints | orderBy: '-cpTime' ">
+                        <div class="">
+
+                            <cp-icons style="float:left; opacity:0.5;" critical-point="cpTreated" critical-point-index="$index" dashboard="true"></cp-icons> | <span ng-if="!(cpTreated.cpType == 'idle')">{{::cpTreated.cpTime}}</span>
+                            <span ng-if="cpTreated.cpType == 'idle'"><span ng-repeat="user in cpTreated.idleUsers">{{user}}</span></span>
+                        </div>
+                    </li>
+
 
                 </ul>
 
             </div>
 
-            <div class="panel-heading" style="padding:1px;">
+            <!--<div class="panel-heading" style="padding:1px;">
                 Treated
             </div>
             <div class="panel-body" style="padding:0px; min-height:182px; max-height:182px; overflow-y:scroll;">
@@ -45,7 +54,7 @@
 
                 </ul>
 
-            </div>
+            </div>-->
 
 
 
