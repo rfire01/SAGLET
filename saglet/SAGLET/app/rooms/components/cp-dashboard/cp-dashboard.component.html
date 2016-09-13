@@ -1,12 +1,12 @@
 ﻿<div class="cp-dashboard">
     <div class="panel panel-primary" id="cp-dashboard-primary">
-        <div class="panel-heading" id="cp-dashboard-heading">Critical Points Dashboard</div>
+        <div class="panel-heading" id="cp-dashboard-heading">Alerts Dashboard</div>
 
-        <div class="panel panel-default" style="margin-bottom:0px;">
+        <div class="panel panel-default" style="margin-bottom:0px; height:530px;">
             <div class="panel-heading" style="padding:1px;">
-                New Critical Points:
+                New critical points:
             </div>
-            <div class="panel-body" style="padding:0px; min-height:100px; max-height:150px; overflow-y:scroll;">
+            <div class="panel-body" style="padding:0px; min-height:300px; max-height:300px; overflow-y:scroll;">
                 <ul class="list-group" style="margin-bottom:7px;">
                     <li class="list-group-item" style="padding:2px 10px; margin-bottom:0px;" ng-repeat="cp in vm.newCriticalPoints track by $index">
                         <div class="">
@@ -26,9 +26,9 @@
             </div>
 
             <div class="panel-heading" style="padding:1px;">
-                Last Critical Points:
+                Treated
             </div>
-            <div class="panel-body" style="padding:0px; min-height:100px; max-height:150px; overflow-y:scroll;">
+            <div class="panel-body" style="padding:0px; min-height:182px; max-height:182px; overflow-y:scroll;">
                 <ul class="list-group" style="margin-bottom:7px;">
                     <li class="list-group-item" style="padding:2px; 10px; margin-bottom:0px;" ng-repeat="cp in vm.oldCriticalPoints track by $index">
                         <div class="">
@@ -51,15 +51,15 @@
 
         </div>
 
-        <div class="panel panel-default" style="margin-bottom:0px; overflow-y:scroll; min-height:200px; max-height:420px;">
+        <div class="panel panel-default" style="margin-bottom:0px; overflow-y:scroll; min-height:160px; max-height:160px;">
             <div class="panel-heading" style="padding:1px;">
-                Last Tagged Messages
+                Last tagged messages
             </div>
             <div class="panel-body" style="padding:0px;">
                 <ul class="list-group" style="margin-bottom:7px;">
                     <li class="list-group-item" style="padding:2px; 10px; font-size:smaller;" ng-repeat="cp in vm.criticalPointsMessages | orderBy: '-cpTime' ">
                         <!--ng-class="'list-group-item list-group-item-warning':($index < 10)"-->
-                        <cp-icons style="" full-view="true" dashboard="true" critical-point="cp"></cp-icons>
+                        <cp-icons style="opacity:0.5" full-view="true" dashboard="true" critical-point="cp"></cp-icons>
                         <span>{{cp.cpTime}}</span>
                         <span>({{cp.cpUser}})</span>
                         <span style="direction:rtl; float:right;">{{cp.cpMsg}}</span>
@@ -78,28 +78,17 @@
 
 
 
-        <!--</div>-->
+        
 
-        <div class="panel-footer" style="padding:0px;">
+        <!--<div class="panel-footer" style="padding:0px;">
             <div class="panel panel-default" style="margin-bottom:0px;">
 
                 <cp-index style="font-size:100%;"></cp-index>
-                <!--<div class="panel-body" style="padding:0px;">
-                    <div ng-repeat="cp in vm.criticalPointsIndex" style="float:left; font-size:x-small; padding:4px;">
-                        <cp-icons style="" critical-point="cp"></cp-icons> - {{cp.desc}}
-                    </div>-->
-                <!--<ul class="list-group">
-                    <li class="list-group-item" style="padding:2px; 10px; font-size:smaller;" ng-repeat="cp in vm.criticalPointsIndex">
-                        <cp-icons style="" critical-point="cp"></cp-icons> - {{cp.desc}}
-                    </li>
-
-
-                </ul>-->
-                <!--</div>-->
+               
 
             </div>
 
-        </div>
+        </div>-->
     </div>
 
 </div>

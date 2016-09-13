@@ -39,7 +39,7 @@
         vm.criticalPointsForRoomBoxToolbar = [];
         vm.idleness = [];
         //vm.newcp = false;
-        //vm.newCpBorderAlertType = '';
+        vm.newCpBorderAlertType = 'none';
         vm.criticalPointsIndex = [];
 
 
@@ -99,7 +99,7 @@
                 })
 
                 vm.newCriticalPoints = [];
-
+                vm.newCpBorderAlertType = 'none'
             }
 
 

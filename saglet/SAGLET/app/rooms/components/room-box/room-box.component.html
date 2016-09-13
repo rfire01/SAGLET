@@ -17,7 +17,7 @@
 
 
 
-            <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView }">
+            <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView || vm.newCpBorderAlertType != 'none' }">
                 Room: {{vm.room.ID}}
 
 

@@ -28,6 +28,9 @@ namespace SAGLET.Hubs
 
         public void GetRooms()
         {
+
+            //UpdateRooms();
+
             using (SagletModel db = new SagletModel())
             {
 
@@ -84,9 +87,10 @@ namespace SAGLET.Hubs
             RoomsController ctrl = new RoomsController();
             ctrl.SyncNewRooms();
 
+            GetRooms();
 
             //var deNewRooms = JsonConvert.DeserializeObject<Object>(newRooms)
-            context.Clients.Client(Context.ConnectionId).updateRooms();
+            //context.Clients.Client(Context.ConnectionId).updateRooms();
         }
 
 

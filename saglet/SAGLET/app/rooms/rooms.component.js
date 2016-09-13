@@ -113,7 +113,9 @@
 
         detailsHub.client.updateIdlenessLive = function (idelenssData) {
             console.info("************ updateIdlenessLive ************");
+            console.info(idelenssData);
             var idel = JSON.parse(idelenssData);
+            console.info(idel);
             for (var room in idel) {
                 vm.idlenessRoom = room;
                 vm.idlenessUsers = idel[room];
