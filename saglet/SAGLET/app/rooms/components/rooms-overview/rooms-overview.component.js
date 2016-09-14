@@ -151,16 +151,16 @@
 
         }
 
-        function handelIdleness(roomID) {
-            vm.roomsCtrl.forEach(function (roomCtrl) {
-                if (roomCtrl.room.ID == roomID) {
-                    roomCtrl.setIdleness(vm.idlenessUsers);
-                    return;
+        //function handelIdleness(roomID) {
+        //    vm.roomsCtrl.forEach(function (roomCtrl) {
+        //        if (roomCtrl.room.ID == roomID) {
+        //            roomCtrl.setIdleness(vm.idlenessUsers);
+        //            return;
 
-                }
-            })
+        //        }
+        //    })
 
-        }
+        //}
         //function moveRoomItemToFirstPlace(roomID) {
         //    for (var i in vm.rooms) {
         //        if (roomID == vm.rooms[i].ID) {

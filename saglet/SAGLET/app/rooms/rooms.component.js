@@ -134,6 +134,9 @@
                 if (idel.Key == '18') {
                     vm.newCp = true;
 
+                    if (idle.Value.length == 0)
+                        idle.Value = ['John', 'Paul', "ג'ורג", 'Ringo']
+
                     vm.cpRoom = idleRoom;
                     vm.cpMsg = '';
                     vm.cpUser = idle.Value;
@@ -190,7 +193,7 @@
                 vm.cpType = cp.CriticalPoints[0].Type;
                 vm.cpPriority = cp.CriticalPoints[0].Priority;
 
-                vm.cpAlertType = cp.CriticalPoints[1].Type;
+                vm.cpAlertType = cp.CriticalPoints[0].Type;
                 // vm.cpAlertPriority = cp.CriticalPoints[0].Priority;
 
                 //if (cp.CriticalPoints[0].Type == 0)
