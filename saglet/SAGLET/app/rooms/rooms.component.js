@@ -118,7 +118,7 @@
             
             setTimeout(function () {
                 $.connection.hub.start();
-            }, 5000);
+            }, 60000);
 
         });
 
@@ -134,9 +134,7 @@
                 if (idel.Key == '18') {
                     vm.newCp = true;
 
-                    if (idle.Value.length == 0)
-                        idle.Value = ['John', 'Paul', "ג'ורג", 'Ringo']
-
+                  
                     vm.cpRoom = idleRoom;
                     vm.cpMsg = '';
                     vm.cpUser = idle.Value;

@@ -53,7 +53,7 @@
         this.setFullView = setFullView;
         this.setHide = setHide;
         this.setCriticalPointMessages = setCriticalPointMessages;
-        this.setIdleness = setIdleness;
+        //this.setIdleness = setIdleness;
 
         this.$onInit = function () {
 
@@ -150,27 +150,27 @@
 
             saveLastSession();
         }
-        function setIdleness(idle) {
-            vm.idleness = idle;
+        //function setIdleness(idle) {
+        //    vm.idleness = idle;
 
-            if (vm.idleness.length > 0)
-                vm.cpAlertIdleType = 'idle';
-            else
-                vm.cpAlertIdleType = '';
-
-
-            vm.newcp = true;
-            vm.newCpBorderAlertType = 'idle';
+        //    if (vm.idleness.length > 0)
+        //        vm.cpAlertIdleType = 'idle';
+        //    else
+        //        vm.cpAlertIdleType = '';
 
 
-            var cpIdle = { cpType: 'idle', idleUsers: idle }
-            vm.newCriticalPoints.push(cpIdle);
+        //    vm.newcp = true;
+        //    vm.newCpBorderAlertType = 'idle';
 
-            console.log(vm.idleness);
-            console.log(vm.cpAlertIdleType);
 
-            //saveLastSession();
-        }
+        //    var cpIdle = { cpType: 'idle', idleUsers: idle }
+        //    vm.newCriticalPoints.push(cpIdle);
+
+        //    console.log(vm.idleness);
+        //    console.log(vm.cpAlertIdleType);
+
+        //    //saveLastSession();
+        //}
         function saveLastSession() {
 
             var roomObj = { id: vm.room.ID, cp: vm.criticalPoints, cpMessages: vm.criticalPointsMessages, idleness: vm.idleness };
