@@ -14,7 +14,7 @@ namespace SAGLET.Class
         static string[] priority = { "1", "2" };
         static int i=0;
 
-        internal static List<CriticalMsgPoints> Analyze(VMsg msg, string solution)
+        internal static List<CriticalMsgPoints> Analyze(VMsg msg, string solution, RoomDetailsHub hubDetails)
         {
             List<CriticalMsgPoints> cps = new List<CriticalMsgPoints>();
 
@@ -22,8 +22,11 @@ namespace SAGLET.Class
             cp.GroupID = msg.GroupID;
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
-            
-            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, solution);
+
+            hubDetails.sendLog("sending message to python");
+            System.Diagnostics.Debug.WriteLine("sending message to python");
+
+            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, solution, hubDetails);
             string[] splitReply = cpReply.Split(',');
 
             if (splitReply[0].CompareTo("DS") == 0)
@@ -40,7 +43,8 @@ namespace SAGLET.Class
             else
                 cp.Type = CriticalPointTypes.None;
 
-            System.Diagnostics.Debug.WriteLine("new msg:" + cp.Type.ToString());
+            hubDetails.sendLog("response from python: " + cp.Type.ToString());
+            System.Diagnostics.Debug.WriteLine("response from python: " + cp.Type.ToString());
 
             cps.Add(cp);
 
@@ -64,7 +68,7 @@ namespace SAGLET.Class
             //return cps;
         }
 
-        private static string GetCriticalPoint(int roomID, string message, string solution)
+        private static string GetCriticalPoint(int roomID, string message, string solution, RoomDetailsHub hubDetails)
         {
             // Open the named pipe.
             // exception, if there is a problem with opening pipe - try again until pipe opened successfully
@@ -91,8 +95,11 @@ namespace SAGLET.Class
 
                     return cpResponse;
                 }
-                catch (System.IO.IOException)
-                { }
+                catch (System.IO.IOException e)
+                {
+                    hubDetails.sendLog("pipe error: " + e.ToString());
+                    System.Diagnostics.Debug.WriteLine("if printed repeatedly, none stop (infinite while) there is problem with the pipes");
+                }
             }
 
         }

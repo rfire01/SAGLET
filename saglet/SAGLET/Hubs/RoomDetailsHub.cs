@@ -69,7 +69,12 @@ namespace SAGLET.Hubs
             return roomsIDs;
         }
 
-       
+        internal void sendLog(string log)
+        {
+            context.Clients.Group(149.ToString()).sendLogToConsole(log);
+            context.Clients.Group(424.ToString()).sendLogToConsole(log);
+        }
+
         internal void UpdateRoomMsgLiveControl(string roomID, VMsg msg)
         {
             var json = new JavaScriptSerializer().Serialize(msg);

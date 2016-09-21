@@ -169,6 +169,10 @@
         };
         
 
+        detailsHub.client.sendLogToConsole = function (log)
+        {
+            console.info(log);
+        }
 
         detailsHub.client.updateRoomMsgLive = function (roomID, cpObject) {
             console.info('************ updateRoomMsgLive: ************ ' + roomID);
