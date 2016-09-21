@@ -482,8 +482,8 @@ namespace SAGLET.Controllers
                 hubDetails.sendLog("new message: " + msg.Text.ToString());
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
-                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);
-
+                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg, solution, hubDetails);
+                
                 if (msg.Text.Contains("joined"))
                 {
                     string user = msg.Text.Split(' ')[0];
