@@ -471,12 +471,15 @@ namespace SAGLET.Controllers
         /* Sockets msgs */
         public void HandleLiveMessage(int roomID, string json)
         {
+            hubDetails.sendLog("****************************");
+            hubDetails.sendLog("****************************");
+            hubDetails.sendLog("new message received");
             System.Diagnostics.Debug.WriteLine("new message received");
             var results = JsonConvert.DeserializeObject<dynamic>(json);
             VMsg msg = VMsg.ConvertLiveMessageJson(roomID, results);
             if (msg != null)
             {
-                System.Diagnostics.Debug.WriteLine("message isn't null");
+                hubDetails.sendLog("new message: " + msg.Text.ToString());
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg,solution);

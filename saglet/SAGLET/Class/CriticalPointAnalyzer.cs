@@ -23,6 +23,7 @@ namespace SAGLET.Class
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
 
+            hubDetails.sendLog("sending message to python");
             System.Diagnostics.Debug.WriteLine("sending message to python");
 
             string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, solution);
@@ -42,6 +43,7 @@ namespace SAGLET.Class
             else
                 cp.Type = CriticalPointTypes.None;
 
+            hubDetails.sendLog("response from python: " + cp.Type.ToString());
             System.Diagnostics.Debug.WriteLine("response from python: " + cp.Type.ToString());
 
             cps.Add(cp);
@@ -93,8 +95,9 @@ namespace SAGLET.Class
 
                     return cpResponse;
                 }
-                catch (System.IO.IOException)
+                catch (System.IO.IOException e)
                 {
+                    hubDetails.sendLog("pipe error: " + e.ToString());
                     System.Diagnostics.Debug.WriteLine("if printed repeatedly, none stop (infinite while) there is problem with the pipes");
                 }
             }
