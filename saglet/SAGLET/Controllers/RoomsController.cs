@@ -418,7 +418,7 @@ namespace SAGLET.Controllers
                 // handle sync
                 if (room.Sync && !roomBefore.Sync)
                 {
-                    VmtDevAPI.RegisterLiveChat(room.ID);
+                    //VmtDevAPIRegisterLiveChat(room.ID);
                     VmtDevAPI.RegisterLiveActions(room.ID);
                 }
                 if (!room.Sync && roomBefore.Sync) VmtDevAPI.CloseSocket(room.ID);

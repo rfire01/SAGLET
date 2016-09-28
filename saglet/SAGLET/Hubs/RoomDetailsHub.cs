@@ -147,7 +147,19 @@ namespace SAGLET.Hubs
 
         }
 
+        public void RegisterLiveChatAndLiveActions(string roomsFromClient)
+        {
+            List<String> roomsID = roomsFromClient.Split(',').ToList();
+            //List<Room> rooms = db.Rooms.Where(r => r.Sync).ToList();
+            foreach (String id in roomsID)
+            {
+                VmtDevAPI.RegisterLiveChat(int.Parse(id));
+                VmtDevAPI.RegisterLiveActions(int.Parse(id));
+            }
 
+
+
+        }
 
 
 

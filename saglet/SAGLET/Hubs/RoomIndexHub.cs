@@ -36,17 +36,19 @@ namespace SAGLET.Hubs
 
                 //List<Room> syncedRoomList = new List<Room>();
                 //List<Room> nonSycedRoomList = new List<Room>();
-                
+
 
                 String user = AppHelper.GetVmtUser();
                 //context.Clients.Client(Context.ConnectionId).GetUserName(user);
 
                 List<Room> roomsList = new List<Room>();
-                
+
                 List<int> roomsIds = db.Moderators.Find(user).RoomsAllowed.Select(r => r.ID).ToList();
-                foreach (int roomId in roomsIds) {
+                foreach (int roomId in roomsIds)
+                {
                     Room room = db.Rooms.Find(Convert.ToInt32(roomId));
-                    Room thisRoom = new Room {
+                    Room thisRoom = new Room
+                    {
                         LastUpdate = room.LastUpdate,
                         ID = room.ID,
                         Sync = room.Sync
@@ -63,24 +65,14 @@ namespace SAGLET.Hubs
 
                 }
 
-                
+
 
                 context.Clients.Client(Context.ConnectionId).getRooms(roomsList);
             }
         }
-  
 
-        public void UpdateRoomsWatchStatus(string rooms)
-        {
-            using (SagletModel db = new SagletModel())
-            {
-                foreach (int room in rooms) {
 
-                }
-            
-
-            }
-        }
+       
 
         public void UpdateRooms()
         {
@@ -116,5 +108,5 @@ namespace SAGLET.Hubs
         //    context.Clients.Client(Context.ConnectionId).roomSyncStatus(String.Format("RoomSyncStatus(roomID) - {0}", status));
         //}
     }
-    
+
 }

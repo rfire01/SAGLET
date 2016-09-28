@@ -13,7 +13,7 @@
         var vm = this;
 
         var detailsHub = $.connection.roomDetailsHub;
-        var idleAlertFreq = 5000;
+        var idleAlertFreq = 60000;
 
         vm.loader = true;
         vm.user;
@@ -58,6 +58,7 @@
                     vm.loader = false;
                     
                     var strRoomsList = getStrRoomsList(vm.roomList);
+                    detailsHub.server.registerLiveChatAndLiveActions(strRoomsList);
                     detailsHub.server.startIdleness(strRoomsList);
 
                     vm.roomList.forEach(function (item) {
@@ -178,10 +179,10 @@
             console.info('************ updateRoomMsgLive: ************ ' + roomID);
            
             returnCp(cpObject).then(function (cp) {
-                if (cp.CriticalPoints[0].Type == 0)
+                if (cp.CriticalPoints[1].Type == 0)
                     return;
 
-                if (cp.CriticalPoints[0].Type > 0)
+                if (cp.CriticalPoints[1].Type > 0)
                     vm.newCp = true;
 
                
@@ -192,10 +193,10 @@
                 vm.cpTime = new Date().toTimeString().substring(0, 8);
                 //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
 
-                vm.cpType = cp.CriticalPoints[0].Type;
-                vm.cpPriority = cp.CriticalPoints[0].Priority;
+                vm.cpType = cp.CriticalPoints[1].Type;
+                vm.cpPriority = cp.CriticalPoints[1].Priority;
 
-                vm.cpAlertType = cp.CriticalPoints[0].Type;
+                vm.cpAlertType = cp.CriticalPoints[1].Type;
                 // vm.cpAlertPriority = cp.CriticalPoints[0].Priority;
 
                 //if (cp.CriticalPoints[0].Type == 0)

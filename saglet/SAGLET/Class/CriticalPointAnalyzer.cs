@@ -6,6 +6,7 @@ using System.Web;
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
+using SAGLET.Hubs;
 
 namespace SAGLET.Class
 {

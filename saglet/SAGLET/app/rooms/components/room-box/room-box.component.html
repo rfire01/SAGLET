@@ -45,15 +45,15 @@
                 <iframe ng-src="{{vm.iframeLink(vm.room.ID)}}"
                         scrolling="no"
                         ng-class="{
-                        'scaled-init-1920x1080': (vm.scaledInit && vm.screenWidthHeight == '1920x1080'),
+                        'scaled-init-1920x1080': (vm.scaledInit && vm.screenWidthHeight == '1920x1080' || vm.screenWidthHeight == '1920x1200'),
                         'scaled-init-1600x900': (vm.scaledInit && vm.screenWidthHeight == '1600x900'),
                         'scaled-init-1366x728': (vm.scaledInit && vm.screenWidthHeight == '1366x768'),
                         'scaled-init-1280x1024': (vm.scaledInit && vm.screenWidthHeight == '1280x1024'),
-                        'scaled-to-full-size-1920x1080': (vm.fullView && vm.screenWidthHeight == '1920x1080'),
+                        'scaled-to-full-size-1920x1080': (vm.fullView && vm.screenWidthHeight == '1920x1080' || vm.screenWidthHeight == '1920x1200'),
                         'scaled-to-full-size-1600x900': (vm.fullView && vm.screenWidthHeight == '1600x900'),
                         'scaled-to-full-size-1366x728': (vm.fullView && vm.screenWidthHeight == '1366x768'),
                         'scaled-to-full-size-1280x1024': (vm.fullView && vm.screenWidthHeight == '1280x1024'),
-                        'scaled-to-room-box-1920x1080': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1920x1080'),
+                        'scaled-to-room-box-1920x1080': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1920x1080' || vm.screenWidthHeight == '1920x1200'),
                         'scaled-to-room-box-1600x900': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1600x900'),
                         'scaled-to-room-box-1366x728': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1366x768'),
                         'scaled-to-room-box-1280x1024': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1280x1024')
