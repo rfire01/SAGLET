@@ -34,7 +34,7 @@ namespace SAGLET.Class
         public KeyValuePair<CriticalPointTypes, List<string>> CheckIdle(Dictionary<string, RoomUser> usersInfo)
         {
             KeyValuePair<Boolean, List<string>> idleUsers = GetIdleUsersInInterval(usersInfo.Keys.ToList());
-            if (StartTime!=DateTime.Now && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || idleUsers.Key))
+            if (StartTime!=DateTime.MinValue && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || idleUsers.Key))
                 return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE,idleUsers.Value);
             else
                 return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.None, idleUsers.Value);
@@ -64,8 +64,8 @@ namespace SAGLET.Class
         private Boolean NoGeogebraUsage(Dictionary<string, RoomUser> usersInfo)
         {
             DateTime currentTime = DateTime.Now;
-            int secondsPassed = calculateTimeDiffInSeconds(StartTime, currentTime);
-            if(secondsPassed <= geoCheckTime)
+            int timeFromStart = calculateTimeDiffInSeconds(StartTime, currentTime);
+            if (timeFromStart <= geoCheckTime)
             {
                 Boolean onlyGeoIdle = true;
                 int actionPassed,messagePassed;
@@ -75,7 +75,28 @@ namespace SAGLET.Class
                     actionPassed = calculateTimeDiffInSeconds(pair.Value.getLastActionTime(), currentTime);
                     Boolean noActionYet = (pair.Value.getLastActionTime() == DateTime.MinValue);
                     Boolean noMessageYet = (pair.Value.getLastMessageTime() == DateTime.MinValue);
-                    onlyGeoIdle = onlyGeoIdle && (actionPassed >= noActionTime || noActionYet) && (messagePassed < noActionTime && !noMessageYet);
+                    if(!noActionYet)
+                    {
+                        if(!noMessageYet)
+                        {
+                            onlyGeoIdle = onlyGeoIdle && (actionPassed >= noActionTime) && (messagePassed < noActionTime);
+                        }
+                        else
+                        {
+                            onlyGeoIdle = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!noMessageYet)
+                        {
+                            onlyGeoIdle = onlyGeoIdle && (timeFromStart >= noActionTime) && (messagePassed < noActionTime);
+                        }
+                        else
+                        {
+                            onlyGeoIdle = false;
+                        }
+                    }
                 }
                 if(usersInfo.Count==0)
                     return false;

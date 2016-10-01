@@ -13,7 +13,7 @@
         var vm = this;
 
         var detailsHub = $.connection.roomDetailsHub;
-        var idleAlertFreq = 60000;
+        var idleAlertFreq = 60000 * 3;
 
         vm.loader = true;
         vm.user;

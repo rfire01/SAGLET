@@ -107,10 +107,25 @@
 
                 var watch = [];
                 var rest = [];
+                var i = 0;
 
                 if (!$sessionStorage.user.rooms && vm.user.rooms.watch.length == 0 && vm.user.rooms.rest.length == 0 && list.length > 0)
                     rest = list;
-
+                if ($sessionStorage.user.rooms && $sessionStorage.user.rooms.watch.length + $sessionStorage.user.rooms.rest.length < list.length) {
+                    list.forEach(function (room) {
+                        var exists = false;
+                        for (i = 0; i < $sessionStorage.user.rooms.watch.length; i++) {
+                            if ($sessionStorage.user.rooms.watch[i].ID == room.ID)
+                                exists = true;
+                        }
+                        for (i = 0; i < $sessionStorage.user.rooms.rest.length; i++) {
+                            if ($sessionStorage.user.rooms.rest[i].ID == room.ID)
+                                exists = true;
+                        }
+                        if (!exists)
+                            $sessionStorage.user.rooms.rest.push(room)
+                    })
+                }
 
 
 
