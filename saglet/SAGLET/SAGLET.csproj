@@ -262,6 +262,7 @@
     <Compile Include="Class\roomIdleness.cs" />
     <Compile Include="Class\RoomUser.cs" />
     <Compile Include="Class\SentimentAnalyzer.cs" />
+    <Compile Include="Class\TecAlert.cs" />
     <Compile Include="Class\TempPerformanceCounterManager.cs" />
     <Compile Include="Class\TwoArgumentsListener.cs" />
     <Compile Include="Class\VmtDevAPI.cs" />

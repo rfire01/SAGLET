@@ -13,6 +13,7 @@ namespace SAGLET.Class
         private Dictionary<string, RoomUser> usersInfo;
         private NmdAlert nmdAlert;
         private IdleAlert idleAlert;
+        private TecAlert tecAlert;
 
         public RoomAnalyzer(int roomID)
         {
@@ -20,6 +21,7 @@ namespace SAGLET.Class
             this.usersInfo = new Dictionary<string, RoomUser>();
             this.nmdAlert = new NmdAlert();
             this.idleAlert = new IdleAlert();
+            this.tecAlert = new TecAlert();
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, string user)
@@ -30,9 +32,12 @@ namespace SAGLET.Class
             idleAlert.HandleMessage(user);
             CriticalPointTypes nmdRes = nmdAlert.HandleMessage(tag);
             CriticalPointTypes userRes = usersInfo[user].HandleMessage(tag, nmdAlert.NmdStarted());
+            CriticalPointTypes tecRes = tecAlert.HandleMessage(tag);
 
             if (nmdRes == CriticalPointTypes.NMD || (userRes == CriticalPointTypes.NMD && !nmdAlert.NmdInAlertWaitTime()))
                 return CriticalPointTypes.NMD;
+            else if (tecRes == CriticalPointTypes.TEC || userRes == CriticalPointTypes.NMD)
+                return CriticalPointTypes.TEC;
             else
                 return CriticalPointTypes.None;
         }

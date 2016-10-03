@@ -69,7 +69,7 @@
         }
 
         this.$onChanges = function (changesObj) {
-
+            
             if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changesObj.cpUser || changesObj.cpAlertType || changesObj.cpTime)
                 handelCriticalPoints(this.cpRoom, changesObj.cpType);
 
@@ -117,6 +117,7 @@
 
 
         function handelCriticalPoints(roomID, newCpType) {
+
 
             //var type = vm.cpType;
             //var msg = vm.cpMsg;

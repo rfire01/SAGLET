@@ -13,7 +13,7 @@
         var vm = this;
 
         var detailsHub = $.connection.roomDetailsHub;
-        var idleAlertFreq = 60000 * 3;
+        var idleAlertFreq = 60000;
 
         vm.loader = true;
         vm.user;
@@ -130,6 +130,7 @@
             
             var idel = JSON.parse(idelenssData);
             console.log(idel);
+            console.log(idleRoom);
 
             returnCp(idelenssData).then(function (idle) {
                 if (idel.Key == '18') {
