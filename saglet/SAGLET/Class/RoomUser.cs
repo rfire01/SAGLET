@@ -43,7 +43,7 @@ namespace SAGLET.Class
 
             if (nmdCount >= 6)
                 return CriticalPointTypes.NMD;
-            else if (tecCount == 3)
+            else if (tecCount >= 3)
                 return CriticalPointTypes.TEC;
             else
                 return CriticalPointTypes.None;

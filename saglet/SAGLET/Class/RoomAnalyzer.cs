@@ -36,7 +36,7 @@ namespace SAGLET.Class
 
             if (nmdRes == CriticalPointTypes.NMD || (userRes == CriticalPointTypes.NMD && !nmdAlert.NmdInAlertWaitTime()))
                 return CriticalPointTypes.NMD;
-            else if (tecRes == CriticalPointTypes.TEC || userRes == CriticalPointTypes.NMD)
+            else if (tecRes == CriticalPointTypes.TEC || (userRes == CriticalPointTypes.TEC && !tecAlert.TecInAlertWaitTime()))
                 return CriticalPointTypes.TEC;
             else
                 return CriticalPointTypes.None;
