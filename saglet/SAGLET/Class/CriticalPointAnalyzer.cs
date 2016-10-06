@@ -24,9 +24,6 @@ namespace SAGLET.Class
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
 
-            hubDetails.sendLog("sending message to python");
-            System.Diagnostics.Debug.WriteLine("sending message to python");
-
             string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, solution, hubDetails);
             string[] splitReply = cpReply.Split(',');
 
@@ -43,9 +40,6 @@ namespace SAGLET.Class
                 cp.Type = CriticalPointTypes.NMD;
             else
                 cp.Type = CriticalPointTypes.None;
-
-            hubDetails.sendLog("response from python: " + cp.Type.ToString());
-            System.Diagnostics.Debug.WriteLine("response from python: " + cp.Type.ToString());
 
             cps.Add(cp);
 

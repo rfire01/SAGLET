@@ -106,7 +106,8 @@ namespace SAGLET.Class
 
         public static void RegisterLiveChat(int id)
         {
-
+            if (chatSockets.ContainsKey(id))
+                return;
             //string data = ;
 
             
@@ -144,6 +145,8 @@ namespace SAGLET.Class
 
         public static void RegisterLiveActions(int roomID)
         {
+            if (chatSockets.ContainsKey(roomID))
+                return;
             var socket = IO.Socket("http://vmtdev.mathforum.org:80");
             actionSockets[roomID] = socket;
 
