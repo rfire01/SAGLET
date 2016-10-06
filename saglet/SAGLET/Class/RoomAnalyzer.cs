@@ -26,6 +26,8 @@ namespace SAGLET.Class
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, string user)
         {
+            System.Diagnostics.Debug.WriteLine("*****************");
+            System.Diagnostics.Debug.WriteLine(this.roomID);
             //in case missed a user joined room
             AddUserToRoom(user);
             //

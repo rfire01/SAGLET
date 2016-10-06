@@ -20,6 +20,9 @@
                 idlenessRoom: '<'
 
             },
+            require: {
+                "parent": "^roomsComponent"
+            },
             controllerAs: 'vm',
             controller: ['$window', '$interval', controller]
         })
@@ -70,8 +73,8 @@
 
         this.$onChanges = function (changesObj) {
             
-            if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changesObj.cpUser || changesObj.cpAlertType || changesObj.cpTime)
-                handelCriticalPoints(this.cpRoom, changesObj.cpType);
+            //if (changesObj.cpRoom || changesObj.cpMsg || changesObj.cpType || changesObj.cpUser || changesObj.cpAlertType || changesObj.cpTime)
+            //    handelCriticalPoints(this.cpRoom, changesObj.cpType);
 
 
             //handelCriticalPoints
@@ -113,6 +116,7 @@
 
         function addRoom(room) {
             vm.roomsCtrl.push(room);
+            this.parent.addRoom(room);
         }
 
 

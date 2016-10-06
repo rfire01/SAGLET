@@ -12,8 +12,10 @@
     function controller($sessionStorage, $sce, $, $q, $interval) {
         var vm = this;
 
+        vm.roomsCtrl = [];
+
         var detailsHub = $.connection.roomDetailsHub;
-        var idleAlertFreq = 60000;
+        var idleAlertFreq = 60000 * 3;
 
         vm.loader = true;
         vm.user;
@@ -37,6 +39,8 @@
         vm.onNewCriticalPoints = onNewCriticalPoints;
 
         vm.hubConnectionStauts = '';
+
+        this.addRoom = addRoom;
 
         this.$onInit = function () {
 
@@ -148,6 +152,7 @@
 
                     vm.cpAlertType = 18;
 
+                    handelCriticalPoints(vm.cpRoom, vm.cpType);
 
                 }
             })
@@ -206,6 +211,8 @@
                 //if (cp.CriticalPoints[0].Type > 0)
                 //    vm.newCp = true;
 
+                handelCriticalPoints(vm.cpRoom, vm.cpType);
+
             })        
         };
 
@@ -241,6 +248,19 @@
             })
 
             return str;
+        }
+
+        function addRoom(room) {
+            vm.roomsCtrl.push(room);
+        }
+
+        function handelCriticalPoints(roomID, newCpType) {
+            vm.roomsCtrl.forEach(function (roomCtrl) {
+                if (roomCtrl.room.ID == roomID) {
+                    roomCtrl.setCriticalPointMessages(vm.cpType, vm.cpMsg, vm.cpUser, vm.cpTime, vm.cpPriority, vm.cpAlertType);
+                    return;
+                }
+            })
         }
     }
 

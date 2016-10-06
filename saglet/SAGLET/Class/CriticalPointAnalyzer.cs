@@ -98,8 +98,8 @@ namespace SAGLET.Class
                 }
                 catch (System.IO.IOException e)
                 {
-                    hubDetails.sendLog("pipe error: " + e.ToString());
-                    System.Diagnostics.Debug.WriteLine("if printed repeatedly, none stop (infinite while) there is problem with the pipes");
+                    //hubDetails.sendLog("pipe error: " + e.ToString());
+                    //System.Diagnostics.Debug.WriteLine("if printed repeatedly, none stop (infinite while) there is problem with the pipes");
                 }
             }
 

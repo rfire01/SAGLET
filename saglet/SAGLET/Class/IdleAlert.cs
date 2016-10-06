@@ -132,7 +132,8 @@ namespace SAGLET.Class
             foreach (KeyValuePair<string,DateTime> userTimePair in idleQueue)
             {
                 count++ ;
-                userActivityCount[userTimePair.Key]++;
+                if(users.Contains(userTimePair.Key))
+                    userActivityCount[userTimePair.Key]++;
             }
 
             List<string> idleUsers = new List<string>();
