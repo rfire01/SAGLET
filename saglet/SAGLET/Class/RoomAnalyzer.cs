@@ -37,9 +37,15 @@ namespace SAGLET.Class
             CriticalPointTypes tecRes = tecAlert.HandleMessage(tag);
 
             if (nmdRes == CriticalPointTypes.NMD || (userRes == CriticalPointTypes.NMD && !nmdAlert.NmdInAlertWaitTime()))
+            {
+                nmdAlert.user_alert();
                 return CriticalPointTypes.NMD;
+            }
             else if (tecRes == CriticalPointTypes.TEC || (userRes == CriticalPointTypes.TEC && !tecAlert.TecInAlertWaitTime()))
+            {
+                tecAlert.user_alert();
                 return CriticalPointTypes.TEC;
+            }
             else
                 return CriticalPointTypes.None;
         }

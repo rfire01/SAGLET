@@ -52,5 +52,11 @@ namespace SAGLET.Class
             TimeSpan diff = newTime.Subtract(oldTime);
             return (diff.Seconds + diff.Minutes * 60 + diff.Hours * 3600 + diff.Days * 3600 * 24);
         }
+
+        public void user_alert()
+        {
+            if (!TecInAlertWaitTime())
+                lastAlertTime = DateTime.Now;
+        }
     }
 }

@@ -11,7 +11,6 @@
                     'has-new-cp-idle':vm.newCpBorderAlertType == '18',
                     'has-new-cp-wds':vm.newCpBorderAlertType == '15',
                     'has-new-cp-cds':vm.newCpBorderAlertType == '14'
-
          }">
         <div class="panel panel-default ">
 
@@ -57,12 +56,10 @@
                         'scaled-to-room-box-1600x900': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1600x900'),
                         'scaled-to-room-box-1366x728': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1366x768'),
                         'scaled-to-room-box-1280x1024': (!vm.scaledInit && vm.overview && vm.screenWidthHeight == '1280x1024')
-                        }">
-
-                </iframe>
+                        }"></iframe>
             </div>
         </div>
-        
+
     </div>
 </div>
 
@@ -71,11 +68,3 @@
     <cp-dashboard critical-points-idleness="vm.idleness" critical-points-messages="vm.criticalPointsMessages" new-critical-points="vm.newCriticalPoints" old-critical-points="vm.oldCriticalPoints"></cp-dashboard>
 
 </div>
-
-
-
-
-
-
-
-

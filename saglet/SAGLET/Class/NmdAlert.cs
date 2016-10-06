@@ -133,5 +133,11 @@ namespace SAGLET.Class
                 return false;
         }
 
+        public void user_alert()
+        {
+            if (!NmdInAlertWaitTime())
+                lastAlertTime = DateTime.Now;
+        }
+
     }
 }
