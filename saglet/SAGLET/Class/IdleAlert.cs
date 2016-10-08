@@ -53,7 +53,10 @@ namespace SAGLET.Class
             DateTime currentTime = DateTime.Now;
             foreach (KeyValuePair<string, RoomUser> pair in usersInfo)
             {
-                secondsPassed = calculateTimeDiffInSeconds(pair.Value.getLastActivityTime(), currentTime);
+                if (pair.Value.getLastActivityTime() != DateTime.MinValue)
+                    secondsPassed = calculateTimeDiffInSeconds(pair.Value.getLastActivityTime(), currentTime);
+                else
+                    secondsPassed = calculateTimeDiffInSeconds(StartTime, currentTime);
                 allIdle = allIdle && (secondsPassed >= allIdleTime);
             }
             if(usersInfo.Count==0)

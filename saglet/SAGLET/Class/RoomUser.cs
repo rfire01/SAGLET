@@ -20,6 +20,8 @@ namespace SAGLET.Class
             this.id = id;
             this.nmdCount = 0;
             this.tecCount = 0;
+            this.lastActionTime = DateTime.MinValue;
+            this.lastMessageTime = DateTime.MinValue;
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag,Boolean nmdStarted)

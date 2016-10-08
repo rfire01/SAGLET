@@ -185,7 +185,7 @@
             console.info('************ updateRoomMsgLive: ************ ' + roomID);
            
             returnCp(cpObject).then(function (cp) {
-                if (cp.CriticalPoints[1].Type == 0)
+                if (cp.CriticalPoints[1].Type == 0 && cp.CriticalPoints[0].Type == 0)
                     return;
 
                 if (cp.CriticalPoints[1].Type > 0)
@@ -199,10 +199,19 @@
                 vm.cpTime = new Date().toTimeString().substring(0, 8);
                 //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
 
-                vm.cpType = cp.CriticalPoints[1].Type;
-                vm.cpPriority = cp.CriticalPoints[1].Priority;
+                if (cp.CriticalPoints[1].Type == 0 && cp.CriticalPoints[0].Type > 0) {
+                    vm.cpType = cp.CriticalPoints[0].Type;
+                    vm.cpPriority = cp.CriticalPoints[0].Priority;
 
-                vm.cpAlertType = cp.CriticalPoints[1].Type;
+                    vm.cpAlertType = 0;
+                }
+                else
+                {
+                    vm.cpType = cp.CriticalPoints[1].Type;
+                    vm.cpPriority = cp.CriticalPoints[1].Priority;
+
+                    vm.cpAlertType = cp.CriticalPoints[1].Type;
+                }
                 // vm.cpAlertPriority = cp.CriticalPoints[0].Priority;
 
                 //if (cp.CriticalPoints[0].Type == 0)

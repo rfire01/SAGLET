@@ -139,12 +139,14 @@
             };
 
             //vm.newcp = true;
-            vm.newCpBorderAlertType = cpType;
+            
 
             vm.criticalPointsMessages.push(cp);
 
-            if (cpAlertType > 0)
+            if (cpAlertType > 0) {
                 vm.newCriticalPoints.push(cp);
+                vm.newCpBorderAlertType = cpType;
+            }
 
 
 
