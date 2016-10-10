@@ -41,8 +41,8 @@
         //vm.newcp = false;
         vm.newCpBorderAlertType = 'none';
         vm.criticalPointsIndex = [];
-
-
+        vm.width = $window.innerWidth;
+        vm.height = ($window.innerHeight > 480) ? ($window.innerHeight + 200) : 480;
 
         //in methods
         vm.iframeLink = iframeLink;
@@ -63,6 +63,7 @@
 
             var initScaledIframe = $timeout(function () {
                 vm.scaledInit = false;
+                vm.height = (vm.height <= 480) ? (vm.height/ 0.74 + 200) : (vm.height / 0.74);
                 console.info("***** scale " + vm.scaledInit + " ****");
             }, 10000);
         }
@@ -86,13 +87,11 @@
             //$sce.trustAsResourceUrl("http://vmtdev.mathforum.org/#/room/' + {{vm.room.ID}} )
         }
 
-
         function openCloseFullView() {
-            if (!vm.fullView)
+            if (!vm.fullView) {
                 this.parent.openFullViewSelectedRoom(this);
-            else {
+            }  else {
                 this.parent.closeFullViewSelectedRoom(this);
-
 
                 vm.newCriticalPoints.forEach(function (cp) {
                     vm.oldCriticalPoints.push(cp);
@@ -101,20 +100,11 @@
                 vm.newCriticalPoints = [];
                 vm.newCpBorderAlertType = 'none'
             }
-
-
-            //if (vm.newcp)
-            //    vm.newcp = !vm.newcp;
-
-
-
         }
-
 
 
         function setFullView(bool) {
             vm.fullView = bool;
-
         }
 
 
