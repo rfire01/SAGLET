@@ -12,7 +12,7 @@
                         <div class="container" style="padding-left:0px; padding-right:0px;">
 
                             <cp-icons style="float:left;" critical-point="cp"  dashboard="true"></cp-icons> | <span>{{::cp.cpTime}}</span>
-                            <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cp.cpUser" ng-if="cp.cpType == 18">{{::user}}</span>
+                            <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cp.cpUser" ng-if="cp.cpType == 18 || cp.cpType == 19 || cp.cpType == 20">{{::user}}</span>
                         </div>
 
 

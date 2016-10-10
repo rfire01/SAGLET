@@ -80,5 +80,13 @@ namespace SAGLET.Class
             }
         }
 
+        public Boolean RoomStarted(int roomID)
+        {
+            if (this.rooms.ContainsKey(roomID) == true)
+                return this.rooms[roomID].RoomStarted();
+            else
+                return false;
+        }
+
     }
 }

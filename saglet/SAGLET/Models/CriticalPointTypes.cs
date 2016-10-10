@@ -26,5 +26,7 @@ namespace SAGLET.Models
         NMD,
         TEC,
         IDLE,
+        UJ,
+        UL,
     }
 }

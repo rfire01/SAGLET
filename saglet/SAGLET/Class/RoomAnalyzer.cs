@@ -14,6 +14,7 @@ namespace SAGLET.Class
         private NmdAlert nmdAlert;
         private IdleAlert idleAlert;
         private TecAlert tecAlert;
+        private Boolean roomStarted;
 
         public RoomAnalyzer(int roomID)
         {
@@ -22,10 +23,13 @@ namespace SAGLET.Class
             this.nmdAlert = new NmdAlert();
             this.idleAlert = new IdleAlert();
             this.tecAlert = new TecAlert();
+            this.roomStarted = false;
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, string user)
         {
+            if (!roomStarted)
+                roomStarted = true;
             System.Diagnostics.Debug.WriteLine("*****************");
             System.Diagnostics.Debug.WriteLine(this.roomID);
             //in case missed a user joined room
@@ -84,6 +88,11 @@ namespace SAGLET.Class
         {
             TimeSpan diff = newTime.Subtract(oldTime);
             return (diff.Seconds + diff.Minutes * 60 + diff.Hours * 3600 + diff.Days * 3600 * 24);
+        }
+
+        public Boolean RoomStarted()
+        {
+            return roomStarted;
         }
 
     }

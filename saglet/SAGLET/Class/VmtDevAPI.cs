@@ -145,7 +145,7 @@ namespace SAGLET.Class
 
         public static void RegisterLiveActions(int roomID)
         {
-            if (chatSockets.ContainsKey(roomID))
+            if (actionSockets.ContainsKey(roomID))
                 return;
             var socket = IO.Socket("http://vmtdev.mathforum.org:80");
             actionSockets[roomID] = socket;
@@ -203,7 +203,12 @@ namespace SAGLET.Class
             List<string> users = new List<string>();
             if (json.Length <= 2) return users;
 
-            users = Regex.Matches(json, @"(?<!\\)\w+").OfType<Match>().Select(u => u.Value).ToList();
+            string[] quoteSplit = json.Split('"');
+            foreach(string possibleUser in quoteSplit)
+            {
+                if (Regex.Matches(possibleUser, @"(?<!\\)\w+").OfType<Match>().Select(u => u.Value).ToList().Count > 0)
+                    users.Add(possibleUser);
+            }
             return users;
         }
 

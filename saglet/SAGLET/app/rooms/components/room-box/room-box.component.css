@@ -64,4 +64,9 @@
 .has-new-cp-idle{
     outline: 5px solid #999999;
 }
-
+.has-new-cp-uj{
+    outline: 5px solid #8FFFA8;
+}
+.has-new-cp-ul{
+    outline: 5px solid #933B3B;
+}

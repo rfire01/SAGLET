@@ -5,6 +5,8 @@
                  'label-info': vm.criticalPoint.cpType == 16,
                  'label-warning': vm.criticalPoint.cpType == 17,
                  'label-default': vm.criticalPoint.cpType == 18,
+                 'label-join': vm.criticalPoint.cpType == 19,
+                 'label-left': vm.criticalPoint.cpType == 20,
 
                  'cp-icons': !vm.fullView,
                  'cp-icons-full-view': vm.fullView,
@@ -16,8 +18,10 @@
        'fa fa-comment-o fa-lg': vm.criticalPoint.cpType == 16,
        'glyphicon glyphicon-wrench fa-lg':  vm.criticalPoint.cpType == 17,
        'fa fa-bed fa-lg': vm.criticalPoint.cpType == 18,
+       'glyphicon glyphicon-user fa-lg': vm.criticalPoint.cpType == 19,
+       'glyphicon glyphicon-user': vm.criticalPoint.cpType == 20,
 
        }"></i>
-    
+
 </span>
 

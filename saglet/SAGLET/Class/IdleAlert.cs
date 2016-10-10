@@ -14,12 +14,15 @@ namespace SAGLET.Class
         private int geoCheckTime = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["geogebraCheckTime"]);
         private int noActionTime = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["yesChatNoActionTime"]);
         private int idleUserInterval = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["idleUserInterval"]);
+        private int idleAlertWaitTime = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["idleAlertWaitTime"]);
         private Queue<KeyValuePair<string, DateTime>> idleQueue;
+        private DateTime lastAlertTime;
 
         public IdleAlert()
         {
             StartTime = new DateTime();
             this.idleQueue = new Queue<KeyValuePair<string, DateTime>>();
+            this.lastAlertTime = DateTime.MinValue;
         }
 
         public void HandleMessage(string user)
@@ -33,11 +36,23 @@ namespace SAGLET.Class
 
         public KeyValuePair<CriticalPointTypes, List<string>> CheckIdle(Dictionary<string, RoomUser> usersInfo)
         {
-            KeyValuePair<Boolean, List<string>> idleUsers = GetIdleUsersInInterval(usersInfo.Keys.ToList());
-            if (StartTime!=DateTime.MinValue && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || idleUsers.Key))
-                return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE,idleUsers.Value);
-            else
-                return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.None, idleUsers.Value);
+            KeyValuePair<Boolean, List<string>> idleUsers = GetIdleUsersInInterval(usersInfo);
+            if (StartTime != DateTime.MinValue && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || idleUsers.Key))
+            {
+                Boolean isntInWaitAlertTime = (lastAlertTime==DateTime.MinValue || calculateTimeDiffInSeconds(lastAlertTime,DateTime.Now)>=idleAlertWaitTime);
+                if (isntInWaitAlertTime && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo)))
+                {
+                    lastAlertTime = DateTime.Now;
+                    return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE, new List<string>());
+                }
+                else if(idleUsers.Key)
+                {
+                    return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE, idleUsers.Value);
+                }
+                
+            }
+            return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.None, idleUsers.Value);
+                
         }
 
         private int calculateTimeDiffInSeconds(DateTime oldTime, DateTime newTime)
@@ -121,8 +136,9 @@ namespace SAGLET.Class
         ///if someone idle returns true
         ///otherwise returns false;
         ///list of idle users is ready, only need to return it.
-        public KeyValuePair<Boolean, List<string>> GetIdleUsersInInterval(List<string> users)
+        public KeyValuePair<Boolean, List<string>> GetIdleUsersInInterval(Dictionary<string, RoomUser> usersInfo)
         {
+            List<string> users = usersInfo.Keys.ToList();
             CleanMessages();
 
             Dictionary<string, int> userActivityCount = new Dictionary<string,int>();
@@ -143,9 +159,18 @@ namespace SAGLET.Class
 
             foreach(KeyValuePair<string,int> userCount in userActivityCount)
             {
+                Boolean inIdleAlertWaitTime = false;
+                DateTime lastAlert = usersInfo[userCount.Key].GetLastIdleTime();
+                if (lastAlert == DateTime.MinValue)
+                    inIdleAlertWaitTime = false;
+                else if (calculateTimeDiffInSeconds(lastAlert, DateTime.Now) < idleAlertWaitTime)
+                    inIdleAlertWaitTime = true;
                 // if less than 10% in interval
-                if (userCount.Value < count / 10)
+                if (userCount.Value < count / 10 && !inIdleAlertWaitTime)
+                {
                     idleUsers.Add(userCount.Key);
+                    usersInfo[userCount.Key].UpdateIdleTime();
+                }
             }
 
             if (idleUsers.Count > 0)

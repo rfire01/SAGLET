@@ -15,7 +15,7 @@
         vm.roomsCtrl = [];
 
         var detailsHub = $.connection.roomDetailsHub;
-        var idleAlertFreq = 60000 * 3;
+        var idleAlertFreq = 20000;
 
         vm.loader = true;
         vm.user;
@@ -164,6 +164,49 @@
             
             console.log(vm.idlenessRoom);
             console.log(vm.idlenessUsers);
+        };
+
+        detailsHub.client.updateRoomUsersLive = function (roomID, roomData) {
+            console.info("************ updateRoomUsersLive ************");
+
+            returnCp(roomData).then(function (room) {
+                if (room.Key == '19') {
+                    vm.newCp = true;
+
+
+                    vm.cpRoom = roomID;
+                    vm.cpMsg = '';
+                    vm.cpUser = room.Value;
+                    vm.cpTime = new Date().toTimeString().substring(0, 8);
+                    //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
+
+                    vm.cpType = 19;
+                    vm.cpPriority = '';
+
+                    vm.cpAlertType = 19;
+
+                    handelCriticalPoints(vm.cpRoom, vm.cpType);
+
+                }
+                else if (room.Key == '20') {
+                    vm.newCp = true;
+
+
+                    vm.cpRoom = roomID;
+                    vm.cpMsg = '';
+                    vm.cpUser = room.Value;
+                    vm.cpTime = new Date().toTimeString().substring(0, 8);
+                    //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
+
+                    vm.cpType = 20;
+                    vm.cpPriority = '';
+
+                    vm.cpAlertType = 20;
+
+                    handelCriticalPoints(vm.cpRoom, vm.cpType);
+
+                }
+            })
         };
 
         detailsHub.client.registeredComplete = function (res) {

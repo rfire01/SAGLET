@@ -3211,6 +3211,10 @@ input[type="button"].btn-block {
   content: "\1f527";
 }
 
+.glyphicon-user:before {
+  content:"\e008";
+}
+
 .caret {
   display: inline-block;
   width: 0;
@@ -4884,6 +4888,24 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .label-danger[href]:hover,
 .label-danger[href]:focus {
   background-color: #c9302c;
+}
+
+.label-join {
+  background-color: #8FFFA8;
+}
+
+.label-join[href]:hover,
+.label-join[href]:focus {
+  background-color: #ACFFBE;
+}
+
+.label-left {
+  background-color: #933B3B;
+}
+
+.label-left[href]:hover,
+.label-left[href]:focus {
+  background-color: #AE4747;
 }
 
 .badge {

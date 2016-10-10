@@ -147,8 +147,15 @@ namespace SAGLET.Hubs
 
         }
 
+        public void UpdateUserInRoom(string roomID, string users)
+        {
+            context.Clients.Group(roomID).updateRoomUsersLive(roomID, users);
+        }
+
         public void RegisterLiveChatAndLiveActions(string roomsFromClient)
         {
+            if (roomsFromClient.CompareTo("") == 0)
+                return;
             List<String> roomsID = roomsFromClient.Split(',').ToList();
             //List<Room> rooms = db.Rooms.Where(r => r.Sync).ToList();
             foreach (String id in roomsID)

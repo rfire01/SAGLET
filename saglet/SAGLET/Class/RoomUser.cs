@@ -14,6 +14,7 @@ namespace SAGLET.Class
         private DateTime lastActionTime;
         private int nmdCount;
         private int tecCount;
+        private DateTime lastIdleAlertTime;
 
         public RoomUser(string id)
         {
@@ -22,6 +23,7 @@ namespace SAGLET.Class
             this.tecCount = 0;
             this.lastActionTime = DateTime.MinValue;
             this.lastMessageTime = DateTime.MinValue;
+            this.lastIdleAlertTime = DateTime.MinValue;
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag,Boolean nmdStarted)
@@ -73,6 +75,16 @@ namespace SAGLET.Class
                 return lastActionTime;
             else
                 return lastMessageTime;
+        }
+
+        public DateTime GetLastIdleTime()
+        {
+            return this.lastIdleAlertTime;
+        }
+
+        public void UpdateIdleTime()
+        {
+            this.lastIdleAlertTime = DateTime.Now;
         }
 
     }
