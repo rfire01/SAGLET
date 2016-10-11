@@ -21,8 +21,6 @@ namespace SAGLET.Controllers
             if (db.Users.Find(username) == null) db.Users.Add(new User(username));
             db.SaveChanges();
 
-            return RedirectToAction("SyncNewRooms", "Rooms");
-            //return Redirect("#!");
             return RedirectToAction("app", "Home");
         }
 
