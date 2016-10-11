@@ -13,16 +13,30 @@
                     'has-new-cp-ul':vm.newCpBorderAlertType == '20'
          }">
         <div class="panel panel-default">
-            <div class="panel-heading" ng-class="{'iframe-header':true, 'iframe-header-has-new-cp-or-room-is-open':vm.fullView || vm.newCpBorderAlertType != 'none' }" ng-click="vm.openCloseFullView()">
-                Room: {{vm.room.ID}}
-                <div class="panel-group" style="float:right;">
-                    <span ng-repeat="cp in vm.newCriticalPoints track by $index">
-                        <cp-icons full-view="vm.fullView" critical-point="cp" critical-point-index="$index"></cp-icons>
-                    </span>
-                    <!--<span><cp-icons critical-point="vm.cpAlertIdleType"></cp-icons></span>-->
-                    <button type="button" class="btn btn-default btn-sm" aria-label="Left Align" style="margin-top:-5px;" ng-hide="!vm.fullView">
-                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
-                    </button>
+            <div class="panel-heading" ng-click="vm.openCloseFullView()"
+                 ng-class="{'iframe-header':true, 
+                            'iframe-header-fullview': vm.fullView, 
+                            'iframe-header-has-new-cp-fv': (vm.fullView && vm.newCpBorderAlertType != 'none'),
+                            'iframe-header-has-new-cp-ov': (!vm.fullView && vm.newCpBorderAlertType != 'none')}" >
+                <div class="row">
+                    <div class="col-sm-11">
+                        <p style="margin: 5px;">{{vm.room.Name + " (" + vm.room.ID + ")"}}</p>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-default btn-sm" aria-label="Left Align" style="float:right;" ng-hide="!vm.fullView">
+                            <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel-group" ng-class="{'cp-panel-overview': vm.overview && vm.newCriticalPoints, 'cp-panel-fullview': vm.fullView}" ng-hide="!vm.cpPanel">
+                            <span ng-repeat="cp in vm.newCriticalPoints track by $index">
+                                <cp-icons full-view="vm.fullView" critical-point="cp" critical-point-index="$index"></cp-icons>
+                            </span>
+                            <!--<span><cp-icons critical-point="vm.cpAlertIdleType"></cp-icons></span>-->
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel-body" style="padding:0px;">

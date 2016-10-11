@@ -75,26 +75,23 @@ namespace SAGLET.Controllers
         // GET: Rooms/SyncNewRooms
         public void SyncNewRooms()
         {
-
-
             try
             {
                 string user = AppHelper.GetVmtUser();
-            // make HTML request
-            var client = new ExtendedWebClient();
-            string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
+                // make HTML request
+                var client = new ExtendedWebClient();
+                string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
 
-            // sync rooms
-            List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
-            //newRooms = SyncUserRooms(user.ToLower(), roomsData);
+                // sync rooms
+                List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
+                //newRooms = SyncUserRooms(user.ToLower(), roomsData);
 
-            foreach (Room room in newRooms)
-            {
-                VmtDevAPI.RegisterLiveChat(room.ID);
-                VmtDevAPI.RegisterLiveActions(room.ID);
-            }
+                foreach (Room room in newRooms)
+                {
+                    VmtDevAPI.RegisterLiveChat(room.ID);
+                    VmtDevAPI.RegisterLiveActions(room.ID);
+                }
                 //GetRoomsList();
-
             }
             catch (Exception e)
             {
@@ -119,19 +116,27 @@ namespace SAGLET.Controllers
                     string currUser = Convert.ToString(item.creator).ToLower();
                     if (user != currUser) continue;
                     int currRoomId = Convert.ToInt32(item.id);
-                    if (db.Rooms.Find(currRoomId) != null) continue;
+                    Room r = db.Rooms.Find(currRoomId);
+                    if (r != null)
+                    {
+                        if (r.Name == null)
+                            r.Name = item.roomName;
+                    }
+                    else
+                    {
+                        Room room = new Room();
+                        room.ID = item.id;
+                        room.Name = item.roomName;
+                        room.RoomGroup = new Group(room.ID);
+                        foreach (var itemTab in item.tabs) { room.RoomGroup.Tabs.Add(new Tab(Convert.ToInt32(itemTab.Value))); }
 
-                    Room room = new Room();
-                    room.ID = item.id;
-                    room.RoomGroup = new Group(room.ID);
-                    foreach (var itemTab in item.tabs) { room.RoomGroup.Tabs.Add(new Tab(Convert.ToInt32(itemTab.Value))); }
-
-                    room.LastUpdate = Convert.ToDateTime(DateTime.Now.ToString("d"));
-                    room.Moderator = moderator;
-                    room.ModeratorsAllowed.Add(moderator);
-                    room.Sync = true;
-                    newRooms.Add(room);
-                    db.Rooms.Add(room);
+                        room.LastUpdate = Convert.ToDateTime(DateTime.Now.ToString("d"));
+                        room.Moderator = moderator;
+                        room.ModeratorsAllowed.Add(moderator);
+                        room.Sync = true;
+                        newRooms.Add(room);
+                        db.Rooms.Add(room);
+                    }
                 }
                 db.SaveChanges();
             }

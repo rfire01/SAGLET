@@ -36,6 +36,7 @@
         vm.criticalPointsIndex = [];
         vm.width = $window.innerWidth;
         vm.height = ($window.innerHeight > 480) ? ($window.innerHeight + 200) : 480;
+        vm.cpPanel = false;
 
         //in methods
         vm.iframeLink = iframeLink;
@@ -87,6 +88,7 @@
 
                 vm.newCriticalPoints = [];
                 vm.newCpBorderAlertType = 'none'
+                vm.cpPanel = false;
             }
         }
 
@@ -118,6 +120,7 @@
             vm.criticalPointsMessages.push(cp);
 
             if (cpAlertType > 0) {
+                vm.cpPanel = true;
                 vm.newCriticalPoints.push(cp);
                 vm.newCpBorderAlertType = cpType;
             }

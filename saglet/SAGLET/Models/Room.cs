@@ -16,6 +16,8 @@ namespace SAGLET.Models
         public bool Sync { get; set; }
         [DisplayName("Last Update")]
         public DateTime LastUpdate { get; set; }
+        [DisplayName("VMT Room Name")]
+        public string Name { get; set; }
         public virtual Group RoomGroup { get; set; }
         public virtual Moderator Moderator { get; set; }
         [InverseProperty("RoomsAllowed")]
