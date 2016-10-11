@@ -11,6 +11,8 @@ class TFIDFAnalyzer:
         self.geo = open('Dictionaries\\GeometryTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.claim = open('Dictionaries\\ClaimTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.conclusion = open('Dictionaries\\ConclusionTerms.txt', 'r', encoding="utf8").read().split('\n')
+        self.structure = open('Dictionaries\\TaskStructure.txt', 'r', encoding="utf8").read().split('\n')
+        self.software = open('Dictionaries\\SoftwareUsage.txt', 'r', encoding="utf8").read().split('\n')
         self.nonMath = open('Dictionaries\\NMDTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.tech = open('Dictionaries\\TechTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.shorts = open('Dictionaries\\ShortTerms.txt', 'r', encoding="utf8").read().split('\n')
@@ -93,6 +95,12 @@ class TFIDFAnalyzer:
         for word in self.conclusion:
             if word in sentence:
                 return self.__check_two_words(word, sentence),3
+        for word in self.structure:
+            if word in sentence:
+                return self.__check_two_words(word, sentence),3
+        for word in self.software:
+            if word in sentence:
+                return self.__check_two_words(word, sentence),3
         return 0,3
 
     def __nmd_check__(self,sentence):
@@ -118,8 +126,6 @@ class TFIDFAnalyzer:
             return 'NaN'
 
     def get_tag(self,sentence,solution):
-        if sentence == 'אסף!!! יש שם חפיפת משולשים!!! תסתכל על משולש ה-ב-ו ועל משולש ז-ד-ב':
-            a = 1
         blob = tb(sentence)
         self.bloblist.append(blob)
         blobList = self.bloblist[:]
@@ -150,7 +156,7 @@ class TFIDFAnalyzer:
             tec = tec + self.__tec_check__(word[0]) * word[1]
 
         if tec == 0 and nmd == 0 and ds == 0:
-            return 'NaN',0
+            return 'NaN',-1
         if ds > nmd:
             if ds > tec:
                 if 1 in codes:
@@ -160,12 +166,12 @@ class TFIDFAnalyzer:
                 else:
                     return 'DS',3
             else:
-                return 'TEC',0
+                return 'TEC',-1
         else:
             if nmd > tec:
-                return 'NMD',0
+                return 'NMD',-1
             else:
-                return 'TEC',0
+                return 'TEC',-1
 
         # tag='NaN'
         # for word in sorted_words:
@@ -173,3 +179,35 @@ class TFIDFAnalyzer:
         #     if tag != 'NaN':
         #         break
         # return tag
+
+    def get_tfidf_values(self,sentence):
+        blob = tb(sentence)
+        self.bloblist.append(blob)
+        blobList = self.bloblist[:]
+        # blobList.append(blob)
+        singleWords = blob.words
+        pairs = [Word(singleWords[i] + ' ' + singleWords[i + 1]) for i in range(len(singleWords) - 1)]
+        scores_pairs = {word: self.__tfidf__(word, blob, blobList, 2) for word in pairs}
+        sorted_words_pairs = sorted(scores_pairs.items(), key=lambda x: x[1], reverse=True)
+        scores_single = {word: self.__tfidf__(word, blob, blobList, 1) for word in blob.words}
+        sorted_words_single = sorted(scores_single.items(), key=lambda x: x[1], reverse=True)
+        sorted_words = sorted(sorted_words_pairs + sorted_words_single, key=lambda x: x[1], reverse=True)
+
+        ds = 0
+        nmd = 0
+        tec = 0
+        codes = []
+        for i, word in enumerate(sorted_words_single):
+            dsRes, code = self.__ds_check__(word[0], ['x','x'])
+            codes.append(code)
+            ds = ds + dsRes * word[1]
+            nmd = nmd + self.__nmd_check__(word[0]) * word[1]
+            tec = tec + self.__tec_check__(word[0]) * word[1]
+        for i, word in enumerate(sorted_words_pairs):
+            dsRes, code = self.__ds_check__(word[0], ['x','x'])
+            codes.append(code)
+            ds = ds + dsRes * word[1]
+            nmd = nmd + self.__nmd_check__(word[0]) * word[1]
+            tec = tec + self.__tec_check__(word[0]) * word[1]
+
+        return [ds,nmd,tec]

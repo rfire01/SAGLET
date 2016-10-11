@@ -73,8 +73,10 @@ def handleRequest(roomID,message,solution):
             tag = 'NMD'
         else:
             tag = 'TEC'
-    if ds_count <= 1 and tec_count <= 1 and nmd_count <= 0:
+    if ds_count <= 1 and tec_count <= 1 and nmd_count <= 1:
         tag = 'NaN'
+    if da_tag == 'NaN':
+        tag = sim_tag
 
     if da_code == 3:
         code = tfa_code

@@ -7,6 +7,8 @@ class DictAnalyzer:
         self.geo = open('Dictionaries\\GeometryTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.claim = open('Dictionaries\\ClaimTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.conclusion = open('Dictionaries\\ConclusionTerms.txt', 'r', encoding="utf8").read().split('\n')
+        self.structure = open('Dictionaries\\TaskStructure.txt', 'r', encoding="utf8").read().split('\n')
+        self.software = open('Dictionaries\\SoftwareUsage.txt', 'r', encoding="utf8").read().split('\n')
         self.nonMath = open('Dictionaries\\NMDTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.tech = open('Dictionaries\\TechTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.shorts = open('Dictionaries\\ShortTerms.txt', 'r', encoding="utf8").read().split('\n')
@@ -16,8 +18,6 @@ class DictAnalyzer:
         count = 0
         shape = False
         geoTerm = False
-        if sentence == 'אסף!!! יש שם חפיפת משולשים!!! תסתכל על משולש ה-ב-ו ועל משולש ז-ד-ב':
-            a = 1
         for word in self.PlurarShapes:
             if word in sentence:
                 count = count + 1
@@ -36,6 +36,12 @@ class DictAnalyzer:
         for word in self.conclusion:
             if word in sentence:
                 count = count + 1
+        for word in self.structure:
+            if word in sentence:
+                count = count + 1
+        for word in self.software:
+            if word in sentence:
+                count = count + 1
         if self.__if_then_statment__(sentence) > 0:
             count = count + 1
         if context == 'DS':
@@ -43,12 +49,12 @@ class DictAnalyzer:
                 if word in sentence:
                     count = count + 1
         if solution[1] == 'shape' and shape:
-            if self.__check_solution__(solution[0],sentence):
+            if self.__check_solution(solution[0],sentence):
                 code = 1
             else:
                 code = 0
         elif solution[1] == 'geoTerm' and geoTerm:
-            if self.__check_solution__(solution[0],sentence):
+            if self.__check_solution(solution[0],sentence):
                 code = 1
             else:
                 code = 0
@@ -78,17 +84,17 @@ class DictAnalyzer:
         nmd = self.__nmd_count__(sentence)
         tec = self.__tec_count__(sentence)
         if tec == 0 and nmd == 0 and ds == 0:
-            return 'NaN',0
+            return 'NaN',-1
         if ds > nmd:
             if ds > tec:
                 return 'DS',code
             else:
-                return 'TEC',0
+                return 'TEC',-1
         else:
             if nmd > tec:
-                return 'NMD',0
+                return 'NMD',-1
             else:
-                return 'TEC',0
+                return 'TEC',-1
 
     def __if_then_statment__(self, sentence):
         conclusionSplit = sentence.split('אם')
@@ -110,7 +116,7 @@ class DictAnalyzer:
                 return 'geoTerm'
         return ""
 
-    def __check_solution__(self, sol, sentence):
+    def __check_solution(self, sol, sentence):
         if sol in sentence:
             return True
         words = re.findall(r'\w+', sentence)
@@ -118,3 +124,9 @@ class DictAnalyzer:
             if word in sol:
                 return True
         return False
+
+    def get_dict_values(self,sentence):
+        [ds,code] = self.__ds_count__(sentence,'x',['x','x'])
+        nmd = self.__nmd_count__(sentence)
+        tec = self.__tec_count__(sentence)
+        return [ds,nmd,tec]
