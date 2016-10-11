@@ -1,6 +1,5 @@
-from similarity import cosineSim as cs,cataly
+from critialAnalyze import cosineSim as cs,cataly
 import ngram
-from gensim import corpora, models, similarities
 
 class SimAnalyzer:
     def __init__(self):
@@ -16,20 +15,10 @@ class SimAnalyzer:
         self.shorts = open('Dictionaries\\ShortTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.context = open('Dictionaries\\ContextTerms.txt', 'r', encoding="utf8").read().split('\n')
 
-        self.tecSentences = open('tecSentences\\tec.txt', 'r', encoding="utf8").read().split('\n')
-        self.dsSentences = open('tecSentences\\ds.txt', 'r', encoding="utf8").read().split('\n')
+        self.tecSentences = open('simSentences\\tec.txt', 'r', encoding="utf8").read().split('\n')
+        self.dsSentences = open('simSentences\\ds.txt', 'r', encoding="utf8").read().split('\n')
         self.gTec = ngram.NGram(self.tecSentences)
         self.gDs = ngram.NGram(self.dsSentences)
-
-        documents = self.tecSentences + self.dsSentences;
-        texts = [[word for word in document.lower().split()] for document in documents]
-        self.dictionary = corpora.Dictionary(texts)
-        corpus = [self.dictionary.doc2bow(text) for text in texts]
-        tfidf = models.TfidfModel(corpus)
-        corpus_tfidf = tfidf[corpus]
-        self.lsi = models.LsiModel(corpus_tfidf, id2word=self.dictionary, num_topics=100)
-        corpus_lsi = self.lsi[corpus_tfidf]
-        self.index = similarities.MatrixSimilarity(corpus_lsi)
 
     def __ds_count__(self,sentence,context):
         count = 0
@@ -123,31 +112,14 @@ class SimAnalyzer:
 
 
         if sim1[0] * sim2[0] * sim3[0] == 0 and sim1ds[0] * sim2ds[0] * sim3ds[0] == 0:
-        # if ds_amount ==0 and tec_amount ==0:
-            return 'NMD',0,[sim1[0],sim2[0],sim3[0],sim1ds[0],sim2ds[0],sim3ds[0]]
+            return 'NMD',0
         if metric == 1:
             if ds >= tec:
-                return 'DS',3,[sim1[0],sim2[0],sim3[0],sim1ds[0],sim2ds[0],sim3ds[0]]
+                return 'DS',3
             else:
-                return 'TEC',-1,[sim1[0],sim2[0],sim3[0],sim1ds[0],sim2ds[0],sim3ds[0]]
+                return 'TEC',3
         else:
             if sum(count) <= 1:
-                return 'DS', 3,[sim1[0],sim2[0],sim3[0],sim1ds[0],sim2ds[0],sim3ds[0]]
+                return 'DS', 3
             else:
-                return 'TEC', -1,[sim1[0],sim2[0],sim3[0],sim1ds[0],sim2ds[0],sim3ds[0]]
-
-    # def wv(self,doc):
-    #     vec_bow = self.dictionary.doc2bow(doc.lower().split())
-    #     vec_lsi = self.lsi[vec_bow]
-    #     sims = self.index[vec_lsi]
-    #     sims = sorted(enumerate(sims), key=lambda item: -item[1])
-    #     return sims[0]
-    #
-    # def get_tag_wv(self,sentence):
-    #     tag = self.wv(sentence)
-    #     if tag[1]==0:
-    #         return 'NaN'
-    #     elif tag[0]<54:
-    #         return 'TEC'
-    #     else:
-    #         return 'DS'
+                return 'TEC', 3
