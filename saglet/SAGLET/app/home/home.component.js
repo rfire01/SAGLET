@@ -16,6 +16,7 @@
         var indexHub = $.connection.roomIndexHub;
         vm.loader = true;
 
+
         vm.user = {
             user: '',
             rooms: { watch: [], rest: [] }
@@ -23,8 +24,12 @@
 
         vm.changeWatchStatus = changeWatchStatus;
         vm.updateRooms = updateRooms;
+        //vm.test = function () {
+        //    $.connection.hub.stop();
+        //}
 
         this.$onInit = function () {
+
             $.connection.hub.logging = true;
 
             /* Hub Start */
@@ -32,9 +37,13 @@
                 console.info(" ** hub started ** ");
                 indexHub.server.getUserName();
                 vm.loader = false;
+                //indexHub.server.getRooms();
             });
-        }
 
+
+            
+
+        }
         this.$onDestroy = function () {
             console.info(" ** $.connection.hub.stop ** ");
             $.connection.hub.stop();
@@ -45,13 +54,18 @@
             console.info(" ** getUserName ** ");
             returnUser(user)
                 .then(function (_userName) {
+
                     vm.user.user = _userName;
+
 
                     indexHub.server.getRooms();
 
                     console.log(" ** User: " + vm.user.user);
                 })
+
         };
+
+
 
         //GetRooms Listner
         indexHub.client.getRooms = function (roomList) {
@@ -65,30 +79,38 @@
                 })
         };
 
+
+
         $.connection.roomIndexHub.client.registeredComplete = function (msg) {
             console.info(msg);
         }
 
+
         function returnUser(user) {
             return $q(function (resolve, reject) {
+
                 var name = user;
 
                 if (!$sessionStorage.user || $sessionStorage.user.user != name)
                     $sessionStorage.user = {};
 
-                resolve(name);
-            });
-        }
 
+
+
+                resolve(name);
+
+            });
+
+        }
         function returnRooms(list) {
             return $q(function (resolve, reject) {
+
                 var watch = [];
                 var rest = [];
                 var i = 0;
 
                 if (!$sessionStorage.user.rooms && vm.user.rooms.watch.length == 0 && vm.user.rooms.rest.length == 0 && list.length > 0)
                     rest = list;
-
                 if ($sessionStorage.user.rooms && $sessionStorage.user.rooms.watch.length + $sessionStorage.user.rooms.rest.length < list.length) {
                     list.forEach(function (room) {
                         var exists = false;
@@ -105,6 +127,8 @@
                     })
                 }
 
+
+
                 if ($sessionStorage.user.rooms) {
                     list.forEach(function (room) {
                         checkLastRoomStatus(room.ID).then(function (status) {
@@ -114,8 +138,11 @@
                                 rest.push(room);
                         })
                     })
+
                 }
+
                 resolve({ watch: watch, rest: rest });
+
             })
         }
 
@@ -130,6 +157,7 @@
                             status = true;
                             isNew = false;
                         }
+
                     })
 
                     $sessionStorage.user.rooms.rest.forEach(function (room) {
@@ -137,13 +165,17 @@
                             status = false;
                             isNew = false;
                         }
+
                     })
                 }
+
                 resolve(status);
+
             });
         }
 
         function changeWatchStatus(index, status) {
+
             // Add to watch list
             if (!status) {
                 var thisRoom = vm.user.rooms.rest[index];
@@ -151,7 +183,7 @@
                 vm.user.rooms.rest.splice(index, 1);
             }
 
-            // Remove from watch list       
+                // Remove from watch list       
             else {
                 var thisRoom = vm.user.rooms.watch[index];
                 vm.user.rooms.rest.push(thisRoom)
@@ -165,5 +197,9 @@
         function updateRooms() {
             indexHub.server.updateRooms();
         }
+
     }
+
+
+
 })();

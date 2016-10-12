@@ -55,7 +55,7 @@ namespace SAGLET.Class
             return res;
         }
 
-        public CriticalActionPoints user_action(int roomID, string user, List<CriticalActionPoints> cps)
+        public CriticalActionPoints user_action(int roomID, string user)
         {
             CriticalPointTypes alert = CriticalPointTypes.None;
             if (this.rooms.ContainsKey(roomID) == true)

@@ -1,27 +1,65 @@
-﻿<div class="row container" >
+﻿
+<div class="row container" >
     <div class="panel panel-default">
+
+
         <span ng-show="vm.loader" us-spinner="{radius:55, width:8, length: 16}"></span>
         <div class="panel-body" ng-show="!vm.loader">
             <div class="col-md-6 container">
                 <div class="panel-heading">
                     Active Rooms
+
                     <div class="btn-group" style="float:right;">
-                        <!--<button class="btn btn-default btn-sm" ng-click="vm.test()">ddd</button>-->
+                        <!--<butotn class="btn btn-default btn-sm" ng-click="vm.test()">ddd</butotn>-->
                     </div>
+
                 </div>
+
+                
                 <rooms-list rooms="vm.user.rooms.watch" watch="true" on-status-change="vm.changeWatchStatus(index, status)"></rooms-list>
+
             </div>
+
             <div class="col-md-6 container">
                 <div class="panel-heading">
                     Archive Rooms
                     <div class="btn-group" style="float:right;">
-                        <button class="btn btn-default" ng-click="vm.updateRooms()">
-                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Sync new rooms
-                        </button>
+                        <butotn class="btn btn-default " ng-click="vm.updateRooms()">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>Sync new rooms
+                        </butotn>
+
                     </div>
                 </div>
                 <rooms-list rooms="vm.user.rooms.rest" watch="false" on-status-change="vm.changeWatchStatus(index, status)"></rooms-list>
             </div>
+
+
         </div>
     </div>
 </div>
+
+    <!--<div class="panel-heading">Active Rooms</div>
+    <div class="panel-body">
+        <p>Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur.</p>
+
+        <rooms-list rooms="vm.syncedRoomsList"></rooms-list>
+
+    </div>
+
+
+    <div class="row container">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">All Rooms</div>
+            <div class="panel-body">
+                <p>Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. </p>
+                <rooms-list rooms="vm.noneSyncedRoomsList"></rooms-list>
+            </div>
+
+
+
+        </div>
+
+
+    </div>-->

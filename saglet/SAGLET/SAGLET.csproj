@@ -318,6 +318,7 @@
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.html" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.js" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.css" />
+    <Content Include="app\rooms\components\room-box\room-box-scaled-rules.component.css" />
     <Content Include="app\rooms\components\room-box\room-box.component.css" />
     <Content Include="app\rooms\components\room-box\room-box.component.html" />
     <Content Include="app\rooms\components\room-box\room-box.component.js" />
@@ -447,6 +448,7 @@
     <Content Include="Views\Home\app.cshtml" />
     <Content Include=".babelrc" />
     <None Include="Properties\PublishProfiles\SAGLET.pubxml" />
+    <None Include="Properties\PublishProfiles\Saglet2.pubxml" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.countdownTimer.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

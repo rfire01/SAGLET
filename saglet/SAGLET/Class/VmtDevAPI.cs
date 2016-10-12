@@ -168,7 +168,7 @@ namespace SAGLET.Class
                 Debug.WriteLine(String.Format("RegisterLiveActions({0}) | New Action!", roomID));
                 //RoomsController ctrl = new RoomsController();
                 ctrl.ResetState();
-                ctrl.HandleLiveAction(actID.ToString(), url.ToString(), log.ToString(), eventName.ToString());
+                ctrl.HandleLiveAction(actID.ToString(), url.ToString(), log.ToString(), eventName.ToString(),roomID);
             });
 
             socket.On("ccAction", listener);
@@ -239,6 +239,11 @@ namespace SAGLET.Class
             sol.Add("דלתון");
             sol.Add("מעוין");
             return sol;
+        }
+
+        public static void setCurrentVmtUser(string user)
+        {
+            ctrl.setCurrentVmtUser(user);
         }
 
     }

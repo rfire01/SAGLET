@@ -19,6 +19,7 @@ namespace SAGLET.Hubs
         public void GetUserName()
         {
             String user = AppHelper.GetVmtUser();
+            VmtDevAPI.setCurrentVmtUser(user);
 
             //RoomsController ctrl = new RoomsController();
             //ctrl.SyncNewRooms();

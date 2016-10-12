@@ -34,6 +34,8 @@ namespace SAGLET.Controllers
 
         private AlertAnalyzer criticalPointAlerts = new AlertAnalyzer();
 
+        private string currentSagletUser = "";
+
         public void ResetState()
         {
             lock (dbLock)
@@ -472,7 +474,7 @@ namespace SAGLET.Controllers
         {
             var results = JsonConvert.DeserializeObject<dynamic>(json);
             VMsg msg = VMsg.ConvertLiveMessageJson(roomID, results);
-            if (msg != null)
+            if (msg != null) // && msg.UserID.CompareTo(currentSagletUser)!=0) // ------------> remove // before updating server
             {
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
@@ -488,7 +490,8 @@ namespace SAGLET.Controllers
                         string jsonRes = JsonConvert.SerializeObject(new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.UJ, userJoined));
                         hubDetails.UpdateUserInRoom(roomID.ToString(), jsonRes);
                     }
-                    criticalPointAlerts.user_joined(roomID, user);
+                    //if (user.CompareTo(currentSagletUser) != 0) // ------------> remove // before updating server
+                        criticalPointAlerts.user_joined(roomID, user);
                     CriticalMsgPoints serverCp = new CriticalMsgPoints();
                     serverCp.Type = CriticalPointTypes.None;
                     msg.CriticalPoints.Add(serverCp);
@@ -496,8 +499,6 @@ namespace SAGLET.Controllers
                 else if (msg.Text.Contains("left"))
                 {
                     string user = msg.Text.Split(' ')[0];
-                    string status = "left";
-                    string[] arr = { user };
 
                     if (criticalPointAlerts.RoomStarted(roomID))
                     {
@@ -506,7 +507,8 @@ namespace SAGLET.Controllers
                         string jsonRes = JsonConvert.SerializeObject(new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.UL, userLeft));
                         hubDetails.UpdateUserInRoom(roomID.ToString(), jsonRes);
                     }
-                    criticalPointAlerts.user_left(roomID, user);
+                    //if(user.CompareTo(currentSagletUser)!=0) // ------------> remove // before updating server
+                        criticalPointAlerts.user_left(roomID, user);
                     CriticalMsgPoints serverCp = new CriticalMsgPoints();
                     serverCp.Type = CriticalPointTypes.None;
                     msg.CriticalPoints.Add(serverCp);
@@ -530,25 +532,36 @@ namespace SAGLET.Controllers
                 //temporary canceled
                 //SaveChatMsgToDB(roomID, msg); 
 
+
                 if (msg.UserID != "server")
+                {
+                    UpdateRoomLastUpdate(roomID);
                     hubDetails.UpdateRoomMsgLiveControl(roomID.ToString(), msg);
+                }
 
             }
         }
 
-        public void HandleLiveAction(string actID, string xmlstr, string log, string eventName)
+        public void HandleLiveAction(string actID, string xmlstr, string log, string eventName,int roomID)
         {
+            //temporary solution for "if(url.xml == null)" always pass 
+            var logRes = JsonConvert.DeserializeObject<dynamic>(log);
+            criticalPointAlerts.user_action(roomID, logRes.userName.Value.ToString().Trim());
+            UpdateRoomLastUpdate(roomID);
+            //end temporary solution
+
+
             // TODO handle log and eventName
             var url = JsonConvert.DeserializeObject<dynamic>(xmlstr);
             if (url.xml == null) return;
-            var logRes = JsonConvert.DeserializeObject<dynamic>(log);
+            //var logRes= JsonConvert.DeserializeObject<dynamic>(log);
 
             VAction action = VAction.ConvertLiveActionJson(actID, url.xml.ToString(), logRes, eventName);
             if (action != null)
             {
                 action.CriticalPoints = CriticalPointAnalyzer.Analyze(action);
-                int roomID = db.Tabs.Find(action.TabID).GroupID;
-                action.CriticalPoints.Add(criticalPointAlerts.user_action(roomID, action.UserID, (List<CriticalActionPoints>)action.CriticalPoints));
+                //int roomID = db.Tabs.Find(action.TabID).GroupID;
+                //action.CriticalPoints.Add(criticalPointAlerts.user_action(roomID, action.UserID, (List<CriticalActionPoints>)action.CriticalPoints));
 
                 HandleIdleAction(roomID, action.UserID);
 
@@ -657,5 +670,19 @@ namespace SAGLET.Controllers
             idle.user_activity(roomID, userID);
         }
 
+        private void UpdateRoomLastUpdate(int roomID)
+        {
+            lock (dbLock)
+            {
+                Room room = db.Rooms.Find(roomID);
+                room.LastUpdate = DateTime.Now;
+                db.SaveChanges();
+            }
+        }
+
+        public void setCurrentVmtUser(string user)
+        {
+            currentSagletUser = user;
+        }
     }
 }
