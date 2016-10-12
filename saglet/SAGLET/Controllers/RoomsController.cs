@@ -77,26 +77,23 @@ namespace SAGLET.Controllers
         // GET: Rooms/SyncNewRooms
         public void SyncNewRooms()
         {
-
-
             try
             {
                 string user = AppHelper.GetVmtUser();
-            // make HTML request
-            var client = new ExtendedWebClient();
-            string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
+                // make HTML request
+                var client = new ExtendedWebClient();
+                string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
 
-            // sync rooms
-            List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
-            //newRooms = SyncUserRooms(user.ToLower(), roomsData);
+                // sync rooms
+                List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
+                //newRooms = SyncUserRooms(user.ToLower(), roomsData);
 
-            foreach (Room room in newRooms)
-            {
-                VmtDevAPI.RegisterLiveChat(room.ID);
-                VmtDevAPI.RegisterLiveActions(room.ID);
-            }
+                foreach (Room room in newRooms)
+                {
+                    VmtDevAPI.RegisterLiveChat(room.ID);
+                    VmtDevAPI.RegisterLiveActions(room.ID);
+                }
                 //GetRoomsList();
-
             }
             catch (Exception e)
             {
@@ -121,19 +118,27 @@ namespace SAGLET.Controllers
                     string currUser = Convert.ToString(item.creator).ToLower();
                     if (user != currUser) continue;
                     int currRoomId = Convert.ToInt32(item.id);
-                    if (db.Rooms.Find(currRoomId) != null) continue;
+                    Room r = db.Rooms.Find(currRoomId);
+                    if (r != null)
+                    {
+                        if (r.Name == null)
+                            r.Name = item.roomName;
+                    }
+                    else
+                    {
+                        Room room = new Room();
+                        room.ID = item.id;
+                        room.Name = item.roomName;
+                        room.RoomGroup = new Group(room.ID);
+                        foreach (var itemTab in item.tabs) { room.RoomGroup.Tabs.Add(new Tab(Convert.ToInt32(itemTab.Value))); }
 
-                    Room room = new Room();
-                    room.ID = item.id;
-                    room.RoomGroup = new Group(room.ID);
-                    foreach (var itemTab in item.tabs) { room.RoomGroup.Tabs.Add(new Tab(Convert.ToInt32(itemTab.Value))); }
-
-                    room.LastUpdate = Convert.ToDateTime(DateTime.Now.ToString("d"));
-                    room.Moderator = moderator;
-                    room.ModeratorsAllowed.Add(moderator);
-                    room.Sync = true;
-                    newRooms.Add(room);
-                    db.Rooms.Add(room);
+                        room.LastUpdate = Convert.ToDateTime(DateTime.Now.ToString("d"));
+                        room.Moderator = moderator;
+                        room.ModeratorsAllowed.Add(moderator);
+                        room.Sync = true;
+                        newRooms.Add(room);
+                        db.Rooms.Add(room);
+                    }
                 }
                 db.SaveChanges();
             }
@@ -474,7 +479,7 @@ namespace SAGLET.Controllers
         {
             var results = JsonConvert.DeserializeObject<dynamic>(json);
             VMsg msg = VMsg.ConvertLiveMessageJson(roomID, results);
-            if (msg != null) // && msg.UserID.CompareTo(currentSagletUser)!=0) // ------------> remove // before updating server
+            if (msg != null && msg.UserID.CompareTo(currentSagletUser)!=0) // ------------> remove // before updating server
             {
                 string solution = GetSolution(msg.Text, roomID);
                 HandleIdleMessage(msg);
@@ -490,7 +495,7 @@ namespace SAGLET.Controllers
                         string jsonRes = JsonConvert.SerializeObject(new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.UJ, userJoined));
                         hubDetails.UpdateUserInRoom(roomID.ToString(), jsonRes);
                     }
-                    //if (user.CompareTo(currentSagletUser) != 0) // ------------> remove // before updating server
+                    if (user.CompareTo(currentSagletUser) != 0)
                         criticalPointAlerts.user_joined(roomID, user);
                     CriticalMsgPoints serverCp = new CriticalMsgPoints();
                     serverCp.Type = CriticalPointTypes.None;
@@ -507,7 +512,7 @@ namespace SAGLET.Controllers
                         string jsonRes = JsonConvert.SerializeObject(new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.UL, userLeft));
                         hubDetails.UpdateUserInRoom(roomID.ToString(), jsonRes);
                     }
-                    //if(user.CompareTo(currentSagletUser)!=0) // ------------> remove // before updating server
+                    if (user.CompareTo(currentSagletUser) != 0) 
                         criticalPointAlerts.user_left(roomID, user);
                     CriticalMsgPoints serverCp = new CriticalMsgPoints();
                     serverCp.Type = CriticalPointTypes.None;
@@ -546,7 +551,10 @@ namespace SAGLET.Controllers
         {
             //temporary solution for "if(url.xml == null)" always pass 
             var logRes = JsonConvert.DeserializeObject<dynamic>(log);
-            criticalPointAlerts.user_action(roomID, logRes.userName.Value.ToString().Trim());
+            string user = logRes.userName.Value.ToString().Trim();
+            if (user.CompareTo(currentSagletUser) == 0)
+                return;
+            criticalPointAlerts.user_action(roomID, user);
             UpdateRoomLastUpdate(roomID);
             //end temporary solution
 

@@ -29,15 +29,12 @@ namespace SAGLET.Hubs
 
         public void GetRooms()
         {
-
             //UpdateRooms();
 
             using (SagletModel db = new SagletModel())
             {
-
                 //List<Room> syncedRoomList = new List<Room>();
                 //List<Room> nonSycedRoomList = new List<Room>();
-
 
                 String user = AppHelper.GetVmtUser();
                 //context.Clients.Client(Context.ConnectionId).GetUserName(user);
@@ -52,28 +49,19 @@ namespace SAGLET.Hubs
                     {
                         LastUpdate = room.LastUpdate,
                         ID = room.ID,
+                        Name = room.Name,
                         Sync = room.Sync
                     };
                     roomsList.Add(thisRoom);
-
-
 
                     //if (thisRoom.Sync)
                     //    syncedRoomList.Add(thisRoom);
                     //else
                     //    nonSycedRoomList.Add(thisRoom);
-
-
                 }
-
-
-
                 context.Clients.Client(Context.ConnectionId).getRooms(roomsList);
             }
         }
-
-
-       
 
         public void UpdateRooms()
         {
@@ -81,12 +69,9 @@ namespace SAGLET.Hubs
             ctrl.SyncNewRooms();
 
             GetRooms();
-
             //var deNewRooms = JsonConvert.DeserializeObject<Object>(newRooms)
             //context.Clients.Client(Context.ConnectionId).updateRooms();
         }
-
-
 
         public void UpdateRoomIndex(string roomID)
         {

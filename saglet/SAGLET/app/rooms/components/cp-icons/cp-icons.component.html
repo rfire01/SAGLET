@@ -9,7 +9,7 @@
                  'label-left': vm.criticalPoint.cpType == 20,
 
                  'cp-icons': !vm.fullView,
-                 'cp-icons-full-view': vm.fullView,
+                 'cp-icons-full-view': vm.fullView && !vm.dashboard,
                  'cp-icons-dashboard': vm.dashboard
       }">
     <i ng-class="{
