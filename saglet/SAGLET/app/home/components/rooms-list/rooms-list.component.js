@@ -8,7 +8,8 @@
             bindings: {
                 rooms: '<',
                 watch: '<',
-                onStatusChange: '&'
+                onStatusChange: '&',
+                isFull: '<'
             },
             controllerAs: 'vm',
             controller: controller

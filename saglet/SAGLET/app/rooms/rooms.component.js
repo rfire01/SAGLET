@@ -24,8 +24,6 @@
         vm.newCp = false;
         vm.cpRoom = '';
         vm.cpMsg = '';
-        
-        
         vm.cpUser = ''
         vm.cpTime = new Date();
         
@@ -43,12 +41,9 @@
         this.addRoom = addRoom;
 
         this.$onInit = function () {
-
-            
-
             if ($sessionStorage.user)
                 vm.roomList = ($sessionStorage.user.rooms.watch);
-            //vm.roomList = $sessionStorage.user.rooms.watch;
+
             if (!$sessionStorage.rooms)
                 $sessionStorage.rooms = [];
 
@@ -82,22 +77,17 @@
 
                         console.log("check " + idleAlertFreq);
                     }, idleAlertFreq);
-
                 })
             .fail(function () {
                 console.log('Could not Connect!');
                 vm.loader = false;
                 vm.hubConnectionStauts = 'fail'
             });
-         
-            
-
         }
 
         this.$onChanges = function (c) {
             console.log(c);
         };
-
 
         $.connection.hub.connected = function () {
             vm.hubConnectionStauts = 'connected';
@@ -106,15 +96,11 @@
         }
 
         $.connection.hub.reconnecting = function () {
-
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-success label-danger').text('Reconnecting').addClass('label-warning');
         }
 
-
-
         $.connection.hub.disconnected(function () {
-
             console.log(" **** Hub: disconnected **** ");
 
             vm.hubConnectionStauts = 'disconnected';
@@ -124,10 +110,7 @@
             setTimeout(function () {
                 $.connection.hub.start();
             }, 60000);
-
         });
-
-
 
         detailsHub.client.updateIdlenessLive = function (idleRoom, idelenssData) {
             console.info("************ updateIdlenessLive ************");
@@ -139,8 +122,6 @@
             returnCp(idelenssData).then(function (idle) {
                 if (idel.Key == '18') {
                     vm.newCp = true;
-
-                  
                     vm.cpRoom = idleRoom;
                     vm.cpMsg = '';
                     vm.cpUser = idle.Value;
@@ -153,7 +134,6 @@
                     vm.cpAlertType = 18;
 
                     handelCriticalPoints(vm.cpRoom, vm.cpType);
-
                 }
             })
             //if (idel.Key == '18') {
@@ -172,8 +152,6 @@
             returnCp(roomData).then(function (room) {
                 if (room.Key == '19') {
                     vm.newCp = true;
-
-
                     vm.cpRoom = roomID;
                     vm.cpMsg = '';
                     vm.cpUser = room.Value;
@@ -187,11 +165,8 @@
 
                     handelCriticalPoints(vm.cpRoom, vm.cpType);
 
-                }
-                else if (room.Key == '20') {
+                } else if (room.Key == '20') {
                     vm.newCp = true;
-
-
                     vm.cpRoom = roomID;
                     vm.cpMsg = '';
                     vm.cpUser = room.Value;
@@ -204,7 +179,6 @@
                     vm.cpAlertType = 20;
 
                     handelCriticalPoints(vm.cpRoom, vm.cpType);
-
                 }
             })
         };
@@ -215,9 +189,7 @@
 
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
-            
         };
-        
 
         detailsHub.client.sendLogToConsole = function (log)
         {
@@ -233,8 +205,6 @@
 
                 if (cp.CriticalPoints[1].Type > 0)
                     vm.newCp = true;
-
-               
 
                 vm.cpRoom = cp.GroupID;
                 vm.cpMsg = cp.Text;
@@ -264,20 +234,14 @@
                 //    vm.newCp = true;
 
                 handelCriticalPoints(vm.cpRoom, vm.cpType);
-
             })        
         };
-
-        
-      
-
 
         function listenToTheseVmtRooms(rooms) {
             rooms.forEach(function (item) {
                 $.connection.roomDetailsHub.server.joinGroup(item.ID);
             })
         }
-        
 
         function returnCp(cp) {
             return $q(function (resolve, reject) {
@@ -315,6 +279,4 @@
             })
         }
     }
-
-
 })();

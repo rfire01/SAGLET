@@ -2,8 +2,9 @@
      style="padding-right:6px; padding-left:6px; padding-top:15px;">
 
     <div class="iframe-wrapper"
+         style="height:{{ vm.fullView && (vm.height - 200) * 0.74 + 'px' || '36vh' }}"
          ng-hide="vm.hide"
-         ng-class="{'iframe-wrapper-overview': vm.overview, 'iframe-wrapper-fullview': vm.fullView,
+         ng-class="{'iframe-wrapper-fullview': vm.fullView,
                     'has-new-cp-nmd':vm.newCpBorderAlertType == '16',
                     'has-new-cp-tec':vm.newCpBorderAlertType == '17',
                     'has-new-cp-idle':vm.newCpBorderAlertType == '18',
@@ -12,7 +13,7 @@
                     'has-new-cp-uj':vm.newCpBorderAlertType == '19',
                     'has-new-cp-ul':vm.newCpBorderAlertType == '20'
          }">
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="margin: -1px -1px 0;">
             <div class="panel-heading" ng-click="vm.openCloseFullView()"
                  ng-class="{'iframe-header':true, 
                             'iframe-header-fullview': vm.fullView, 
@@ -52,5 +53,5 @@
 </div>
 
 <div class="col-md-3" ng-if="!vm.overview && vm.fullView">
-    <cp-dashboard critical-points-idleness="vm.idleness" critical-points-messages="vm.criticalPointsMessages" new-critical-points="vm.newCriticalPoints" old-critical-points="vm.oldCriticalPoints"></cp-dashboard>
+    <cp-dashboard critical-points-idleness="vm.idleness" critical-points-messages="vm.criticalPointsMessages" new-critical-points="vm.newCriticalPoints" old-critical-points="vm.oldCriticalPoints" tag-height="(vm.height - 200) * 0.74 - 509"></cp-dashboard>
 </div>

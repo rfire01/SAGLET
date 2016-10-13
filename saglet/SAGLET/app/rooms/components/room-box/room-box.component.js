@@ -42,7 +42,7 @@
         vm.newCpBorderAlertType = 'none';
         vm.criticalPointsIndex = [];
         vm.width = $window.innerWidth;
-        vm.height = ($window.innerHeight > 480) ? ($window.innerHeight + 200) : 480;
+        vm.height = $window.innerHeight / 0.74;
         vm.cpPanel = false;
 
         //in methods
@@ -64,7 +64,7 @@
 
             var initScaledIframe = $timeout(function () {
                 vm.scaledInit = false;
-                vm.height = (vm.height <= 480) ? (vm.height/ 0.74 + 200) : (vm.height / 0.74);
+                vm.height += 300;
                 console.info("***** scale " + vm.scaledInit + " ****");
             }, 10000);
         }

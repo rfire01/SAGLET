@@ -10,7 +10,8 @@
                 newCriticalPoints: "<",
                 oldCriticalPoints: "<",
                 criticalPointsMessages: "<",
-                criticalPointsIdleness: "<"
+                criticalPointsIdleness: "<",
+                tagHeight: "<"
             },
             controllerAs: 'vm',
             controller: controller
