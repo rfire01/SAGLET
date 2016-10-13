@@ -5,6 +5,7 @@
         // Angular modules 
         'ngRoute',
         'ngStorage',
+        'ngOnload',
         // app modules 
         'app.home',
         'app.rooms',

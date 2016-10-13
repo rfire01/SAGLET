@@ -1,6 +1,6 @@
 ﻿<div class="row">
     <div class="col-sm-12">
-        <span ng-show="vm.loader && vm.hubConnectionStauts != 'fail'" us-spinner="{radius:55, width:8, length: 16}"></span>
+        <span ng-show="vm.loader && vm.hubConnectionStauts != 'fail' && vm.roomList.length != 0" us-spinner="{radius:55, width:8, length: 16}"></span>
 
         <span ng-show="vm.roomList.length == 0" class="error-msg">No rooms chosen. Please go to home page in order to choose rooms to watch.</span>
         <span ng-show="vm.hubConnectionStauts == 'fail'" class="error-msg">VMT connection fail. Please reload this page.</span>

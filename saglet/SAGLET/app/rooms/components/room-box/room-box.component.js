@@ -9,7 +9,6 @@
                 room: '<',
                 overview: '<',
                 screenWidthHeight: '<'
-
             },
             require: {
                 "parent": "^roomsOverview"
@@ -21,17 +20,10 @@
     function controller($sce, $window, $sessionStorage, $timeout) {
         var vm = this;
 
-
         var criticalPointsTenLastMessages = [];
-
 
         //props
         vm.fullView = false;
-
-        // vm.fullView800plus = true;
-
-
-        vm.scaledInit = true;
         vm.hide = false;
         vm.newCriticalPoints = [];
         vm.oldCriticalPoints = [];
@@ -48,7 +40,7 @@
         //in methods
         vm.iframeLink = iframeLink;
         vm.openCloseFullView = openCloseFullView;
-        vm.getScaledRules = getScaledRules;
+        vm.iframeLoaded = iframeLoaded;
 
         //out methods
         this.setFullView = setFullView;
@@ -57,25 +49,21 @@
         //this.setIdleness = setIdleness;
 
         this.$onInit = function () {
-
             this.parent.addRoom(this);
 
             loadLastSession();
-
-            var initScaledIframe = $timeout(function () {
-                vm.scaledInit = false;
-                vm.height += 300;
-                console.info("***** scale " + vm.scaledInit + " ****");
-            }, 10000);
         }
 
         this.$onChanges = function (changes) {
-
             console.log(changes);
         }
-        this.$onDestroy = function () {
 
+        this.$onDestroy = function () {
             saveLastSession();
+        }
+
+        function iframeLoaded() {
+            vm.height += 300;
         }
 
         function iframeLink(_index) {
@@ -104,20 +92,17 @@
             }
         }
 
-
         function setFullView(bool) {
             vm.fullView = bool;
         }
 
-
         function setHide(bool) {
             vm.hide = bool;
         }
-        function setCriticalPointMessages(cpType, cpMsg, cpUser, cpTime, cpPriority, cpAlertType) {
 
+        function setCriticalPointMessages(cpType, cpMsg, cpUser, cpTime, cpPriority, cpAlertType) {
             //console.log(cpType);
             //console.log(cpMsg);
-
             //console.log(cpAlertType);
 
             var cp = {
@@ -131,7 +116,6 @@
             };
 
             //vm.newcp = true;
-            
 
             vm.criticalPointsMessages.push(cp);
 
@@ -141,33 +125,10 @@
                 vm.newCpBorderAlertType = cpType;
             }
 
-
-
             saveLastSession();
         }
-        //function setIdleness(idle) {
-        //    vm.idleness = idle;
 
-        //    if (vm.idleness.length > 0)
-        //        vm.cpAlertIdleType = 'idle';
-        //    else
-        //        vm.cpAlertIdleType = '';
-
-
-        //    vm.newcp = true;
-        //    vm.newCpBorderAlertType = 'idle';
-
-
-        //    var cpIdle = { cpType: 'idle', idleUsers: idle }
-        //    vm.newCriticalPoints.push(cpIdle);
-
-        //    console.log(vm.idleness);
-        //    console.log(vm.cpAlertIdleType);
-
-        //    //saveLastSession();
-        //}
         function saveLastSession() {
-
             var roomObj = { id: vm.room.ID, cp: vm.criticalPoints, cpMessages: vm.criticalPointsMessages, idleness: vm.idleness };
 
             var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
@@ -177,6 +138,7 @@
             else
                 $sessionStorage.rooms[roomIndex] = roomObj;
         }
+
         function loadLastSession() {
             var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
 
@@ -184,10 +146,9 @@
                 vm.criticalPoints = $sessionStorage.rooms[roomIndex].cp
         }
 
-
-
         function getRoomObjectIndex(rooms, id) {
             var index = -1;
+
             rooms.forEach(function (room, i) {
                 if (room.id == id) {
                     index = i;
@@ -203,9 +164,5 @@
             if (screenRes == '1600x900')
                 return
         }
-
-
-
-
     }
 })();
