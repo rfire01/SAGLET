@@ -20,9 +20,10 @@
                             'iframe-header-has-new-cp-fv': (vm.fullView && vm.newCpBorderAlertType != 'none'),
                             'iframe-header-has-new-cp-ov': (!vm.fullView && vm.newCpBorderAlertType != 'none')}" >
                 <div class="row">
-                    <div class="col-sm-11">
-                        <p style="margin: 5px;">{{vm.room.Name + " (" + vm.room.ID + ")"}}</p>
+                    <div class="col-sm-11" style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">
+                        <p style="margin: 5px 7px;"><b>{{vm.room.ID}}</b>{{" - " + vm.room.Name}}</p>
                     </div>
+                    
                     <div class="col-sm-1">
                         <button type="button" class="btn btn-default btn-sm" aria-label="Left Align" style="float:right;" ng-hide="!vm.fullView">
                             <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
@@ -31,7 +32,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="panel-group" ng-class="{'cp-panel-overview': vm.overview && vm.newCriticalPoints, 'cp-panel-fullview': vm.fullView}" ng-hide="!vm.cpPanel">
+                        <div class="panel-group" style="overflow:hidden;" ng-class="{'cp-panel-overview': vm.overview && vm.newCriticalPoints, 'cp-panel-fullview': vm.fullView}" ng-hide="!vm.cpPanel">
                             <span ng-repeat="cp in vm.newCriticalPoints track by $index">
                                 <cp-icons full-view="vm.fullView" critical-point="cp" critical-point-index="$index"></cp-icons>
                             </span>

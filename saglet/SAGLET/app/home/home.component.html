@@ -4,7 +4,7 @@
         <div class="panel-body" ng-show="!vm.loader">
             <div class="col-md-6 container">
                 <div class="panel-heading">
-                    Active Rooms
+                    <p style="margin-left:-10px; font-size:18px; display:inline;">Active Rooms</p>
                     <div class="btn-group" style="float:right;">
                         <!--<button class="btn btn-default btn-sm" ng-click="vm.test()">ddd</button>-->
                     </div>
@@ -12,9 +12,9 @@
                 <rooms-list rooms="vm.user.rooms.watch" watch="true" on-status-change="vm.changeWatchStatus(index, status)"></rooms-list>
             </div>
             <div class="col-md-6 container">
-                <div class="panel-heading" style="">
-                    Archive Rooms
-                    <div class="btn-group" style="float:right;">
+                <div class="panel-heading">
+                    <p style="margin-left:-10px; font-size:18px; display:inline;">Archived Rooms</p>
+                    <div class="btn-group" style="float:right;margin-top:-8px;margin-right:-15px;">
                         <button class="btn btn-default" ng-click="vm.updateRooms()">
                             <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Sync new rooms
                         </button>
