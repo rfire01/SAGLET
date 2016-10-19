@@ -89,6 +89,9 @@
                 vm.newCriticalPoints = [];
                 vm.newCpBorderAlertType = 'none'
                 vm.cpPanel = false;
+
+                vm.height = vm.height - 1;
+                vm.height = vm.height + 1;
             }
         }
 

@@ -7,16 +7,14 @@
             <div class="panel-body" style="padding:0px; min-height:470px; max-height:470px; overflow-y:scroll;">
                 <ul class="list-group" style="margin-bottom:7px;">
                     <li class="list-group-item" style="padding:2px 10px; margin-bottom:0px; background-color:beige; " ng-repeat="cp in vm.newCriticalPoints | orderBy: '-cpTime'">
-                        <div class="container" style="padding-left:0px; padding-right:0px;">
                             <cp-icons style="float:left;" critical-point="cp"  dashboard="true"></cp-icons> | <span>{{::cp.cpTime}}</span>
-                            <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cp.cpUser" ng-if="cp.cpType == 18 || cp.cpType == 19 || cp.cpType == 20">{{::user}}</span>
-                        </div>
+                            <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cp.cpUser" ng-if="cp.cpType >= 18 && cp.cpType <= 20">{{::user}}</span>
                     </li>
                     <!--Treated-->
                     <li class="list-group-item" style="padding:2px 10px; margin-bottom:0px;" ng-repeat="cpTreated in vm.oldCriticalPoints | orderBy: '-cpTime' ">
                         <div class="">
                             <cp-icons style="float:left; opacity:0.5;" critical-point="cpTreated" dashboard="true"></cp-icons> | <span>{{::cpTreated.cpTime}}</span>
-                            <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cpTreated.cpUser" ng-if="cpTreated.cpType == 18">{{::user}}</span>
+                            <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cpTreated.cpUser" ng-if="cpTreated.cpType >= 18 && cpTreated.cpType <= 20">{{::user}}</span>
                         </div>
                     </li>
                 </ul>

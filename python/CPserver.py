@@ -74,7 +74,7 @@ def handleRequest(roomID,message,solution):
         else:
             tag = 'TEC'
     if ds_count <= 1 and tec_count <= 1 and nmd_count <= 1:
-        tag = 'NaN'
+        tag = 'NMD'
     if da_tag == 'NaN':
         tag = sim_tag
 

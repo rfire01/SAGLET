@@ -6,7 +6,7 @@
 }
 
 .iframe-wrapper-fullview {
-    min-height:709px;
+    min-height: 709px;
     position: relative;
 }
 
@@ -16,24 +16,16 @@
 }
 
 .iframe-header {
-    position:relative;
+    position: relative;
     z-index: 1;
     width: 100%;
     padding: 0;
-    margin:0;
-    opacity: 0.0;
-    -webkit-transition: all 200ms ease-in-out;
-    -moz-transition: all 200ms ease-in-out;
-    -ms-transition: all 200ms ease-in-out;
-    -o-transition: all 200ms ease-in-out;
-    transition: all 200ms ease-in-out;
+    margin: 0;
 }
 
 .iframe-header-fullview{
-    width: 100%;
     height: 42px;
     padding: 5px;
-    opacity: 1.0;
 }
 
 .iframe-header-has-new-cp-fv{
@@ -51,6 +43,7 @@
 .iframe-header-has-new-cp-ov{
     position: relative;
     z-index: 1;
+    height: 60px;
     opacity: 1.0;
     -webkit-transition: all 200ms ease-in-out;
     -moz-transition: all 200ms ease-in-out;
@@ -60,12 +53,12 @@
 }
 
 .cp-panel-overview {
-    float:right;
+    float: right;
     height: 24px;
 }
 
 .cp-panel-fullview {
-    float:right;
+    float: right;
     height: 35px;
 }
 

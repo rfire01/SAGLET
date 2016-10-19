@@ -6,16 +6,17 @@
         .component('roomsComponent', {
             templateUrl: 'app/rooms/rooms.component.html',
             controllerAs: 'vm',
-            controller: ['$sessionStorage', '$sce', '$', '$q', '$interval', controller]
+            controller: ['$sessionStorage', '$sce', '$', '$q', '$interval', '$timeout', controller]
         });
 
-    function controller($sessionStorage, $sce, $, $q, $interval) {
+    function controller($sessionStorage, $sce, $, $q, $interval, $timeout) {
         var vm = this;
 
         vm.roomsCtrl = [];
 
         var detailsHub = $.connection.roomDetailsHub;
         var idleAlertFreq = 20000;
+        var disconnectCheckFreq = 30000;
 
         vm.loader = true;
         vm.user;
@@ -24,19 +25,20 @@
         vm.newCp = false;
         vm.cpRoom = '';
         vm.cpMsg = '';
-        vm.cpUser = ''
+        vm.cpUser = '';
         vm.cpTime = new Date();
         
-        vm.cpType = ''
-        vm.cpPriority = ''
-        vm.cpAlertType = ''
+        vm.cpType = '';
+        vm.cpPriority = '';
+        vm.cpAlertType = '';
 
         vm.idlenessRoom = '';
         vm.idlenessUsers = [];
+        vm.strRoomsList = '';
 
         vm.onNewCriticalPoints = onNewCriticalPoints;
 
-        vm.hubConnectionStauts = '';
+        vm.hubConnectionStatus = '';
 
         this.addRoom = addRoom;
 
@@ -48,40 +50,43 @@
                 $sessionStorage.rooms = [];
 
             $.connection.hub.logging = true;
-            /* Hub Start */
 
+            /* Hub Start */
             $.connection.hub.start()
                 .done(function (res) {
                     console.info("************ hub started ************");
-
                     vm.loader = false;
                     
-                    var strRoomsList = getStrRoomsList(vm.roomList);
-                    detailsHub.server.registerLiveChatAndLiveActions(strRoomsList);
-                    detailsHub.server.startIdleness(strRoomsList);
+                    initHub();
 
-                    vm.roomList.forEach(function (item) {
-                        detailsHub.server.joinGroup(item.ID);
-                    })
-                    
-                    //console.log(idleAlertFreq);
-
-                    //detailsHub.client.updateIdlenessAlertFrequency = function (freq) {
-                    //    console.log("freq " + freq);
-                    //    idleAlertFreq = freq;
-                    //}
-
-                    var check = $interval(function () {
-                        var strRoomsList = getStrRoomsList(vm.roomList);
-                        detailsHub.server.checkIdleness(strRoomsList);
-
-                        console.log("check " + idleAlertFreq);
+                    /* check idleness */
+                    $interval(function () {
+                        if (vm.hubConnectionStatus != 'disconnected') {
+                            var strRoomsList = getStrRoomsList(vm.roomList);
+                            detailsHub.server.checkIdleness(strRoomsList);
+                        }
                     }, idleAlertFreq);
+
+                    /* check connection */
+                    $interval(function () {
+                        if (vm.hubConnectionStatus == 'disconnected') {
+                            // display reconnecting
+                            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+                            connectionStatus.removeClass('label-success label-danger').text('Reconnecting').addClass('label-warning');
+                            
+                            // try connect
+                            $.connection.hub.start().done(function (res) {
+                                console.info("************ hub restarted ************");
+                                initHub();
+                            });
+                        }
+                    }, disconnectCheckFreq);
                 })
+
             .fail(function () {
                 console.log('Could not Connect!');
                 vm.loader = false;
-                vm.hubConnectionStauts = 'fail'
+                vm.hubConnectionStatus = 'failure';
             });
         }
 
@@ -89,27 +94,28 @@
             console.log(c);
         };
 
-        $.connection.hub.connected = function () {
-            vm.hubConnectionStauts = 'connected';
-            var connectionStatus = angular.element(document.querySelector('#connection-status'));
-            connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
+        function initHub() {
+            var strRoomsList = getStrRoomsList(vm.roomList);
+            detailsHub.server.registerLiveChatAndLiveActions(strRoomsList);
+            detailsHub.server.startIdleness(strRoomsList);
+
+            vm.roomList.forEach(function (item) {
+                detailsHub.server.joinGroup(item.ID);
+            })
         }
 
         $.connection.hub.reconnecting = function () {
+            vm.hubConnectionStatus = 'reconnecting';
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-success label-danger').text('Reconnecting').addClass('label-warning');
         }
 
         $.connection.hub.disconnected(function () {
-            console.log(" **** Hub: disconnected **** ");
+            console.log(" **** hub: disconnected **** ");
 
-            vm.hubConnectionStauts = 'disconnected';
+            vm.hubConnectionStatus = 'disconnected';
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-success').text('Offline').addClass('label-danger label-warning');
-            
-            setTimeout(function () {
-                $.connection.hub.start();
-            }, 60000);
         });
 
         detailsHub.client.updateIdlenessLive = function (idleRoom, idelenssData) {
@@ -187,6 +193,7 @@
             console.info("************ Registered Complete ************");
             console.log("************" + res + "************");
 
+            vm.hubConnectionStatus = 'connected';
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
         };
@@ -255,15 +262,17 @@
         }
 
         function getStrRoomsList(roomList) {
-            var str = '';
-            roomList.forEach(function (room, i) {
-                if (i == 0)
-                    str = room.ID.toString();
-                else
-                str = str + ', ' + room.ID.toString();
-            })
-
-            return str;
+            if (vm.strRoomsList == '') {
+                var str = '';
+                roomList.forEach(function (room, i) {
+                    if (i == 0)
+                        str = room.ID.toString();
+                    else
+                        str = str + ', ' + room.ID.toString();
+                })
+                vm.strRoomsList = str;
+            }
+            return vm.strRoomsList;
         }
 
         function addRoom(room) {
