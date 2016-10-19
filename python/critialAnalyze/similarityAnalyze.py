@@ -14,6 +14,7 @@ class SimAnalyzer:
         self.tech = open('Dictionaries\\TechTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.shorts = open('Dictionaries\\ShortTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.context = open('Dictionaries\\ContextTerms.txt', 'r', encoding="utf8").read().split('\n')
+        self.stopWords = open('Dictionaries\\StopWords.txt', 'r', encoding="utf8").read().split('\n')
 
         self.tecSentences = open('simSentences\\tec.txt', 'r', encoding="utf8").read().split('\n')
         self.dsSentences = open('simSentences\\ds.txt', 'r', encoding="utf8").read().split('\n')
@@ -78,12 +79,19 @@ class SimAnalyzer:
 
     def get_tag(self,sentence,context,metric=1):
 
-        sim1 = [cs.get_cosine(sentence, sen) for sen in self.tecSentences]
-        sim2 = [cataly.string_similarity(sentence, sen) for sen in self.tecSentences]
+        sentence = self.remove_stop(sentence)
+        sim1 = [cs.get_cosine(sentence, self.remove_stop(sen)) for sen in self.tecSentences]
+        try:
+            sim2 = [cataly.string_similarity(sentence, self.remove_stop(sen)) for sen in self.tecSentences]
+        except:
+            sim2 = [0]
         sim3 = [value[1] for value in self.gTec.search(sentence)]
 
-        sim1ds = [cs.get_cosine(sentence, sen) for sen in self.dsSentences]
-        sim2ds = [cataly.string_similarity(sentence, sen) for sen in self.dsSentences]
+        sim1ds = [cs.get_cosine(sentence, self.remove_stop(sen)) for sen in self.dsSentences]
+        try:
+            sim2ds = [cataly.string_similarity(sentence, self.remove_stop(sen)) for sen in self.dsSentences]
+        except:
+            sim2ds = [0]
         sim3ds = [value[1] for value in self.gTec.search(sentence)]
 
         sim1.sort(reverse=True)
@@ -123,3 +131,10 @@ class SimAnalyzer:
                 return 'DS', 3
             else:
                 return 'TEC', 3
+
+    def remove_stop(self, sentence):
+        words = sentence.split(' ')
+        for stop in self.stopWords:
+            if stop in words:
+                words.remove(stop)
+        return " ".join(words)
