@@ -318,7 +318,6 @@
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.html" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.component.js" />
     <Content Include="app\rooms\components\cp-icons\cp-icons.css" />
-    <Content Include="app\rooms\components\room-box\room-box-scaled-rules.component.css" />
     <Content Include="app\rooms\components\room-box\room-box.component.css" />
     <Content Include="app\rooms\components\room-box\room-box.component.html" />
     <Content Include="app\rooms\components\room-box\room-box.component.js" />
@@ -392,12 +391,6 @@
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
     <Content Include="app\home\app.home..js" />
-    <Content Include="Fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="config\SAGLET.config">
       <SubType>Designer</SubType>
     </Content>
@@ -434,6 +427,12 @@
     <Content Include="Icons\font-awesome-4.6.3\scss\_screen-reader.scss" />
     <Content Include="Icons\font-awesome-4.6.3\scss\_stacked.scss" />
     <Content Include="Icons\font-awesome-4.6.3\scss\_variables.scss" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
     <None Include="package.json" />
     <None Include="Scripts\jquery-3.1.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
@@ -448,7 +447,6 @@
     <Content Include="Views\Home\app.cshtml" />
     <Content Include=".babelrc" />
     <None Include="Properties\PublishProfiles\SAGLET.pubxml" />
-    <None Include="Properties\PublishProfiles\Saglet2.pubxml" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.countdownTimer.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

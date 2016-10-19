@@ -1,12 +1,18 @@
-﻿<span ng-show="vm.loader && vm.hubConnectionStauts != 'fail'" us-spinner="{radius:55, width:8, length: 16}"></span>
-<!--<div ng-show="!vm.loader">-->
+﻿<div class="row">
+    <div class="col-sm-12">
+        <span ng-show="vm.loader && vm.hubConnectionStauts != 'fail' && vm.roomList.length != 0" us-spinner="{radius:55, width:8, length: 16}"></span>
 
-<rooms-overview rooms="vm.roomList" new-cp="vm.newCp" idleness-room="vm.idlenessRoom" idleness-users="vm.idlenessUsers" cp-room="vm.cpRoom" cp-msg="vm.cpMsg" cp-type="vm.cpType" cp-user="vm.cpUser" cp-time="vm.cpTime" cp-priority="vm.cpPriority" cp-alert-type="vm.cpAlertType"></rooms-overview>
+        <span ng-show="vm.roomList.length == 0" class="error-msg">No rooms chosen. Please go to home page in order to choose rooms to watch.</span>
+        <span ng-show="vm.hubConnectionStauts == 'fail'" class="error-msg">VMT connection fail. Please reload this page.</span>
 
-<div class="well well-sm" style="background-color:rgba(156, 156, 156, 0.07); margin-top:4px; border:0px;">
-    <span style="margin-right:40px; font-size:100%;">Critical Points Types:</span>
-    <cp-index style="font-size:150%;"></cp-index>
+        <rooms-overview ng-show="vm.roomList.length > 0" rooms="vm.roomList" new-cp="vm.newCp" idleness-room="vm.idlenessRoom" idleness-users="vm.idlenessUsers" cp-room="vm.cpRoom" cp-msg="vm.cpMsg" cp-type="vm.cpType" cp-user="vm.cpUser" cp-time="vm.cpTime" cp-priority="vm.cpPriority" cp-alert-type="vm.cpAlertType"></rooms-overview>
+    </div>
 </div>
-<!--</div>-->
-
-<span ng-show="vm.hubConnectionStauts == 'fail'">VMT connection fail. Please reload this page.</span>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well well-sm" style="background-color:rgba(156, 156, 156, 0.07); margin-top:4px; border:0px;">
+            <span style="margin-right:40px; font-size:100%;">Critical Points Types:</span>
+            <cp-index style="font-size:150%;"></cp-index>
+        </div>
+    </div>
+</div>

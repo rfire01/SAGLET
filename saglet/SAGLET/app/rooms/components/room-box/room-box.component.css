@@ -5,12 +5,8 @@
     outline: 3px solid rgb(232, 229, 229);
 }
 
-.iframe-wrapper-overview {
-    height:36vh;
-}
-
 .iframe-wrapper-fullview {
-    height:709px;
+    min-height:709px;
     position: relative;
 }
 
@@ -37,6 +33,7 @@
     width: 100%;
     height: 42px;
     padding: 5px;
+    opacity: 1.0;
 }
 
 .iframe-header-has-new-cp-fv{

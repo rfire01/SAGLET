@@ -26,14 +26,18 @@ namespace SAGLET.Class
             this.lastIdleAlertTime = DateTime.MinValue;
         }
 
-        public CriticalPointTypes HandleMessage(CriticalPointTypes tag,Boolean nmdStarted)
+        public CriticalPointTypes HandleMessage(CriticalPointTypes tag, Boolean nmdStarted)
         {
             lastMessageTime = DateTime.Now;
             //if(!nmdStarted)
             //    return CriticalPointTypes.None;
 
-            if (tag == CriticalPointTypes.NMD && nmdStarted)
-                nmdCount++;
+            if (tag == CriticalPointTypes.NMD)
+            {
+                tecCount = 0;
+                if (nmdStarted)
+                    nmdCount++;
+            }
             else if (tag == CriticalPointTypes.TEC)
             {
                 nmdCount = 0;

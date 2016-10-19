@@ -14,3 +14,21 @@
     margin: 5px;
     /*margin-right:25px;*/
 }
+
+.label-join {
+  background-color: #8FFFA8;
+}
+
+.label-join[href]:hover,
+.label-join[href]:focus {
+  background-color: #ACFFBE;
+}
+
+.label-left {
+  background-color: #933B3B;
+}
+
+.label-left[href]:hover,
+.label-left[href]:focus {
+  background-color: #AE4747;
+}

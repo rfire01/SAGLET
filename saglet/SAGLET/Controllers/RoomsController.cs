@@ -61,8 +61,6 @@ namespace SAGLET.Controllers
             return Json(new List<Room>(), JsonRequestBehavior.AllowGet);
         }
 
-
-
         // GET: Rooms
         public ActionResult Index()
         {
@@ -82,11 +80,11 @@ namespace SAGLET.Controllers
                 string user = AppHelper.GetVmtUser();
                 // make HTML request
                 var client = new ExtendedWebClient();
+                client.Encoding = System.Text.Encoding.UTF8;
                 string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
 
                 // sync rooms
                 List<Room> newRooms = SyncUserRooms(user.ToLower(), roomsData);
-                //newRooms = SyncUserRooms(user.ToLower(), roomsData);
 
                 foreach (Room room in newRooms)
                 {
@@ -121,7 +119,7 @@ namespace SAGLET.Controllers
                     Room r = db.Rooms.Find(currRoomId);
                     if (r != null)
                     {
-                        if (r.Name == null)
+                        if (r.Name == null || r.Name.CompareTo(Convert.ToString(item.roomName).ToLower()) != 0)
                             r.Name = item.roomName;
                     }
                     else

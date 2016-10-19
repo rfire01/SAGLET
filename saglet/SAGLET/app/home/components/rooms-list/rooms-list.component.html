@@ -1,40 +1,33 @@
-﻿
-    <!-- Table -->
-
+﻿    <!-- Table -->
     <table class="table">
         <tr>
             <th>
                 <i class="glyphicon glyphicon-th" data-toggle="tooltip" title="Room ID"> </i>
                 Watch
             </th>
-            <th>
+            <th style="width:250px;">
                 <i class="glyphicon glyphicon-asterisk"></i>
-                Room
+                Room ID and Name
             </th>
             <th>
                 <i class="glyphicon glyphicon-calendar"></i>
                 Last Update
             </th>
-            
-
-            
         </tr>
         <tr class="" ng-repeat="room in vm.rooms track by $index">
-          
             <td>
-                <button class="btn btn-link n"
-                        ng-class="['btn',{'glyphicon glyphicon glyphicon-plus plusButtonGreen':!vm.watch, 'glyphicon glyphicon glyphicon-minus minusButtonRed':vm.watch}]"
-                        
+                <button class="btn btn-link"
+                        ng-class="{'glyphicon glyphicon-plus plusButtonGreen':!vm.watch && !vm.isFull,
+                                   'glyphicon glyphicon-plus plusButtonGray':!vm.watch && vm.isFull,
+                                   'glyphicon glyphicon-minus minusButtonRed':vm.watch}"
                         ng-click="vm.changeWatchStatus($index)"
-                        style="text-decoration:none;">
-                </button>
-                
-                
-                
+                        style="text-decoration:none;"></button>
             </td>
-            <td><b>{{room.ID}}</b>{{" - " + room.Name}}</td>
+            <td>
+                <div style="width:230px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
+                    <b>{{room.ID}}</b>{{" - " + room.Name}}
+                </div>
+            </td>
             <td>{{room.LastUpdate | date}}</td>
-            
         </tr>
-
     </table>

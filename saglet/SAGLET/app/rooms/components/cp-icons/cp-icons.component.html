@@ -1,4 +1,4 @@
-﻿<span class="label "
+﻿<span class="label"
       ng-class="{'label-info': vm.criticalPoint.cpType == 13,
                  'label-success': vm.criticalPoint.cpType == 14,
                  'label-danger': vm.criticalPoint.cpType == 15,
@@ -12,16 +12,14 @@
                  'cp-icons-full-view': vm.fullView && !vm.dashboard,
                  'cp-icons-dashboard': vm.dashboard
       }">
-    <i ng-class="{
-       'glyphicon glyphicon-ok fa-lg': vm.criticalPoint.cpType == 14,
-       'glyphicon glyphicon-remove fa-lg': vm.criticalPoint.cpType == 15,
-       'fa fa-comment-o fa-lg': vm.criticalPoint.cpType == 16,
-       'glyphicon glyphicon-wrench fa-lg':  vm.criticalPoint.cpType == 17,
-       'fa fa-bed fa-lg': vm.criticalPoint.cpType == 18,
-       'glyphicon glyphicon-user fa-lg': vm.criticalPoint.cpType == 19,
-       'glyphicon glyphicon-user': vm.criticalPoint.cpType == 20,
-
+    <i ng-class="{ 'cp-center': true,
+                   'glyphicon glyphicon-ok fa-lg': vm.criticalPoint.cpType == 14,
+                   'glyphicon glyphicon-remove fa-lg': vm.criticalPoint.cpType == 15,
+                   'fa fa-comment-o fa-lg': vm.criticalPoint.cpType == 16,
+                   'glyphicon glyphicon-wrench':  vm.criticalPoint.cpType == 17,
+                   'fa fa-bed fa-lg': vm.criticalPoint.cpType == 18,
+                   'glyphicon glyphicon-user fa-lg': vm.criticalPoint.cpType == 19,
+                   'glyphicon glyphicon-user': vm.criticalPoint.cpType == 20,
        }"></i>
-
 </span>
 
