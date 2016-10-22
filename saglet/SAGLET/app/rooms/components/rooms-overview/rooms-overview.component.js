@@ -36,9 +36,7 @@
         this.openFullViewSelectedRoom = openFullViewSelectedRoom;
         this.closeFullViewSelectedRoom = closeFullViewSelectedRoom;
 
-        this.$onInit = function () {
-            console.log(bindings);
-        }
+        this.$onInit = function (bindings) { }
 
         this.$onChanges = function (changesObj) { }
 
