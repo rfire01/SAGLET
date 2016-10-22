@@ -1,5 +1,4 @@
-﻿
-(function () {
+﻿(function () {
     'use strict';
 
     angular
@@ -10,22 +9,16 @@
                 criticalPoint: '<',
                 criticalPointIndex: '<',
                 cpIdle: '<',
-
-
                 criticalPoints: '<',
                 dashboard: '<',
                 fullView: '<'
-                
-                
             },
             controllerAs: 'vm',
             controller: controller
         })
 
-
     function controller() {
         var vm = this;
-
         
         vm.cpTypeChanger = cpTypeChanger;
         vm.cpTypeChangerShorts = cpTypeChangerShorts;
@@ -73,7 +66,5 @@
             if (cp == 'idle')
                 return 'IDL';
         }
-        
-        
     }
 })();

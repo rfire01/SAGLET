@@ -8,17 +8,13 @@
             $locationProvider.hashPrefix('!');
 
             $routeProvider.
-                 when('/', {
+                when('/', {
                      template: '<home-component></home-component>'
-                 }).
+                }).
                 when('/rooms', {
                     template: '<rooms-component></rooms-component>'
                 }).
-                when('/actions', {
-                    template: '<actions-component></actions-component>'
-                }).
           
             otherwise('/');
-        }
-        ]);
+        }]);
 })();

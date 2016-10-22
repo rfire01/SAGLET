@@ -7,31 +7,20 @@
             <div class="panel-body" style="padding:0px; min-height:470px; max-height:470px; overflow-y:scroll;">
                 <ul class="list-group" style="margin-bottom:7px;">
                     <li class="list-group-item" style="padding:2px 10px; margin-bottom:0px; background-color:beige; " ng-repeat="cp in vm.newCriticalPoints | orderBy: '-cpTime'">
-                            <cp-icons style="float:left;" critical-point="cp"  dashboard="true"></cp-icons> | <span>{{::cp.cpTime}}</span>
+                        <div>
+                            <cp-icons style="float:left;" critical-point="cp" dashboard="true"></cp-icons> | <span>{{::cp.cpTime}}</span>
                             <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cp.cpUser" ng-if="cp.cpType >= 18 && cp.cpType <= 20">{{::user}}</span>
+                        </div>
                     </li>
                     <!--Treated-->
                     <li class="list-group-item" style="padding:2px 10px; margin-bottom:0px;" ng-repeat="cpTreated in vm.oldCriticalPoints | orderBy: '-cpTime' ">
-                        <div class="">
+                        <div>
                             <cp-icons style="float:left; opacity:0.7;" critical-point="cpTreated" dashboard="true"></cp-icons> | <span>{{::cpTreated.cpTime}}</span>
                             <span class="label label-warning" style="color:black; background-color:beige; border:1px solid #dddddd; float:right;" ng-repeat="user in cpTreated.cpUser" ng-if="cpTreated.cpType >= 18 && cpTreated.cpType <= 20">{{::user}}</span>
                         </div>
                     </li>
                 </ul>
             </div>
-            <!--<div class="panel-heading" style="padding:1px;">
-                Treated
-            </div>
-            <div class="panel-body" style="padding:0px; min-height:182px; max-height:182px; overflow-y:scroll;">
-                <ul class="list-group" style="margin-bottom:7px;">
-                    <li class="list-group-item" style="padding:2px; 10px; margin-bottom:0px;" ng-repeat="cp in vm.oldCriticalPoints track by $index">
-                        <div class="">
-                            <cp-icons style="float:left;" critical-point="cp" critical-point-index="$index" dashboard="true"></cp-icons> | {{vm.currentDate()}}
-                            <span ng-if="cp.cpType == 'idle'"><span ng-repeat="user in cp.idleUsers">{{user}}</span></span>
-                        </div>
-                    </li>
-                </ul>
-            </div>-->
         </div>
         <div class="panel-heading" style="padding:1px;">
             Last tagged messages
@@ -40,7 +29,6 @@
             <div class="panel-body" style="padding:0px;">
                 <ul class="list-group" style="margin-bottom:7px;">
                     <li class="list-group-item clearfix" style="padding:2px 10px; font-size:smaller;" ng-repeat="cp in vm.criticalPointsMessages | orderBy: '-cpTime'" ng-if="cp.cpType != 18">
-                        <!--ng-class="'list-group-item list-group-item-warning':($index < 10)"-->
                         <cp-icons style="opacity:0.7" full-view="true" dashboard="true" critical-point="cp"></cp-icons>
                         <span>{{cp.cpTime}}</span>
                         <span>({{cp.cpUser}})</span>
@@ -49,11 +37,7 @@
                 </ul>
             </div>
         </div>
-        <!--<div class="panel-footer" style="padding:0px;">
-            <div class="panel panel-default" style="margin-bottom:0px;">
-                <cp-index style="font-size:100%;"></cp-index>
-            </div>
-        </div>-->
+
     </div>
 </div>
 

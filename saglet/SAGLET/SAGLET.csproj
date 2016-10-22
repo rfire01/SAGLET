@@ -294,8 +294,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\actions\actions.component.js" />
-    <Content Include="app\actions\app.actions.js" />
     <Content Include="app\app.config.js" />
     <Content Include="app\app.js" />
     <Content Include="app\app.component.js" />
@@ -546,10 +544,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\common\components\" />
     <Folder Include="config\solutions\" />
     <Folder Include="node_modules\" />
     <Folder Include="typings\" />

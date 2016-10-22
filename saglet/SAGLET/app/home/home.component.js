@@ -25,9 +25,7 @@
 
         vm.changeWatchStatus = changeWatchStatus;
         vm.updateRooms = updateRooms;
-        //vm.test = function () {
-        //    $.connection.hub.stop();
-        //}
+        
 
         this.$onInit = function () {
             $.connection.hub.logging = true;
@@ -37,20 +35,20 @@
                 console.info(" ** hub started ** ");
                 indexHub.server.getUserName();
                 vm.loader = false;
-                //indexHub.server.getRooms();
             });
             
+            /* If max number of rooms chosen saved in session, then forbid choosing more */
             if ($sessionStorage.user != null && $sessionStorage.user.rooms != null && $sessionStorage.user.rooms.watch.length == vm.maxRooms) {
                 vm.full = true;
             }
         }
 
+        /* Stop Hub */
         this.$onDestroy = function () {
-            console.info(" ** $.connection.hub.stop ** ");
             $.connection.hub.stop();
         }
 
-        //GetUserName Listner
+        /* GetUserName Listner */
         indexHub.client.getUserName = function (user) {
             console.info(" ** getUserName ** ");
             returnUser(user)
@@ -58,12 +56,11 @@
                     vm.user.user = _userName;
 
                     indexHub.server.getRooms();
-
                     console.log(" ** User: " + vm.user.user);
                 })
         };
 
-        //GetRooms Listner
+        /* GetRooms Listner */
         indexHub.client.getRooms = function (roomList) {
             console.info(" ** getRooms ** ");
             returnRooms(roomList)
@@ -75,10 +72,12 @@
                 })
         };
 
-        $.connection.roomIndexHub.client.registeredComplete = function (msg) {
+        /* Hub on connect */
+        indexHub.client.registeredComplete = function (msg) {
             console.info(msg);
         }
 
+        /* Async task that gets the Saglet User, and updates the session storage if needed */
         function returnUser(user) {
             return $q(function (resolve, reject) {
                 var name = user;
@@ -90,15 +89,18 @@
             });
         }
 
+        /* Async task that gets the list of rooms, and updates the view and the session storage if needed */
         function returnRooms(list) {
             return $q(function (resolve, reject) {
                 var watch = [];
                 var rest = [];
                 var i = 0;
 
+                // if session is new and there are no rooms in lists
                 if (!$sessionStorage.user.rooms && vm.user.rooms.watch.length == 0 && vm.user.rooms.rest.length == 0 && list.length > 0)
                     rest = list;
 
+                // check if new rooms where added 
                 if ($sessionStorage.user.rooms && $sessionStorage.user.rooms.watch.length + $sessionStorage.user.rooms.rest.length < list.length) {
                     list.forEach(function (room) {
                         var exists = false;
@@ -115,14 +117,16 @@
                     })
                 }
 
+                // restore watch list and rooms list status from session, if exists
                 if ($sessionStorage.user.rooms) {
                     list.forEach(function (room) {
-                        checkLastRoomStatus(room.ID).then(function (status) {
-                            if (status)
-                                watch.push(room);
-                            else
-                                rest.push(room);
-                        })
+                        checkLastRoomStatus(room.ID)
+                            .then(function (status) {
+                                if (status)
+                                    watch.push(room);
+                                else
+                                    rest.push(room);
+                            })
                     })
                 }
 
@@ -130,6 +134,7 @@
             })
         }
 
+        /* returns the last status (rest or watch) of a room from session, if existed */
         function checkLastRoomStatus(id) {
             return $q(function (resolve, reject) {
                 var status = false;
@@ -154,6 +159,7 @@
             });
         }
 
+        /* Move room from rooms list to watch list or vice versa*/
         function changeWatchStatus(index, status) {
             if (!status && vm.user.rooms.watch.length == vm.maxRooms - 1) {
                 vm.full = true;
@@ -162,13 +168,14 @@
                 return;
             }
             
-            if (!status) { // Add to watch list
+            if (!status) {
+                // Add to watch list
                 var thisRoom = vm.user.rooms.rest[index];
                 vm.user.rooms.watch.push(thisRoom)
                 vm.user.rooms.rest.splice(index, 1);
-            } else { // Remove from watch list
-                if (vm.full)
-                    vm.full = false;
+            } else {
+                // Remove from watch list
+                if (vm.full) vm.full = false;
                 var thisRoom = vm.user.rooms.watch[index];
                 vm.user.rooms.rest.push(thisRoom)
                 vm.user.rooms.watch.splice(index, 1);
@@ -178,6 +185,7 @@
             $sessionStorage.user.rooms.rest = vm.user.rooms.rest;    
         }
 
+        /* Asks the server for rooms update */
         function updateRooms() {
             indexHub.server.updateRooms();
         }

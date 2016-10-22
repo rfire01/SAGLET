@@ -8,7 +8,6 @@
     appController.$inject = ['$location']; 
 
     function appController($location) {
-        /* jshint validthis:true */
         var vm = this;
         vm.title = 'appController';
 

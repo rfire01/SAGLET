@@ -24,21 +24,6 @@ namespace SAGLET
             /* SignalR hang fix - end */
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            //TrackOnlineRooms();
         }
-
-        //private void TrackOnlineRooms()
-        //{
-        //    using (SagletModel db = new SagletModel())
-        //    {
-        //        List<Room> rooms = db.Rooms.Where(r => r.Sync).ToList();
-        //        foreach (Room room in rooms)
-        //        {
-        //            VmtDevAPI.RegisterLiveChat(room.ID);
-        //            VmtDevAPI.RegisterLiveActions(room.ID);
-        //        }
-        //    }
-
-        //}
     }
 }

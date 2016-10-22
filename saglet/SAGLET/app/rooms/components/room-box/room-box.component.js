@@ -7,8 +7,7 @@
             templateUrl: 'app/rooms/components/room-box/room-box.component.html',
             bindings: {
                 room: '<',
-                overview: '<',
-                screenWidthHeight: '<'
+                overview: '<'
             },
             require: {
                 "parent": "^roomsOverview"
@@ -32,7 +31,6 @@
         vm.criticalPointsMessages = [];
         vm.criticalPointsForRoomBoxToolbar = [];
         vm.idleness = [];
-        //vm.newcp = false;
         vm.newCpBorderAlertType = 'none';
         vm.criticalPointsIndex = [];
         vm.width = $window.innerWidth;
@@ -51,7 +49,6 @@
 
         this.$onInit = function () {
             this.parent.addRoom(this);
-
             loadLastSession();
         }
 
@@ -63,10 +60,12 @@
             saveLastSession();
         }
 
+        /* iframe loaded event */
         function iframeLoaded() {
             vm.height += 300;
         }
 
+        /* generates the link corresponding to to room */
         function iframeLink(_index) {
             var u = "http://vmtdev.mathforum.org/#/room/";
             var r = _index;
@@ -76,6 +75,7 @@
             return $sce.trustAsResourceUrl(url);
         }
 
+        /* start screen jumping fix interval, when taking control in fullview */
         function startJumpFix() {
             vm.jumpFixInterval = $interval(function () {
                 vm.jumpFix = true;
@@ -85,43 +85,43 @@
             }, 10000);
         }
 
+        /* stop screen jumping fix interval, when taking control in fullview */
         function stopJumpFix() {
             $interval.cancel(vm.jumpFixInterval);
         }
 
+        /* change fullview to overview and vice versa */
         function openCloseFullView() {
             if (!vm.fullView) {
                 this.parent.openFullViewSelectedRoom(this);
-                vm.jumpFix = false;
                 startJumpFix();
             }  else {
                 this.parent.closeFullViewSelectedRoom(this);
 
                 vm.newCriticalPoints.forEach(function (cp) {
                     vm.oldCriticalPoints.push(cp);
-                })
+                });
 
                 vm.newCriticalPoints = [];
-                vm.newCpBorderAlertType = 'none'
+                vm.newCpBorderAlertType = 'none';
                 vm.cpPanel = false;
 
                 stopJumpFix();
             }
         }
 
+        /* set fullview field */
         function setFullView(bool) {
             vm.fullView = bool;
         }
 
+        /* set hide field */
         function setHide(bool) {
             vm.hide = bool;
         }
 
+        /* add critical point to list and display on panel if should be alerted */
         function setCriticalPointMessages(cpType, cpMsg, cpUser, cpTime, cpPriority, cpAlertType) {
-            //console.log(cpType);
-            //console.log(cpMsg);
-            //console.log(cpAlertType);
-
             var cp = {
                 cpUser: cpUser,
                 cpMsg: cpMsg,
@@ -131,8 +131,6 @@
                 cpAlertType: cpAlertType,
                 cpCount: false
             };
-
-            //vm.newcp = true;
 
             vm.criticalPointsMessages.push(cp);
 
@@ -145,9 +143,9 @@
             saveLastSession();
         }
 
+        /* save the current session */
         function saveLastSession() {
             var roomObj = { id: vm.room.ID, cp: vm.criticalPoints, cpMessages: vm.criticalPointsMessages, idleness: vm.idleness };
-
             var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
 
             if (roomIndex < 0)
@@ -156,6 +154,7 @@
                 $sessionStorage.rooms[roomIndex] = roomObj;
         }
 
+        /* restore last session, if any */
         function loadLastSession() {
             var roomIndex = getRoomObjectIndex($sessionStorage.rooms, vm.room.ID);
 
@@ -163,23 +162,16 @@
                 vm.criticalPoints = $sessionStorage.rooms[roomIndex].cp
         }
 
+        /* return the index of a room by id, in rooms list*/
         function getRoomObjectIndex(rooms, id) {
             var index = -1;
 
             rooms.forEach(function (room, i) {
-                if (room.id == id) {
+                if (room.id == id)
                     index = i;
-                }
-            })
+            });
 
             return index;
-        }
-
-        function getScaledRules(screenRes) {
-            var rules = '';
-
-            if (screenRes == '1600x900')
-                return
         }
     }
 })();

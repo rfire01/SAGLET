@@ -15,5 +15,4 @@
         var h1 = element.find('h1');
         expect(h1.text()).toBe('Unit Testing AngularJS 1.5');
     });
-
 });

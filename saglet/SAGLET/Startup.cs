@@ -18,7 +18,7 @@ namespace SAGLET
 
             app.UseHangfireDashboard("/Jobs", new DashboardOptions
             {
-                AuthorizationFilters = new[] { new MyRestrictiveAuthorizationFilter() }
+                Authorization = new[] { new MyRestrictiveAuthorizationFilter() }
             });
 
             app.UseHangfireServer(new BackgroundJobServerOptions

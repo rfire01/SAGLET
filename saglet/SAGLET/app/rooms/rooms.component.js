@@ -6,10 +6,10 @@
         .component('roomsComponent', {
             templateUrl: 'app/rooms/rooms.component.html',
             controllerAs: 'vm',
-            controller: ['$sessionStorage', '$sce', '$', '$q', '$interval', '$timeout', controller]
+            controller: ['$sessionStorage', '$sce', '$', '$q', '$interval', controller]
         });
 
-    function controller($sessionStorage, $sce, $, $q, $interval, $timeout) {
+    function controller($sessionStorage, $sce, $, $q, $interval) {
         var vm = this;
 
         vm.roomsCtrl = [];
@@ -35,9 +35,6 @@
         vm.idlenessRoom = '';
         vm.idlenessUsers = [];
         vm.strRoomsList = '';
-
-        vm.onNewCriticalPoints = onNewCriticalPoints;
-
         vm.hubConnectionStatus = '';
 
         this.addRoom = addRoom;
@@ -54,10 +51,8 @@
             /* Hub Start */
             $.connection.hub.start()
                 .done(function (res) {
-                    console.info("************ hub started ************");
-                    vm.loader = false;
-                    
                     initHub();
+                    vm.loader = false;
 
                     /* check idleness */
                     $interval(function () {
@@ -76,15 +71,13 @@
                             
                             // try connect
                             $.connection.hub.start().done(function (res) {
-                                console.info("************ hub restarted ************");
                                 initHub();
                             });
                         }
                     }, disconnectCheckFreq);
                 })
-
             .fail(function () {
-                console.log('Could not Connect!');
+                console.info("************ hub start failure ************");
                 vm.loader = false;
                 vm.hubConnectionStatus = 'failure';
             });
@@ -94,7 +87,9 @@
             console.log(c);
         };
 
+        /* Initialize Hub */
         function initHub() {
+            console.info("************ hub started ************");
             var strRoomsList = getStrRoomsList(vm.roomList);
             detailsHub.server.registerLiveChatAndLiveActions(strRoomsList);
             detailsHub.server.startIdleness(strRoomsList);
@@ -104,12 +99,14 @@
             })
         }
 
+        /* Hub reconnecting event handler */
         $.connection.hub.reconnecting = function () {
             vm.hubConnectionStatus = 'reconnecting';
             var connectionStatus = angular.element(document.querySelector('#connection-status'));
             connectionStatus.removeClass('label-success label-danger').text('Reconnecting').addClass('label-warning');
         }
 
+        /* Hub disconnected event handler */
         $.connection.hub.disconnected(function () {
             console.log(" **** hub: disconnected **** ");
 
@@ -118,6 +115,22 @@
             connectionStatus.removeClass('label-success').text('Offline').addClass('label-danger label-warning');
         });
 
+        /* Hub connected event handler */
+        detailsHub.client.registeredComplete = function (res) {
+            console.info("************ Registered Complete ************");
+            console.log("************" + res + "************");
+
+            vm.hubConnectionStatus = 'connected';
+            var connectionStatus = angular.element(document.querySelector('#connection-status'));
+            connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
+        };
+
+        /* log to console */
+        detailsHub.client.sendLogToConsole = function (log) {
+            console.info(log);
+        }
+
+        /* idleness event handler */
         detailsHub.client.updateIdlenessLive = function (idleRoom, idelenssData) {
             console.info("************ updateIdlenessLive ************");
             
@@ -132,26 +145,20 @@
                     vm.cpMsg = '';
                     vm.cpUser = idle.Value;
                     vm.cpTime = new Date().toTimeString().substring(0, 8);
-                    //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
 
                     vm.cpType = 18;
                     vm.cpPriority = '';
-
                     vm.cpAlertType = 18;
 
                     handelCriticalPoints(vm.cpRoom, vm.cpType);
                 }
             })
-            //if (idel.Key == '18') {
-            //    console.log(idel.Key);
-            //    vm.idlenessRoom = idleRoom;
-            //    vm.idlenessUsers = idel.Value;
-            //}
             
             console.log(vm.idlenessRoom);
             console.log(vm.idlenessUsers);
         };
 
+        /* user join & user left event handler */
         detailsHub.client.updateRoomUsersLive = function (roomID, roomData) {
             console.info("************ updateRoomUsersLive ************");
 
@@ -162,26 +169,21 @@
                     vm.cpMsg = '';
                     vm.cpUser = room.Value;
                     vm.cpTime = new Date().toTimeString().substring(0, 8);
-                    //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
 
                     vm.cpType = 19;
                     vm.cpPriority = '';
-
                     vm.cpAlertType = 19;
 
                     handelCriticalPoints(vm.cpRoom, vm.cpType);
-
                 } else if (room.Key == '20') {
                     vm.newCp = true;
                     vm.cpRoom = roomID;
                     vm.cpMsg = '';
                     vm.cpUser = room.Value;
                     vm.cpTime = new Date().toTimeString().substring(0, 8);
-                    //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
 
                     vm.cpType = 20;
                     vm.cpPriority = '';
-
                     vm.cpAlertType = 20;
 
                     handelCriticalPoints(vm.cpRoom, vm.cpType);
@@ -189,20 +191,7 @@
             })
         };
 
-        detailsHub.client.registeredComplete = function (res) {
-            console.info("************ Registered Complete ************");
-            console.log("************" + res + "************");
-
-            vm.hubConnectionStatus = 'connected';
-            var connectionStatus = angular.element(document.querySelector('#connection-status'));
-            connectionStatus.removeClass('label-danger label-warning').text('Online').addClass('label-success');
-        };
-
-        detailsHub.client.sendLogToConsole = function (log)
-        {
-            console.info(log);
-        }
-
+        /* new message event handler */
         detailsHub.client.updateRoomMsgLive = function (roomID, cpObject) {
             console.info('************ updateRoomMsgLive: ************ ' + roomID);
            
@@ -217,50 +206,29 @@
                 vm.cpMsg = cp.Text;
                 vm.cpUser = cp.UserID;
                 vm.cpTime = new Date().toTimeString().substring(0, 8);
-                //vm.cpTime = new Date(cpObject.TimeStamp).toTimeString().substring(0, 8) || new Date();
 
                 if (cp.CriticalPoints[1].Type == 0 && cp.CriticalPoints[0].Type > 0) {
                     vm.cpType = cp.CriticalPoints[0].Type;
                     vm.cpPriority = cp.CriticalPoints[0].Priority;
-
                     vm.cpAlertType = 0;
-                }
-                else
-                {
+                } else {
                     vm.cpType = cp.CriticalPoints[1].Type;
                     vm.cpPriority = cp.CriticalPoints[1].Priority;
-
                     vm.cpAlertType = cp.CriticalPoints[1].Type;
                 }
-                // vm.cpAlertPriority = cp.CriticalPoints[0].Priority;
-
-                //if (cp.CriticalPoints[0].Type == 0)
-                //    return;
-
-                //if (cp.CriticalPoints[0].Type > 0)
-                //    vm.newCp = true;
 
                 handelCriticalPoints(vm.cpRoom, vm.cpType);
             })        
         };
 
-        function listenToTheseVmtRooms(rooms) {
-            rooms.forEach(function (item) {
-                $.connection.roomDetailsHub.server.joinGroup(item.ID);
-            })
-        }
-
+        /* parses cp object to json */
         function returnCp(cp) {
             return $q(function (resolve, reject) {
                 resolve(JSON.parse(cp));
-
             })
         }
 
-        function onNewCriticalPoints(roomID, msg) {
-
-        }
-
+        /* get or create string of the rooms watched*/
         function getStrRoomsList(roomList) {
             if (vm.strRoomsList == '') {
                 var str = '';
@@ -275,10 +243,12 @@
             return vm.strRoomsList;
         }
 
+        /* add room */
         function addRoom(room) {
             vm.roomsCtrl.push(room);
         }
 
+        /* handle critical points at the matching room */
         function handelCriticalPoints(roomID, newCpType) {
             vm.roomsCtrl.forEach(function (roomCtrl) {
                 if (roomCtrl.room.ID == roomID) {
