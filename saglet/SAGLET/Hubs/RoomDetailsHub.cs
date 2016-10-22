@@ -41,14 +41,6 @@ namespace SAGLET.Hubs
         {
             using (SagletModel db = new SagletModel())
             {
-                //List<int> rooms = db.Moderators.Find(AppHelper.GetVmtUser()).RoomsAllowed.Where(r => r.Sync).Select(r => r.ID).ToList();
-                //List<String> rooms = roomsFromClient.Split(',').ToList();
-                //foreach (string roomID in rooms)
-                //{
-                //    //int x = Int32.Parse(roomID);
-                //    //VmtDevAPI.RegisterLiveChat(x);
-                //    Groups.Add(Context.ConnectionId, roomID.ToString());
-                //}
                 Groups.Add(Context.ConnectionId, roomsFromClient.ToString());
                 context.Clients.Client(Context.ConnectionId).registeredComplete("Registered succesfully to rooms: " + roomsFromClient);
             }
@@ -79,7 +71,6 @@ namespace SAGLET.Hubs
         {
             var json = new JavaScriptSerializer().Serialize(msg);
             context.Clients.Group(roomID).updateRoomMsgLive(roomID, json);
-            //context.Clients.Client(Context.ConnectionId).updateNewMsg(msg);
 
         }
 
@@ -120,6 +111,7 @@ namespace SAGLET.Hubs
             VmtDevAPI.HandleIdleness(roomList);
         }
 
+        //send what rooms were chosen, and add them to AlertAnalyzer
         public void StartIdleness(string rooms) {
             if (rooms.CompareTo("")==0)
                 return;
@@ -127,45 +119,40 @@ namespace SAGLET.Hubs
             VmtDevAPI.OpenAnalyzeRooms(roomList);
 
             context.Clients.Client(Context.ConnectionId).updateIdlenessAlertFrequency(this.idlenessAlertFrequency);
-            //GetIdleAlertFreq();
-            //VmtDevAPI.HnadleIdleness(roomList)
         }
 
         public void GetIdleAlertFreq()
         {
 
             context.Clients.Client(Context.ConnectionId).updateIdlenessAlertFrequency(this.idlenessAlertFrequency);
-           // context.Clients.Group(roomID).updateRoomMsgLive(this.idlenessAlertFrequency);
 
         }
 
+        //send to client idle alerts, and what users are idle
         public void UpdateIdleness(string roomID, string idles)
         {
             
             context.Clients.Group(roomID).updateIdlenessLive(roomID, idles);
-            //context.Clients.Client(Context.ConnectionId).updateIdlenessLive(idles);
 
         }
 
+        //send to client user joined \ left alerts
         public void UpdateUserInRoom(string roomID, string users)
         {
             context.Clients.Group(roomID).updateRoomUsersLive(roomID, users);
         }
 
+        //open socket on chosen rooms
         public void RegisterLiveChatAndLiveActions(string roomsFromClient)
         {
             if (roomsFromClient.CompareTo("") == 0)
                 return;
             List<String> roomsID = roomsFromClient.Split(',').ToList();
-            //List<Room> rooms = db.Rooms.Where(r => r.Sync).ToList();
             foreach (String id in roomsID)
             {
                 VmtDevAPI.RegisterLiveChat(int.Parse(id));
                 VmtDevAPI.RegisterLiveActions(int.Parse(id));
             }
-
-
-
         }
 
 
@@ -313,12 +300,6 @@ namespace SAGLET.Hubs
             List<UserData> usersData = ExtractUsersInRoom(subRoomID);
             context.Clients.Client(Context.ConnectionId).UpdateUsersToolBarOnLoad(subRoomID, usersData);
         }
-
-        //public void RequestUsersGraphToolBarUpdate(int roomID)
-        //{
-        //    List<UserData> usersData = ExtractUsersInRoom(roomID);
-        //    context.Clients.Client(Context.ConnectionId).UpdateUsersGraphToolBarReq(roomID, usersData);
-        //}
 
         internal void UpdateUserList(int roomID, object json)
         {

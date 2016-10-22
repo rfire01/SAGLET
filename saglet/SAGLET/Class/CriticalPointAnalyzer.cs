@@ -15,6 +15,7 @@ namespace SAGLET.Class
         static string[] priority = { "1", "2" };
         static int i=0;
 
+        //return the tag for a message and the room solution
         internal static List<CriticalMsgPoints> Analyze(VMsg msg, string solution, RoomDetailsHub hubDetails)
         {
             List<CriticalMsgPoints> cps = new List<CriticalMsgPoints>();
@@ -44,13 +45,11 @@ namespace SAGLET.Class
             cps.Add(cp);
 
             return cps;
-            //return null;
         }
 
+        //currently actions dont have any tags
         internal static ICollection<CriticalActionPoints> Analyze(VAction action)
         {
-            //TODO replace with eran's code
-
             List<CriticalActionPoints> cps = new List<CriticalActionPoints>();
 
             CriticalActionPoints cp = new CriticalActionPoints();
@@ -60,13 +59,12 @@ namespace SAGLET.Class
             cps.Add(cp);
 
             return cps;
-            //return cps;
         }
 
         private static string GetCriticalPoint(int roomID, string message, string solution, RoomDetailsHub hubDetails)
         {
             // Open the named pipe.
-            // exception, if there is a problem with opening pipe - try again until pipe opened successfully
+            // exception, if there is a problem with opening pipe - try again until pipe opened successfully (in case 2 threads try to open the pipe at the same time)
             while (true)
             {
                 try
@@ -90,11 +88,7 @@ namespace SAGLET.Class
 
                     return cpResponse;
                 }
-                catch (System.IO.IOException e)
-                {
-                    //hubDetails.sendLog("pipe error: " + e.ToString());
-                    //System.Diagnostics.Debug.WriteLine("if printed repeatedly, none stop (infinite while) there is problem with the pipes");
-                }
+                catch (System.IO.IOException e){}
             }
 
         }

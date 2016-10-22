@@ -108,14 +108,6 @@ namespace SAGLET.Class
         {
             if (chatSockets.ContainsKey(id))
                 return;
-            //string data = ;
-
-            
-
-            //Timer = new System.Timers.Timer();
-            //Timer.Elapsed += new System.Timers.ElapsedEventHandler(ctrl.HandleLiveMessage(, data));
-            //Timer.Interval = 10000; // 1000 ms * 60 seconds * 60 minutes : timer interval of 1 hour
-            //Timer.Start();
 
 
             var socket = IO.Socket("http://vmtdev.mathforum.org:80");
@@ -137,7 +129,6 @@ namespace SAGLET.Class
             {
                 Debug.WriteLine(String.Format("RegisterLiveChat({0}) | New Msg!", id));
                 string results = data.ToString();
-                //RoomsController ctrl = new RoomsController();
                 ctrl.ResetState();
                 ctrl.HandleLiveMessage(id, results);
             });
@@ -166,7 +157,6 @@ namespace SAGLET.Class
             var listener = new FourArgumentsListener((eventName, actID, url, log) =>
             {
                 Debug.WriteLine(String.Format("RegisterLiveActions({0}) | New Action!", roomID));
-                //RoomsController ctrl = new RoomsController();
                 ctrl.ResetState();
                 ctrl.HandleLiveAction(actID.ToString(), url.ToString(), log.ToString(), eventName.ToString(),roomID);
             });
@@ -174,6 +164,7 @@ namespace SAGLET.Class
             socket.On("ccAction", listener);
         }
 
+        //returns a list of users that are currently connected to roomID
         public static List<string> GetUsersConnected(int roomID)
         {
             ManualResetEvent ManualResetEvent = new ManualResetEvent(false);
@@ -215,9 +206,7 @@ namespace SAGLET.Class
         public static void CloseSocket(int id)
         {
             Debug.WriteLine(String.Format("CloseSocket({0}) | Closing connection!", id));
-            //chatSockets[id].Disconnect();
             if (chatSockets[id] != null) chatSockets[id].Close();
-            //actionSockets[id].Disconnect();
             if (actionSockets[id] != null) actionSockets[id].Close();
         }
 
@@ -228,11 +217,13 @@ namespace SAGLET.Class
             ctrl.RestartSolutionIndex(rooms);
         }
 
+        //check with timer for idle alerts
         public static void HandleIdleness(List<int> rooms)
         {
             ctrl.getRoomIdles(rooms);
         }
 
+        //need to be updated later, to get solutions according to excel files
         public static List<string> getSolutions(int roomID)
         {
             List<string> sol = new List<string>();
@@ -241,6 +232,7 @@ namespace SAGLET.Class
             return sol;
         }
 
+        //save the userID for the current user that use saglet
         public static void setCurrentVmtUser(string user)
         {
             ctrl.setCurrentVmtUser(user);

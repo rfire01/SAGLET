@@ -26,11 +26,10 @@ namespace SAGLET.Class
             this.lastIdleAlertTime = DateTime.MinValue;
         }
 
+        //check how many tec\nmd messages in a row sent, and send alert if needed
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, Boolean nmdStarted)
         {
             lastMessageTime = DateTime.Now;
-            //if(!nmdStarted)
-            //    return CriticalPointTypes.None;
 
             if (tag == CriticalPointTypes.NMD)
             {
@@ -63,6 +62,7 @@ namespace SAGLET.Class
             return CriticalPointTypes.None;
         }
 
+        //functions to get last action \ message time
         public DateTime getLastMessageTime()
         {
             return lastMessageTime;
@@ -81,11 +81,13 @@ namespace SAGLET.Class
                 return lastMessageTime;
         }
 
+        //get the last time that the user sent idle alert
         public DateTime GetLastIdleTime()
         {
             return this.lastIdleAlertTime;
         }
 
+        //set the last time that the user sent idle alert
         public void UpdateIdleTime()
         {
             this.lastIdleAlertTime = DateTime.Now;

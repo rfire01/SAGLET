@@ -25,6 +25,7 @@ namespace SAGLET.Class
             this.lastAlertTime = DateTime.MinValue;
         }
 
+        //adds new message to queue (user & time)
         public void HandleMessage(string user)
         {
             DateTime currentTime = DateTime.Now;
@@ -34,6 +35,7 @@ namespace SAGLET.Class
             CleanMessages();
         }
 
+        //check if room is idle (need to send idle alert)
         public KeyValuePair<CriticalPointTypes, List<string>> CheckIdle(Dictionary<string, RoomUser> usersInfo)
         {
             KeyValuePair<Boolean, List<string>> idleUsers = GetIdleUsersInInterval(usersInfo);
@@ -61,6 +63,7 @@ namespace SAGLET.Class
             return (diff.Seconds + diff.Minutes * 60 + diff.Hours * 3600 + diff.Days * 3600 * 24);
         }
 
+        //checks if all users didn't sent messages & didn't used geogabra for at least "allIdleTime" seconds
         private Boolean TotalIdle(Dictionary<string, RoomUser> usersInfo)
         {
             Boolean allIdle = true;
@@ -79,6 +82,7 @@ namespace SAGLET.Class
             return allIdle;
         }
 
+        //check if all users sent message in the last "actionPassed" seconds, and didn't used geogabra
         private Boolean NoGeogebraUsage(Dictionary<string, RoomUser> usersInfo)
         {
             DateTime currentTime = DateTime.Now;
@@ -123,6 +127,7 @@ namespace SAGLET.Class
             return false;
         }
 
+        // removes all messages in queue that happend before at least "idleUserInterval" seconds
         private void CleanMessages()
         {
             DateTime currentTime = DateTime.Now;
@@ -132,10 +137,8 @@ namespace SAGLET.Class
             }
         }
 
-        ///currently just give idle or not.
-        ///if someone idle returns true
-        ///otherwise returns false;
-        ///list of idle users is ready, only need to return it.
+        //return a list of users that are idle
+        //user is idle, if he sent less than 10% of total messages sent in the last "idleUserInterval" seconds
         public KeyValuePair<Boolean, List<string>> GetIdleUsersInInterval(Dictionary<string, RoomUser> usersInfo)
         {
             List<string> users = usersInfo.Keys.ToList();
@@ -157,6 +160,7 @@ namespace SAGLET.Class
 
             List<string> idleUsers = new List<string>();
 
+            //don't add user to list if he already been idle in the last "idleAlertWaitTime" seconds
             foreach(KeyValuePair<string,int> userCount in userActivityCount)
             {
                 Boolean inIdleAlertWaitTime = false;

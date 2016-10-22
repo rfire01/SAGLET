@@ -18,8 +18,10 @@ namespace SAGLET.Class
 
         public void openRoom(int roomID)
         {
+            //check if room already exists
             if (this.rooms.ContainsKey(roomID) == true)
             {
+                //replace existing room, only if it wasnt used in the last 10 minutes
                 if (this.rooms[roomID].RoomUnused())
                 {
                     this.rooms.Remove(roomID);
@@ -71,6 +73,7 @@ namespace SAGLET.Class
             return res;
         }
 
+        //check what rooms are idle
         public KeyValuePair<CriticalPointTypes, List<string>> IsIdle(int roomID)
         {
             if (this.rooms.ContainsKey(roomID) == true)
@@ -83,6 +86,7 @@ namespace SAGLET.Class
             }
         }
 
+        //check if roomID started (first message from student sent)
         public Boolean RoomStarted(int roomID)
         {
             if (this.rooms.ContainsKey(roomID) == true)

@@ -29,7 +29,6 @@ namespace SAGLET.Controllers
 
         private readonly Object dbLock = new Object();
         private Dictionary<int, int> solutionIndex = new Dictionary<int, int>();
-        private CpAlarm criticalPointAlert = new CpAlarm();
 
         private AlertAnalyzer criticalPointAlerts = new AlertAnalyzer();
 
@@ -470,16 +469,16 @@ namespace SAGLET.Controllers
         }
 
 
-        //Assaf
         /* Sockets msgs */
         public void HandleLiveMessage(int roomID, string json)
         {
             var results = JsonConvert.DeserializeObject<dynamic>(json);
             VMsg msg = VMsg.ConvertLiveMessageJson(roomID, results);
-            if (msg != null && msg.UserID.CompareTo(currentSagletUser)!=0) // ------------> remove // before updating server
+            //check msg not empty and its not teacher message
+            if (msg != null && msg.UserID.CompareTo(currentSagletUser)!=0)
             {
                 string solution = GetSolution(msg.Text, roomID);
-                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg, solution, hubDetails);
+                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg, solution, hubDetails);  //tag for current message
                 
                 if (msg.Text.Contains("joined"))
                 {
@@ -526,11 +525,8 @@ namespace SAGLET.Controllers
                     }
                 }
 
-                //temp for test
-                //msg.CriticalPoints.Add(((List<CriticalMsgPoints>)msg.CriticalPoints)[0]);
-
-
                 //temporary canceled
+                //need to fix saveChatMsgToDB to handle 2 cps
                 //SaveChatMsgToDB(roomID, msg); 
 
 

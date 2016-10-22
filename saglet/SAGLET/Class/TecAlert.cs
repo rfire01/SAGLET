@@ -29,6 +29,7 @@ namespace SAGLET.Class
             return ((secondsPass < AlertWaitTime) && lastAlertTime != DateTime.MinValue);
         }
 
+        //send tec alert if there were 4 tec messages in a row
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag)
         {
             if (tag == CriticalPointTypes.TEC)

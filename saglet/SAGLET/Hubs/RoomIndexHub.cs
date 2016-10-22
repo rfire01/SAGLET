@@ -21,23 +21,18 @@ namespace SAGLET.Hubs
             String user = AppHelper.GetVmtUser();
             VmtDevAPI.setCurrentVmtUser(user);
 
-            //RoomsController ctrl = new RoomsController();
-            //ctrl.SyncNewRooms();
-
             context.Clients.Client(Context.ConnectionId).GetUserName(user);
         }
 
+        //get rooms details for the home room index
         public void GetRooms()
         {
             //UpdateRooms();
 
             using (SagletModel db = new SagletModel())
             {
-                //List<Room> syncedRoomList = new List<Room>();
-                //List<Room> nonSycedRoomList = new List<Room>();
 
                 String user = AppHelper.GetVmtUser();
-                //context.Clients.Client(Context.ConnectionId).GetUserName(user);
 
                 List<Room> roomsList = new List<Room>();
 
@@ -53,11 +48,6 @@ namespace SAGLET.Hubs
                         Sync = room.Sync
                     };
                     roomsList.Add(thisRoom);
-
-                    //if (thisRoom.Sync)
-                    //    syncedRoomList.Add(thisRoom);
-                    //else
-                    //    nonSycedRoomList.Add(thisRoom);
                 }
                 context.Clients.Client(Context.ConnectionId).getRooms(roomsList);
             }
@@ -69,8 +59,6 @@ namespace SAGLET.Hubs
             ctrl.SyncNewRooms();
 
             GetRooms();
-            //var deNewRooms = JsonConvert.DeserializeObject<Object>(newRooms)
-            //context.Clients.Client(Context.ConnectionId).updateRooms();
         }
 
         public void UpdateRoomIndex(string roomID)
@@ -88,11 +76,6 @@ namespace SAGLET.Hubs
             }
         }
 
-        //public void RoomSyncStatus(string roomID, bool isSynced)
-        //{
-        //    string status = isSynced ? "Successfully Synced!" : "FAILED TO SYNC!";
-        //    context.Clients.Client(Context.ConnectionId).roomSyncStatus(String.Format("RoomSyncStatus(roomID) - {0}", status));
-        //}
     }
 
 }

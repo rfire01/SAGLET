@@ -82,6 +82,7 @@ namespace SAGLET.Class
             return (diff.Seconds + diff.Minutes * 60 + diff.Hours * 3600 + diff.Days * 3600 * 24);
         }
 
+        //check if it has been "startRoomTime" seconds since first message sent in the room
         private void checkRoomNeedToOpen()
         {
             if (startRoomTime == DateTime.MinValue)
@@ -95,6 +96,7 @@ namespace SAGLET.Class
             }
         }
 
+        //send nmd alert if there were 10 nmd messages in a row
         private Boolean HandleNMDRow(CriticalPointTypes tag)
         {
             if (tag == CriticalPointTypes.NMD)
@@ -108,6 +110,7 @@ namespace SAGLET.Class
                 return false;
         }
 
+        //send nmd alert if 70% of messages sent in last "nmdTimeWindow" seconds are tagged as nmd
         private Boolean HandleNMDWindow(CriticalPointTypes newTag)
         {
             DateTime currentTime = DateTime.Now;
@@ -133,6 +136,7 @@ namespace SAGLET.Class
                 return false;
         }
 
+        //if specific user caused nmd alert, this function make sure that no other nmd alert will be send for "AlertWaitTime" seconds
         public void user_alert()
         {
             if (!NmdInAlertWaitTime())

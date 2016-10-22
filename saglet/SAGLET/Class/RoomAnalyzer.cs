@@ -33,11 +33,10 @@ namespace SAGLET.Class
             lastUpdate = DateTime.Now;
             if (!roomStarted)
                 roomStarted = true;
-            //System.Diagnostics.Debug.WriteLine("*****************");
-            //System.Diagnostics.Debug.WriteLine(this.roomID);
             //in case missed a user joined room
             AddUserToRoom(user);
             //
+            //check if any alert need to be sent
             idleAlert.HandleMessage(user);
             CriticalPointTypes nmdRes = nmdAlert.HandleMessage(tag);
             CriticalPointTypes userRes = usersInfo[user].HandleMessage(tag, nmdAlert.NmdStarted());
@@ -66,7 +65,8 @@ namespace SAGLET.Class
             CriticalPointTypes userRes = usersInfo[user].HandleAction();
             return CriticalPointTypes.None;
         }
-
+        
+        //check if room is idle
         public KeyValuePair<CriticalPointTypes, List<string>> CheckForIdle()
         {
             return idleAlert.CheckIdle(usersInfo);
@@ -99,6 +99,7 @@ namespace SAGLET.Class
             return roomStarted;
         }
 
+        //return if its been more than 10 minutes since last usage in room
         public Boolean RoomUnused()
         {
             int secondsFromLastUpdate = calculateTimeDiffInSeconds(lastUpdate, DateTime.Now);
