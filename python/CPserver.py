@@ -13,6 +13,7 @@ da = DictAnalyzer()
 tfa = TFIDFAnalyzer()
 sa = SimAnalyzer()
 
+
 def checkForRequest():
     try:
         f = open(r'\\.\pipe\cpPipe', 'r+b', 0)
@@ -40,7 +41,8 @@ def checkForRequest():
     except:
         pass
 
-def handleRequest(roomID,message,solution):
+
+def handleRequest(roomID, message, solution):
     if not roomID in rooms:
         rooms[roomID] = {}
         # rooms[roomID]['answer'] = ''
@@ -55,9 +57,9 @@ def handleRequest(roomID,message,solution):
 
     context = rooms[roomID]['context']
     group = da.check_group(solution)
-    da_tag,da_code = da.get_tag(message, context, [solution, group])
-    tfa_tag,tfa_code = tfa.get_tag(message, [solution, group])
-    sim_tag,sim_code = sa.get_tag(message,context,2)
+    da_tag, da_code = da.get_tag(message, context, [solution, group])
+    tfa_tag, tfa_code = tfa.get_tag(message, [solution, group])
+    sim_tag, sim_code = sa.get_tag(message,context,2)
 
     ds_count = sum([1 for tag in [da_tag, tfa_tag, sim_tag] if tag == 'DS'])
     tec_count = sum([1 for tag in [da_tag, tfa_tag, sim_tag] if tag == 'TEC'])
@@ -84,7 +86,7 @@ def handleRequest(roomID,message,solution):
         code = da_code
 
     rooms[roomID]['context'] = tag
-    return (tag + "," + str(code))
+    return tag + "," + str(code)
 
 
 if __name__ == '__main__':

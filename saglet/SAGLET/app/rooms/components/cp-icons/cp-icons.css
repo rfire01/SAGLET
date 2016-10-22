@@ -12,11 +12,10 @@
 .cp-icons-dashboard {
     font-size:12px;
     margin: 5px;
-    /*margin-right:25px;*/
 }
 
 .label-join {
-  background-color: #8FFFA8;
+  background-color: #97e252;
 }
 
 .label-join[href]:hover,
@@ -25,10 +24,28 @@
 }
 
 .label-left {
-  background-color: #933B3B;
+  background-color: #924040;
 }
 
 .label-left[href]:hover,
 .label-left[href]:focus {
+  background-color: #AE4747;
+}
+
+.label-idea {
+  background-color: #9e29da;
+}
+
+.label-idea[href]:hover,
+.label-idea[href]:focus {
+  background-color: #AE4747;
+}
+
+.label-confusion {
+  background-color: #ff7cbe;
+}
+
+.label-confusion[href]:hover,
+.label-confusion[href]:focus {
   background-color: #AE4747;
 }

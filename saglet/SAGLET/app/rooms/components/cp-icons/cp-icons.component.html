@@ -1,5 +1,5 @@
 ﻿<span class="label"
-      ng-class="{'label-info': vm.criticalPoint.cpType == 13,
+      ng-class="{'label-primary': vm.criticalPoint.cpType == 13,
                  'label-success': vm.criticalPoint.cpType == 14,
                  'label-danger': vm.criticalPoint.cpType == 15,
                  'label-info': vm.criticalPoint.cpType == 16,
@@ -12,13 +12,13 @@
                  'cp-icons-full-view': vm.fullView && !vm.dashboard,
                  'cp-icons-dashboard': vm.dashboard
       }">
-    <i ng-class="{ 'cp-center': true,
-                   'glyphicon glyphicon-ok': vm.criticalPoint.cpType == 14,
-                   'glyphicon glyphicon-remove': vm.criticalPoint.cpType == 15,
+    <i ng-class="{ 'fa fa-percent': vm.criticalPoint.cpType == 13,
+                   'glyphicon glyphicon-ok cp-center': vm.criticalPoint.cpType == 14,
+                   'glyphicon glyphicon-remove cp-center': vm.criticalPoint.cpType == 15,
                    'fa fa-comment-o': vm.criticalPoint.cpType == 16,
-                   'glyphicon glyphicon-wrench':  vm.criticalPoint.cpType == 17,
+                   'glyphicon glyphicon-wrench cp-center':  vm.criticalPoint.cpType == 17,
                    'fa fa-bed': vm.criticalPoint.cpType == 18,
-                   'glyphicon glyphicon-user': vm.criticalPoint.cpType == 19 || vm.criticalPoint.cpType == 20
+                   'glyphicon glyphicon-user cp-center': vm.criticalPoint.cpType == 19 || vm.criticalPoint.cpType == 20
        }"></i>
 </span>
 

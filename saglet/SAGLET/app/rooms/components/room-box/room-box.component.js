@@ -25,6 +25,7 @@
         //props
         vm.fullView = false;
         vm.hide = false;
+        vm.jumpFix = false;
         vm.newCriticalPoints = [];
         vm.oldCriticalPoints = [];
         vm.criticalPointsMessages = [];
@@ -50,7 +51,6 @@
 
         this.$onInit = function () {
             this.parent.addRoom(this);
-
             loadLastSession();
         }
 
@@ -79,6 +79,7 @@
         function openCloseFullView() {
             if (!vm.fullView) {
                 this.parent.openFullViewSelectedRoom(this);
+                vm.jumpFix = false;
             }  else {
                 this.parent.closeFullViewSelectedRoom(this);
 
@@ -90,8 +91,10 @@
                 vm.newCpBorderAlertType = 'none'
                 vm.cpPanel = false;
 
-                vm.height = vm.height - 1;
-                vm.height = vm.height + 1;
+                vm.jumpFix = true;
+                $timeout(function () {
+                    vm.jumpFix = false;
+                }, 50);
             }
         }
 

@@ -5,6 +5,7 @@
          style="height:{{ vm.fullView && (vm.height - 200) * 0.74 + 'px' || '36vh' }};"
          ng-hide="vm.hide"
          ng-class="{'iframe-wrapper-fullview': vm.fullView,
+                    'iframe-control-jump-fix': vm.jumpFix,
                     'has-new-cp-nmd':vm.newCpBorderAlertType == '16',
                     'has-new-cp-tec':vm.newCpBorderAlertType == '17',
                     'has-new-cp-idle':vm.newCpBorderAlertType == '18',
@@ -47,7 +48,8 @@
 
             <div class="panel-body" style="padding:0px;">
                 <div ng-hide="vm.fullView" ng-click="vm.openCloseFullView()" style="position:absolute; width:97%; height:80%; z-index:2;"></div>
-                <iframe ng-onload="vm.iframeLoaded()"
+                <iframe id="iframeName"
+                        ng-onload="vm.iframeLoaded()"
                         ng-src="{{vm.iframeLink(vm.room.ID)}}"
                         scrolling="no"
                         style="height:{{ vm.height }}px; width:{{ vm.width }}px"
