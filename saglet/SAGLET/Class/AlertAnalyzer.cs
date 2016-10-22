@@ -20,8 +20,11 @@ namespace SAGLET.Class
         {
             if (this.rooms.ContainsKey(roomID) == true)
             {
-                this.rooms.Remove(roomID);
-                this.rooms.Add(roomID, new RoomAnalyzer(roomID));
+                if (this.rooms[roomID].RoomUnused())
+                {
+                    this.rooms.Remove(roomID);
+                    this.rooms.Add(roomID, new RoomAnalyzer(roomID));
+                }
             }
             else
             {

@@ -15,6 +15,7 @@ namespace SAGLET.Class
         private IdleAlert idleAlert;
         private TecAlert tecAlert;
         private Boolean roomStarted;
+        private DateTime lastUpdate;
 
         public RoomAnalyzer(int roomID)
         {
@@ -24,14 +25,16 @@ namespace SAGLET.Class
             this.idleAlert = new IdleAlert();
             this.tecAlert = new TecAlert();
             this.roomStarted = false;
+            this.lastUpdate = DateTime.MinValue;
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, string user)
         {
+            lastUpdate = DateTime.Now;
             if (!roomStarted)
                 roomStarted = true;
-            System.Diagnostics.Debug.WriteLine("*****************");
-            System.Diagnostics.Debug.WriteLine(this.roomID);
+            //System.Diagnostics.Debug.WriteLine("*****************");
+            //System.Diagnostics.Debug.WriteLine(this.roomID);
             //in case missed a user joined room
             AddUserToRoom(user);
             //
@@ -56,6 +59,7 @@ namespace SAGLET.Class
 
         public CriticalPointTypes HandleAction(string user)
         {
+            lastUpdate = DateTime.Now;
             //in case missed a user joined room
             AddUserToRoom(user);
             //
@@ -93,6 +97,17 @@ namespace SAGLET.Class
         public Boolean RoomStarted()
         {
             return roomStarted;
+        }
+
+        public Boolean RoomUnused()
+        {
+            int secondsFromLastUpdate = calculateTimeDiffInSeconds(lastUpdate, DateTime.Now);
+            if (lastUpdate == DateTime.MinValue)
+                return false;
+            else if (secondsFromLastUpdate < 10 * 60)
+                return false;
+            else
+                return true;
         }
 
     }
