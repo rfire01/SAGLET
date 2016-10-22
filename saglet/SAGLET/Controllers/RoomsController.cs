@@ -27,7 +27,6 @@ namespace SAGLET.Controllers
         private static RoomDetailsHub hubDetails = new RoomDetailsHub();
         private static RoomIndexHub hubIndex = new RoomIndexHub();
 
-        private static IdlenessAnalyzer idle = new IdlenessAnalyzer();
         private readonly Object dbLock = new Object();
         private Dictionary<int, int> solutionIndex = new Dictionary<int, int>();
         private CpAlarm criticalPointAlert = new CpAlarm();
@@ -480,13 +479,12 @@ namespace SAGLET.Controllers
             if (msg != null && msg.UserID.CompareTo(currentSagletUser)!=0) // ------------> remove // before updating server
             {
                 string solution = GetSolution(msg.Text, roomID);
-                HandleIdleMessage(msg);
                 msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg, solution, hubDetails);
                 
                 if (msg.Text.Contains("joined"))
                 {
                     string user = msg.Text.Split(' ')[0];
-                    if (criticalPointAlerts.RoomStarted(roomID))
+                    if (criticalPointAlerts.RoomStarted(roomID) && user.CompareTo(currentSagletUser) != 0)
                     {
                         string[] arr = { user };
                         List<string> userJoined = new List<string>(arr);
@@ -503,7 +501,7 @@ namespace SAGLET.Controllers
                 {
                     string user = msg.Text.Split(' ')[0];
 
-                    if (criticalPointAlerts.RoomStarted(roomID))
+                    if (criticalPointAlerts.RoomStarted(roomID) && user.CompareTo(currentSagletUser) != 0)
                     {
                         string[] arr2 = { user };
                         List<string> userLeft = new List<string>(arr2);
@@ -569,8 +567,6 @@ namespace SAGLET.Controllers
                 //int roomID = db.Tabs.Find(action.TabID).GroupID;
                 //action.CriticalPoints.Add(criticalPointAlerts.user_action(roomID, action.UserID, (List<CriticalActionPoints>)action.CriticalPoints));
 
-                HandleIdleAction(roomID, action.UserID);
-
                 //temporary canceled
                 SaveActionToDB(roomID, action);
                 hubDetails.UpdateRoomActionLiveControl(roomID.ToString(), action);
@@ -622,12 +618,11 @@ namespace SAGLET.Controllers
             foreach (int roomID in roomIDs)
             {
                 criticalPointAlerts.openRoom(roomID);
-                idle.openRoom(idleWindow, roomID);
                 List<string> users = VmtDevAPI.GetUsersConnected(roomID);
                 foreach (string userID in users)
                 {
-                    criticalPointAlerts.user_joined(roomID, userID);
-                    idle.user_joined(roomID, userID);
+                    if (userID.CompareTo(currentSagletUser) != 0)
+                        criticalPointAlerts.user_joined(roomID, userID);
                 }
             }
         }
@@ -638,42 +633,10 @@ namespace SAGLET.Controllers
             {
                 KeyValuePair<CriticalPointTypes, List<string>> res = criticalPointAlerts.IsIdle(roomID);
 
-                
-                //Dictionary<int, List<String>> idles = new Dictionary<int, List<string>>();
-                //List<String> idleUsers = idle.whoIsIdle(roomID);
-                //idles.Add(roomID, idleUsers);
-                //string json2 = JsonConvert.SerializeObject(idles);
-
                 string jsonRes = JsonConvert.SerializeObject(res);
 
                 hubDetails.UpdateIdleness(roomID.ToString(), jsonRes);
             }   
-        }
-
-        private void HandleIdleMessage(VMsg msg)
-        {
-            int roomID = msg.GroupID;
-            string message = msg.Text;
-            string userID = msg.UserID;
-            if (message.Contains("joined"))
-            {
-                string user = message.Split(' ')[0];
-                idle.user_joined(roomID, user);
-            }
-            else if (message.Contains("left"))
-            {
-                string user = message.Split(' ')[0];
-                idle.user_left(roomID, user);
-            }
-            else
-            {
-                idle.user_activity(roomID, userID);
-            }
-        }
-
-        private void HandleIdleAction(int roomID, string userID)
-        {
-            idle.user_activity(roomID, userID);
         }
 
         private void UpdateRoomLastUpdate(int roomID)

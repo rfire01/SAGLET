@@ -14,10 +14,10 @@
                 "parent": "^roomsOverview"
             },
             controllerAs: 'vm',
-            controller: ['$sce', '$window', '$sessionStorage', '$timeout', controller]
+            controller: ['$sce', '$window', '$sessionStorage', '$timeout', '$interval', controller]
         })
 
-    function controller($sce, $window, $sessionStorage, $timeout) {
+    function controller($sce, $window, $sessionStorage, $timeout, $interval) {
         var vm = this;
 
         var criticalPointsTenLastMessages = [];
@@ -26,6 +26,7 @@
         vm.fullView = false;
         vm.hide = false;
         vm.jumpFix = false;
+        vm.jumpFixInterval = null;
         vm.newCriticalPoints = [];
         vm.oldCriticalPoints = [];
         vm.criticalPointsMessages = [];
@@ -47,10 +48,10 @@
         this.setFullView = setFullView;
         this.setHide = setHide;
         this.setCriticalPointMessages = setCriticalPointMessages;
-        //this.setIdleness = setIdleness;
 
         this.$onInit = function () {
             this.parent.addRoom(this);
+
             loadLastSession();
         }
 
@@ -73,13 +74,26 @@
             var url = u + r + l;
 
             return $sce.trustAsResourceUrl(url);
-            //$sce.trustAsResourceUrl("http://vmtdev.mathforum.org/#/room/' + {{vm.room.ID}} )
+        }
+
+        function startJumpFix() {
+            vm.jumpFixInterval = $interval(function () {
+                vm.jumpFix = true;
+                $timeout(function () {
+                    vm.jumpFix = false;
+                }, 50);
+            }, 10000);
+        }
+
+        function stopJumpFix() {
+            $interval.cancel(vm.jumpFixInterval);
         }
 
         function openCloseFullView() {
             if (!vm.fullView) {
                 this.parent.openFullViewSelectedRoom(this);
                 vm.jumpFix = false;
+                startJumpFix();
             }  else {
                 this.parent.closeFullViewSelectedRoom(this);
 
@@ -91,10 +105,7 @@
                 vm.newCpBorderAlertType = 'none'
                 vm.cpPanel = false;
 
-                vm.jumpFix = true;
-                $timeout(function () {
-                    vm.jumpFix = false;
-                }, 50);
+                stopJumpFix();
             }
         }
 

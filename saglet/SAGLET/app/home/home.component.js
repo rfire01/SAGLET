@@ -40,7 +40,7 @@
                 //indexHub.server.getRooms();
             });
             
-            if ($sessionStorage.user.rooms != null && $sessionStorage.user.rooms.watch.length == vm.maxRooms) {
+            if ($sessionStorage.user != null && $sessionStorage.user.rooms != null && $sessionStorage.user.rooms.watch.length == vm.maxRooms) {
                 vm.full = true;
             }
         }
