@@ -1,6 +1,7 @@
 ﻿<div ng-class="{'col-md-3': vm.overview, 'col-md-9': vm.fullView}" style="padding-right:6px; padding-left:6px; padding-top:15px;">
     <div class="iframe-wrapper"
          style="height:{{ vm.fullView && (vm.height - 200) * 0.74 + 'px' || '36vh' }};"
+         ng-mouseleave="vm.jumpFixer()"
          ng-hide="vm.hide"
          ng-class="{'iframe-wrapper-fullview': vm.fullView,
                     'iframe-control-jump-fix': vm.jumpFix,
@@ -48,7 +49,8 @@
                         ng-src="{{vm.iframeLink(vm.room.ID)}}"
                         scrolling="no"
                         style="height:{{ vm.height }}px; width:{{ vm.width }}px"
-                        ng-class="{'scaled-overview': vm.overview, 'scaled-fullview': vm.fullView }"></iframe>
+                        ng-class="{'scaled-overview': vm.overview, 'scaled-fullview': vm.fullView }">
+                </iframe>
             </div>
         </div>
     </div>

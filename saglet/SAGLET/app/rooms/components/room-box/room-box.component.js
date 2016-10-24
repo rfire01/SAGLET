@@ -25,7 +25,6 @@
         vm.fullView = false;
         vm.hide = false;
         vm.jumpFix = false;
-        vm.jumpFixInterval = null;
         vm.newCriticalPoints = [];
         vm.oldCriticalPoints = [];
         vm.criticalPointsMessages = [];
@@ -41,6 +40,7 @@
         vm.iframeLink = iframeLink;
         vm.openCloseFullView = openCloseFullView;
         vm.iframeLoaded = iframeLoaded;
+        vm.jumpFixer = jumpFixer;
 
         //out methods
         this.setFullView = setFullView;
@@ -75,26 +75,19 @@
             return $sce.trustAsResourceUrl(url);
         }
 
-        /* start screen jumping fix interval, when taking control in fullview */
-        function startJumpFix() {
-            vm.jumpFixInterval = $interval(function () {
+        function jumpFixer() {
+            if (vm.cpPanel && vm.fullView) {
                 vm.jumpFix = true;
                 $timeout(function () {
                     vm.jumpFix = false;
                 }, 50);
-            }, 10000);
-        }
-
-        /* stop screen jumping fix interval, when taking control in fullview */
-        function stopJumpFix() {
-            $interval.cancel(vm.jumpFixInterval);
+            }
         }
 
         /* change fullview to overview and vice versa */
         function openCloseFullView() {
             if (!vm.fullView) {
                 this.parent.openFullViewSelectedRoom(this);
-                startJumpFix();
             }  else {
                 this.parent.closeFullViewSelectedRoom(this);
 
@@ -105,8 +98,6 @@
                 vm.newCriticalPoints = [];
                 vm.newCpBorderAlertType = 'none';
                 vm.cpPanel = false;
-
-                stopJumpFix();
             }
         }
 
