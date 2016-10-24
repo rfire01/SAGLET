@@ -54,26 +54,26 @@ namespace SAGLET.Class
             }
 
             //handle message according to room state
-            if (!roomOpen)
+            //if (!roomOpen)
+            //{
+            //    return CriticalPointTypes.None;
+            //}
+            //else
+            //{
+            Boolean alert = false;
+            alert = alert || HandleNMDRow(tag);
+            alert = alert || HandleNMDWindow(tag);
+
+            DateTime currentTime = DateTime.Now;
+            int secondsPass = calculateTimeDiffInSeconds(lastAlertTime, currentTime);
+            if (alert && (lastAlertTime == DateTime.MinValue || secondsPass >= AlertWaitTime) && roomOpen)
             {
-                return CriticalPointTypes.None;
+                lastAlertTime = currentTime;
+                return CriticalPointTypes.NMD;
             }
             else
-            {
-                Boolean alert = false;
-                alert = alert || HandleNMDRow(tag);
-                alert = alert || HandleNMDWindow(tag);
-
-                DateTime currentTime = DateTime.Now;
-                int secondsPass = calculateTimeDiffInSeconds(lastAlertTime, currentTime);
-                if (alert && (lastAlertTime == DateTime.MinValue || secondsPass >= AlertWaitTime))
-                {
-                    lastAlertTime = currentTime;
-                    return CriticalPointTypes.NMD;
-                }
-                else
-                    return CriticalPointTypes.None;
-            }
+                return CriticalPointTypes.None;
+            //}
         }
 
         private int calculateTimeDiffInSeconds(DateTime oldTime, DateTime newTime)
