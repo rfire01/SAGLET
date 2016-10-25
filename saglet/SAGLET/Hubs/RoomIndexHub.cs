@@ -16,10 +16,11 @@ namespace SAGLET.Hubs
     public class RoomIndexHub : Hub
     {
         IHubContext context = GlobalHost.ConnectionManager.GetHubContext<RoomIndexHub>();
+        RoomsController ctrl = RoomsController.Instance;
+
         public void GetUserName()
         {
             String user = AppHelper.GetVmtUser();
-            VmtDevAPI.setCurrentVmtUser(user);
 
             context.Clients.Client(Context.ConnectionId).GetUserName(user);
         }
@@ -27,16 +28,13 @@ namespace SAGLET.Hubs
         //get rooms details for the home room index
         public void GetRooms()
         {
-            //UpdateRooms();
-
             using (SagletModel db = new SagletModel())
             {
-
                 String user = AppHelper.GetVmtUser();
 
                 List<Room> roomsList = new List<Room>();
-
                 List<int> roomsIds = db.Moderators.Find(user).RoomsAllowed.Select(r => r.ID).ToList();
+
                 foreach (int roomId in roomsIds)
                 {
                     Room room = db.Rooms.Find(Convert.ToInt32(roomId));
@@ -55,11 +53,16 @@ namespace SAGLET.Hubs
 
         public void UpdateRooms()
         {
-            RoomsController ctrl = new RoomsController();
             ctrl.SyncNewRooms();
-
             GetRooms();
         }
+
+        public void FollowNewRoom(string roomId)
+        {
+            ctrl.SyncNewRooms(roomId);
+            GetRooms();
+        }
+
 
         public void UpdateRoomIndex(string roomID)
         {

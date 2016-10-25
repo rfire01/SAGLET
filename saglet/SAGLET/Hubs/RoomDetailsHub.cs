@@ -10,6 +10,7 @@ using Hangfire;
 using System.Threading.Tasks;
 using SAGLET.Class;
 using System.Web.Script.Serialization;
+using SAGLET.Controllers;
 
 namespace SAGLET.Hubs
 {
@@ -17,6 +18,7 @@ namespace SAGLET.Hubs
     public class RoomDetailsHub : Hub
     {
         IHubContext context = GlobalHost.ConnectionManager.GetHubContext<RoomDetailsHub>();
+        RoomsController ctrl = RoomsController.Instance;
         static string toolbarStr = "-ToolBar";
         private int idlenessAlertFrequency = 1000 * Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["idlenessAlertFrequency"]);
 
@@ -41,6 +43,9 @@ namespace SAGLET.Hubs
         {
             using (SagletModel db = new SagletModel())
             {
+                string user = AppHelper.GetVmtUser();
+                ctrl.addSagletUserToRoom(roomsFromClient, user);
+
                 Groups.Add(Context.ConnectionId, roomsFromClient.ToString());
                 context.Clients.Client(Context.ConnectionId).registeredComplete("Registered succesfully to rooms: " + roomsFromClient);
             }

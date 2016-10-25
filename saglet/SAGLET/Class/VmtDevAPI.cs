@@ -14,12 +14,11 @@ namespace SAGLET.Class
 {
     public class VmtDevAPI
     {
-        private static System.Timers.Timer Timer;
-
-        private static RoomsController ctrl = new RoomsController();
+        private static RoomsController ctrl = RoomsController.Instance;
 
         private static Dictionary<int, Socket> chatSockets = new Dictionary<int, Socket>();
         private static Dictionary<int, Socket> actionSockets = new Dictionary<int, Socket>();
+
         public static string GetChatHistory(int id, int startIndex)
         {
             ManualResetEvent ManualResetEvent = new ManualResetEvent(false);
@@ -231,12 +230,5 @@ namespace SAGLET.Class
             sol.Add("מעוין");
             return sol;
         }
-
-        //save the userID for the current user that use saglet
-        public static void setCurrentVmtUser(string user)
-        {
-            ctrl.setCurrentVmtUser(user);
-        }
-
     }
 }

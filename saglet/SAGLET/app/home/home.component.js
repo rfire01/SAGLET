@@ -17,6 +17,8 @@
         vm.loader = true;
         vm.full = false;
         vm.maxRooms = 8;
+        vm.newRoomNum = '';
+        vm.newRoomInput = false;
 
         vm.user = {
             user: '',
@@ -25,6 +27,8 @@
 
         vm.changeWatchStatus = changeWatchStatus;
         vm.updateRooms = updateRooms;
+        vm.followNewRoom = followNewRoom;
+        vm.showNewRoomInput = showNewRoomInput;
         
 
         this.$onInit = function () {
@@ -188,6 +192,19 @@
         /* Asks the server for rooms update */
         function updateRooms() {
             indexHub.server.updateRooms();
+        }
+
+        /* Asks the server for watching another room */
+        function showNewRoomInput() {
+            vm.newRoomInput ^= true;
+        }
+
+        /* Asks the server for watching another room */
+        function followNewRoom() {
+            console.info("************ following " + vm.newRoomNum);
+            indexHub.server.followNewRoom(vm.newRoomNum);
+            vm.newRoomNum = '';
+            vm.newRoomInput = false;
         }
     }
 })();

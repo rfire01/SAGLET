@@ -9,7 +9,6 @@ namespace SAGLET.Class
 {
     public class NmdAlert
     {
-        private int roomID;
         private int nmdTimeWindow;
         private int startRoomWaitTime;
         private DateTime startRoomTime;

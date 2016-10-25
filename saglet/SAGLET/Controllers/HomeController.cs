@@ -21,16 +21,12 @@ namespace SAGLET.Controllers
             bool login = String.IsNullOrEmpty(user);
 
             if(!login)
-            return View();
+                return View();
 
             return View("Index");
         }
 
-
-
-
         //API CONTROLLER:
-
         //GET: USER LOGIN
         public ActionResult UserLoginStatus()
         {
@@ -39,10 +35,5 @@ namespace SAGLET.Controllers
 
             return Json(!login, JsonRequestBehavior.AllowGet);
         }
-
-        //check excel files
-        ///
-        ///
-        ///
     }
 }

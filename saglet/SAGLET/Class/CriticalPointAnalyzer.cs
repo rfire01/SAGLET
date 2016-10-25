@@ -88,7 +88,7 @@ namespace SAGLET.Class
 
                     return cpResponse;
                 }
-                catch (System.IO.IOException e){}
+                catch (System.IO.IOException){}
             }
 
         }
