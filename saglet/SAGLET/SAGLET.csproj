@@ -517,23 +517,7 @@
     <Content Include="Views\Moderators\Details.cshtml" />
     <Content Include="Views\Moderators\Edit.cshtml" />
     <Content Include="Views\Moderators\Index.cshtml" />
-    <None Include="typings.json" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <None Include="tsconfig.json" />
-    <None Include="Scripts\typings\react\react-addons-create-fragment.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-css-transition-group.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-linked-state-mixin.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-perf.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-pure-render-mixin.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-shallow-compare.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-test-utils.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-transition-group.d.ts" />
-    <None Include="Scripts\typings\react\react-addons-update.d.ts" />
-    <None Include="Scripts\typings\react\react-dom.d.ts" />
-    <None Include="Scripts\typings\react\react-global-tests.ts" />
-    <None Include="Scripts\typings\react\react-global.d.ts" />
-    <None Include="Scripts\typings\react\react-tests.ts" />
-    <None Include="Scripts\typings\react\react.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Areas\Demo\Migrations\DemoModal\201603051344201_InitialDatabaseCreation.resx">
@@ -548,7 +532,6 @@
   <ItemGroup>
     <Folder Include="config\solutions\" />
     <Folder Include="node_modules\" />
-    <Folder Include="typings\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
