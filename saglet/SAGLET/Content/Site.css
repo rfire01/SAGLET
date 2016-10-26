@@ -86,8 +86,6 @@ span.badge.highlight{
     margin-right: 5px;
 }
 
-
-
 .container-graphs{
     margin: 5px 0 5px 0;
 }
@@ -121,8 +119,7 @@ kbd{
     word-wrap: break-word;
 }
 
-/* This only works with JavaScript,
-               if it's not present, don't show loader */
+/* This only works with JavaScript, if it's not present, don't show loader */
 .no-js #loader {
     display: none;
 }
@@ -138,17 +135,14 @@ kbd{
 }
 
 /* Top Navbar - connected/disconnected */
-
 #connection-status{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-top: 15px;
+    padding: 5px 0;
     display: block;
     width: 125px;
     font-size: 14px;    
 }
-/* Graph - Users */
 
+/* Graph - Users */
 .user{
     margin: 0 auto;
     width: 100%;
@@ -183,7 +177,6 @@ kbd{
 }
 
 /* VMT */
-
 #vmt-iframes-container iframe, #vmt-iframes-container video{
     width: 100%;
     min-height: 600px;
@@ -267,8 +260,6 @@ div.users ul.list-group li:nth-child(18) div.user-left-bar{background-color: #32
 div.users ul.list-group li:nth-child(19) div.user-left-bar{background-color: #5574A6;}   /*19*/
 div.users ul.list-group li:nth-child(20) div.user-left-bar{background-color: #3B3EAC;}   /*20*/
 
-
-
 .user-bar{
     display: table;
 }
@@ -290,10 +281,7 @@ div.user-right-bar div.progress{
     margin-bottom: 5px;
 }
 
-
-
 /* Tables */
-
 .table-wrapper{
     overflow-y: scroll;
 }

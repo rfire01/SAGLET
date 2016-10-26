@@ -4,8 +4,6 @@
     angular
         .module('app')
         .component('appComponent', {
-            template: `
-                <div ng-view></div>
-                `
+            template: '<div ng-view></div>'
         });
 })();

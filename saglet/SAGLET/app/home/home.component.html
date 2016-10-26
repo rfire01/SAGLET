@@ -1,39 +1,41 @@
-﻿<div class="row container" >
-    <div class="panel panel-default">
-        <span ng-show="vm.loader" us-spinner="{radius:55, width:8, length: 16}"></span>
-        <div class="panel-body" ng-show="!vm.loader">
-            <div class="col-md-6 container">
-                <div class="panel-heading">
-                    <p style="margin-left:-10px; font-size:18px; display:inline;">Active Rooms</p>
+﻿<span ng-show="vm.loader" us-spinner="{radius:55, width:8, length: 16}"></span>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body" ng-show="!vm.loader">
+                <div class="col-md-6 container">
+                    <div class="panel-heading">
+                        <p style="margin-left: -10px; font-size: 18px; display: inline;">Active Rooms</p>
+                    </div>
+                    <rooms-list rooms="vm.user.rooms.watch" watch="true" on-status-change="vm.changeWatchStatus(index, status)"></rooms-list>
                 </div>
-                <rooms-list rooms="vm.user.rooms.watch" watch="true" on-status-change="vm.changeWatchStatus(index, status)"></rooms-list>
-            </div>
-            <div class="col-md-6 container">
-                <div class="panel-heading">
-                        <p style="margin-left:-10px; font-size:18px; display:inline;">Archived Rooms</p>
-                        <div class="btn-group" style="float:right;margin-top:-8px;margin-right:-15px;">
-                            <button class="btn btn-default" ng-click="vm.showNewRoomInput()">
+                <div class="col-md-6 container">
+                    <div class="panel-heading">
+                        <p style="margin-left: -10px; font-size: 18px; display: inline;">Archived Rooms</p>
+                        <div class="btn-group" style="float: right; margin-top: -8px; margin-right: -15px;">
+                            <button class="btn btn-default" ng-click="vm.toggleNewRoomInput()"  ng-blur="vm.hideNewRoomInput()">
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Add Unfollowed Room
                             </button>
                             <button class="btn btn-default" ng-click="vm.updateRooms()">
                                 <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Sync New Rooms
                             </button>
                         </div>
+                    </div>
+
+                    <div class="panel-heading pull-right" style="padding-right: 170px; right: 0; top: 40px; position: absolute; z-index: 5;" ng-show="vm.newRoomInput">
+                        <form style="border: solid 1px #999; padding: 10px 8px 10px; border-radius: 5px; background: white;">
+                            <div class="form-group" style="margin-top: -19px; line-height: 2px;">
+                                <label style="text-align: center; display: block; font-size: 20px; font-weight: normal; color: #999">▲</label>
+                            </div>
+                            <div class="form-group">
+                                <label for="roomnum">Room Number:</label>
+                                <input id="roomnum" type="number" class="form-control" ng-model="vm.newRoomNum" style="width: 168px;">
+                            </div>
+                            <button class="btn btn-default btn-block" ng-click="vm.followNewRoom()">Add</button>
+                        </form>
+                    </div>
+                    <rooms-list rooms="vm.user.rooms.rest" watch="false" on-status-change="vm.changeWatchStatus(index, status)" is-full="vm.full"></rooms-list>
                 </div>
-                    
-                <div class="panel-heading pull-right" style="padding-right:155px;" ng-show="vm.newRoomInput">
-                    <form style="border: solid 1px #999; padding: 10px 8px 10px; border-radius: 5px;">
-                        <div class="form-group" style="margin-top: -19px; line-height: 2px;">
-                            <label style="text-align:center;display: block;font-size: 20px;font-weight: normal; color: #999">▲</label>
-                        </div>
-                        <div class="form-group">
-                            <label for="roomnum">Room Number:</label>
-                            <input id="roomnum" type="number" class="form-control" ng-model="vm.newRoomNum" style="width:168px;">
-                        </div>
-                        <button class="btn btn-default btn-block" ng-click="vm.followNewRoom()">Add</button>
-                    </form>
-                </div>
-                <rooms-list rooms="vm.user.rooms.rest" watch="false" on-status-change="vm.changeWatchStatus(index, status)" is-full="vm.full"></rooms-list>
             </div>
         </div>
     </div>

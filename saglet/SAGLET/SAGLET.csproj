@@ -388,7 +388,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
-    <Content Include="app\home\app.home..js" />
+    <Content Include="app\home\app.home.js" />
     <Content Include="config\SAGLET.config">
       <SubType>Designer</SubType>
     </Content>

@@ -28,8 +28,8 @@
         vm.changeWatchStatus = changeWatchStatus;
         vm.updateRooms = updateRooms;
         vm.followNewRoom = followNewRoom;
-        vm.showNewRoomInput = showNewRoomInput;
-        
+        vm.toggleNewRoomInput = toggleNewRoomInput;
+        vm.hideNewRoomInput = hideNewRoomInput;
 
         this.$onInit = function () {
             $.connection.hub.logging = true;
@@ -72,6 +72,9 @@
                     vm.user.rooms.watch = prop.watch;
                     vm.user.rooms.rest = prop.rest;
 
+                    if (prop.alert)
+                        alert('Room list was updated successfully!');
+
                     $sessionStorage.user = vm.user;
                 })
         };
@@ -98,6 +101,7 @@
             return $q(function (resolve, reject) {
                 var watch = [];
                 var rest = [];
+                var alert = false;
                 var i = 0;
 
                 // if session is new and there are no rooms in lists
@@ -119,6 +123,7 @@
                         if (!exists)
                             $sessionStorage.user.rooms.rest.push(room)
                     })
+                    alert = true;
                 }
 
                 // restore watch list and rooms list status from session, if exists
@@ -134,7 +139,7 @@
                     })
                 }
 
-                resolve({ watch: watch, rest: rest });
+                resolve({ watch: watch, rest: rest, alert: alert});
             })
         }
 
@@ -194,9 +199,14 @@
             indexHub.server.updateRooms();
         }
 
-        /* Asks the server for watching another room */
-        function showNewRoomInput() {
+        /* toggles add new room form */
+        function toggleNewRoomInput() {
             vm.newRoomInput ^= true;
+        }
+
+        /* hides add new room form */
+        function hideNewRoomInput() {
+            vm.newRoomInput = false;
         }
 
         /* Asks the server for watching another room */
