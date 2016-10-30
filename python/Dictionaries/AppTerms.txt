@@ -5,6 +5,7 @@ update
 started
 tab
 erased
+deleted
 left the session
 change
 renamed

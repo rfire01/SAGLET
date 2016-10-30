@@ -14,8 +14,8 @@ namespace SAGLET.Class
 {
     public class VmtDevAPI
     {
+        public static String VMT_URL = "http://vmtdev.mathforum.org:80";
         private static RoomsController ctrl = RoomsController.Instance;
-
         private static Dictionary<int, Socket> chatSockets = new Dictionary<int, Socket>();
         private static Dictionary<int, Socket> actionSockets = new Dictionary<int, Socket>();
 
@@ -25,7 +25,7 @@ namespace SAGLET.Class
 
             Debug.WriteLine(String.Format("GetChatHistory({0}) | (msgs) Starting!", id));
             string results = "";
-            var socket = IO.Socket("http://vmtdev.mathforum.org:80");
+            var socket = IO.Socket(VMT_URL);
 
             socket.On(Socket.EVENT_CONNECT, () =>
             {
@@ -58,7 +58,7 @@ namespace SAGLET.Class
 
             Debug.WriteLine(String.Format("GetActionHistory({0}) | (actions) Starting!", tabID));
             string results = "";
-            var socket = IO.Socket("http://vmtdev.mathforum.org:80");
+            var socket = IO.Socket(VMT_URL);
 
             socket.On(Socket.EVENT_CONNECT, () =>
             {
@@ -90,7 +90,7 @@ namespace SAGLET.Class
         // not used for now
         public static void RegisterUserJoinLeave(int id)
         {
-            var socket = IO.Socket("http://vmtdev.mathforum.org:80");
+            var socket = IO.Socket(VMT_URL);
 
             socket.On(Socket.EVENT_CONNECT, () =>
             {
@@ -109,7 +109,7 @@ namespace SAGLET.Class
                 return;
 
 
-            var socket = IO.Socket("http://vmtdev.mathforum.org:80");
+            var socket = IO.Socket(VMT_URL);
             chatSockets[id] = socket;
 
             socket.On(Socket.EVENT_CONNECT, () =>
@@ -137,7 +137,7 @@ namespace SAGLET.Class
         {
             if (actionSockets.ContainsKey(roomID))
                 return;
-            var socket = IO.Socket("http://vmtdev.mathforum.org:80");
+            var socket = IO.Socket(VMT_URL);
             actionSockets[roomID] = socket;
 
             socket.On(Socket.EVENT_CONNECT, () =>
@@ -169,7 +169,7 @@ namespace SAGLET.Class
             ManualResetEvent ManualResetEvent = new ManualResetEvent(false);
             List<string> results = new List<string>();
 
-            var socket = IO.Socket("http://vmtdev.mathforum.org:80");
+            var socket = IO.Socket(VMT_URL);
 
             socket.On(Socket.EVENT_CONNECT, () =>
             {

@@ -1,15 +1,16 @@
 def get_bigrams(string):
-    '''
+    """
     Takes a string and returns a list of bigrams
-    '''
+    """
     s = string.lower()
     return [s[i:i+2] for i in range(len(s) - 1)]
 
+
 def string_similarity(str1, str2):
-    '''
+    """
     Perform bigram comparison between two strings
     and return a percentage match in decimal form
-    '''
+    """
     pairs1 = get_bigrams(str1)
     pairs2 = get_bigrams(str2)
     union  = len(pairs1) + len(pairs2)

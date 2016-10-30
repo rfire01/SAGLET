@@ -92,7 +92,7 @@ namespace SAGLET.Controllers
                 // make HTML request
                 var client = new ExtendedWebClient();
                 client.Encoding = System.Text.Encoding.UTF8;
-                string roomsData = client.DownloadString("http://vmtdev.mathforum.org/rooms/");
+                string roomsData = client.DownloadString(VmtDevAPI.VMT_URL + "/rooms/");
 
                 // sync rooms (if followedRoomId is not 'None', then user is not a moderator)
                 List<Room> newRooms;
