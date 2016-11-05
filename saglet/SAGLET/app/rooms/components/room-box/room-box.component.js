@@ -75,13 +75,14 @@
             return $sce.trustAsResourceUrl(url);
         }
 
+        /* fixes VMT jump when taking control and performing action (not happening in new version!) */
         function jumpFixer() {
-            if (vm.cpPanel && vm.fullView) {
-                vm.jumpFix = true;
-                $timeout(function () {
-                    vm.jumpFix = false;
-                }, 50);
-            }
+            //if (vm.cpPanel && vm.fullView) {
+            //    vm.jumpFix = true;
+            //    $timeout(function () {
+            //        vm.jumpFix = false;
+            //    }, 50);
+            //}
         }
 
         /* change fullview to overview and vice versa */

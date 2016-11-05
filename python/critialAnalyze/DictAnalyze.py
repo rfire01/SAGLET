@@ -49,7 +49,7 @@ class DictAnalyzer:
         if context == 'DS':
             for word in self.context:
                 if word in sentence:
-                    count += 1
+                    count += 2  # higher value
         if solution[1] == 'shape' and shape:
             if self.__check_solution(solution[0], sentence):
                 code = 1
@@ -81,7 +81,7 @@ class DictAnalyzer:
                 count += 1
         for word in self.negTech:
             if word in sentence:
-                count += 1
+                count += 10  # higher value - contains DS context words
         return count
 
     def get_tag(self, sentence, context, solution):
@@ -94,12 +94,12 @@ class DictAnalyzer:
             if ds > tec:
                 return 'DS', code
             else:
-                return 'TEC', -1
+                return 'TEC', tec
         else:
             if nmd > tec:
                 return 'NMD', -1
             else:
-                return 'TEC', -1
+                return 'TEC', tec
 
     def __if_then_statment__(self, sentence):
         conclusion_split = sentence.split('אם')
