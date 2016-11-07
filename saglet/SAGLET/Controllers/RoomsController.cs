@@ -587,10 +587,6 @@ namespace SAGLET.Controllers
                         }
                         criticalPointAlerts.user_left(roomID, user);
                     }
-                    else
-                    {
-                        roomSagletUsers[roomID.ToString()].Remove(user);
-                    }
 
                     CriticalMsgPoints serverCp = new CriticalMsgPoints();
                     serverCp.Type = CriticalPointTypes.None;
@@ -694,7 +690,10 @@ namespace SAGLET.Controllers
         {
             foreach (int roomID in roomIDs)
             {
-                criticalPointAlerts.openRoom(roomID);
+                bool wasAlreadyOpened = criticalPointAlerts.openRoom(roomID);
+                if (wasAlreadyOpened && roomSagletUsers.ContainsKey(roomID.ToString())) // "refresh" saglet users in room
+                        roomSagletUsers.Remove(roomID.ToString());
+
                 List<string> users = VmtDevAPI.GetUsersConnected(roomID);
                 foreach (string userID in users)
                 {
@@ -728,9 +727,14 @@ namespace SAGLET.Controllers
 
         public void addSagletUserToRoom(string room, string user)
         {
-            if (!roomSagletUsers.ContainsKey(room))
-                roomSagletUsers.Add(room, new HashSet<string>());
-            roomSagletUsers[room].Add(user);
+            try
+            {
+                if (!roomSagletUsers.ContainsKey(room))
+                    roomSagletUsers.Add(room, new HashSet<string>());
+                roomSagletUsers[room].Add(user);
+                criticalPointAlerts.user_left(int.Parse(room), user); //remove saglet user from room, if needed
+            }
+            catch(Exception) { Console.WriteLine("************************************"); }
         }
 
         public bool isSagletUserInRoom(string room, string user)

@@ -16,7 +16,8 @@ namespace SAGLET.Class
             this.rooms = new Dictionary<int, RoomAnalyzer>();
         }
 
-        public void openRoom(int roomID)
+        // opens the room and returns true if the room was already existed or false otherwise
+        public bool openRoom(int roomID)
         {
             //check if room already exists
             if (this.rooms.ContainsKey(roomID) == true)
@@ -26,12 +27,14 @@ namespace SAGLET.Class
                 {
                     this.rooms.Remove(roomID);
                     this.rooms.Add(roomID, new RoomAnalyzer(roomID));
+                    return true;
                 }
             }
             else
             {
                 this.rooms.Add(roomID, new RoomAnalyzer(roomID));
             }
+            return false;
         }
 
         public void user_joined(int roomID, string user)

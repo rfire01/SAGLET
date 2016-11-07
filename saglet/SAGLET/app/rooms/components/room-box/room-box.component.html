@@ -1,6 +1,6 @@
-﻿<div ng-class="{'col-md-3': vm.overview, 'col-md-9': vm.fullView}" style="padding-right:6px; padding-left:6px; padding-top:15px;">
+﻿<div ng-class="{'col-md-3': vm.overview && !vm.enlarge, 'col-md-4': vm.overview && vm.enlarge, 'col-md-9': vm.fullView}" style="padding-right:6px; padding-left:6px; padding-top:15px;">
     <div class="iframe-wrapper"
-         style="height:{{ vm.fullView && (vm.height - 200) * 0.74 + 'px' || '36vh' }};"
+         style="height:{{ vm.fullView && (vm.height - 200) * 0.74 + 'px' || vm.enlarge && '50vh' || '36vh' }};"
          ng-mouseleave="vm.jumpFixer()"
          ng-hide="vm.hide"
          ng-class="{'iframe-wrapper-fullview': vm.fullView,
@@ -45,11 +45,12 @@
             <div class="panel-body" style="padding:0;">
                 <div ng-hide="vm.fullView" ng-click="vm.openCloseFullView()" style="position:absolute; width:97%; height:80%; z-index:2;"></div>
                 <iframe id="iframeName"
+                        ng-iframe-scroll ng-iframe-scroll-x="0" ng-iframe-scroll-y="9999"
                         ng-onload="vm.iframeLoaded()"
                         ng-src="{{vm.iframeLink(vm.room.ID)}}"
                         scrolling="no"
                         style="height:{{ vm.height }}px; width:{{ vm.width }}px"
-                        ng-class="{'scaled-overview': vm.overview, 'scaled-fullview': vm.fullView }">
+                        ng-class="{'scaled-overview': vm.overview && !vm.enlarge, 'scaled-overview-enlarged': vm.overview && vm.enlarge, 'scaled-fullview': vm.fullView }">
                 </iframe>
             </div>
         </div>

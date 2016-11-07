@@ -30,13 +30,17 @@
         var vm = this;
 
         vm.overview = true;
+        vm.enlarge = false;
         vm.roomsCtrl = [];
 
         this.addRoom = addRoom;
         this.openFullViewSelectedRoom = openFullViewSelectedRoom;
         this.closeFullViewSelectedRoom = closeFullViewSelectedRoom;
 
-        this.$onInit = function (bindings) { }
+        this.$onInit = function () {
+            if (vm.rooms.length < 4)
+                vm.enlarge = true;
+        }
 
         this.$onChanges = function (changesObj) { }
 

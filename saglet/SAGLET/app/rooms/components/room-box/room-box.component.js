@@ -7,7 +7,8 @@
             templateUrl: 'app/rooms/components/room-box/room-box.component.html',
             bindings: {
                 room: '<',
-                overview: '<'
+                overview: '<',
+                enlarge: '<'
             },
             require: {
                 "parent": "^roomsOverview"

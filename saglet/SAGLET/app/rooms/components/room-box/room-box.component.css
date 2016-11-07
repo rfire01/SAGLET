@@ -112,3 +112,14 @@
     -webkit-transform: scale(0.24);
     -webkit-transform-origin: 0 0;
 }
+
+.scaled-overview-enlarged {
+    margin-top: -85px;
+    margin-left: -5px;
+    -moz-transform: scale(0.32);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.32);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.32);
+    -webkit-transform-origin: 0 0;
+}
