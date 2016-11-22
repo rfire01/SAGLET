@@ -46,33 +46,25 @@ namespace SAGLET.Class
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag)
         {
-            //check if need to try to open room again
             if (!roomOpen)
-            {
-                checkRoomNeedToOpen();
-            }
+                checkRoomNeedToOpen(); //check if need to try to open room again
 
-            //handle message according to room state
-            //if (!roomOpen)
-            //{
-            //    return CriticalPointTypes.None;
-            //}
-            //else
-            //{
-            Boolean alert = false;
-            alert = alert || HandleNMDRow(tag);
-            alert = alert || HandleNMDWindow(tag);
-
-            DateTime currentTime = DateTime.Now;
-            int secondsPass = calculateTimeDiffInSeconds(lastAlertTime, currentTime);
-            if (alert && (lastAlertTime == DateTime.MinValue || secondsPass >= AlertWaitTime) && roomOpen)
+            if (roomOpen)
             {
-                lastAlertTime = currentTime;
-                return CriticalPointTypes.NMD;
+                Boolean alert = false;
+                alert = alert || HandleNMDRow(tag);
+                alert = alert || HandleNMDWindow(tag);
+
+                DateTime currentTime = DateTime.Now;
+                int secondsPass = calculateTimeDiffInSeconds(lastAlertTime, currentTime);
+                if (alert && (lastAlertTime == DateTime.MinValue || secondsPass >= AlertWaitTime))
+                {
+                    lastAlertTime = currentTime;
+                    clearAfterAlert();
+                    return CriticalPointTypes.NMD;
+                }
             }
-            else
-                return CriticalPointTypes.None;
-            //}
+            return CriticalPointTypes.None;
         }
 
         private int calculateTimeDiffInSeconds(DateTime oldTime, DateTime newTime)
@@ -105,8 +97,7 @@ namespace SAGLET.Class
 
             if (nmdCount >= 10)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         //send nmd alert if 70% of messages sent in last "nmdTimeWindow" seconds are tagged as nmd
@@ -129,17 +120,26 @@ namespace SAGLET.Class
                     count++;
             }
 
-            if ((100 * count) / messagesType.Count >= 70)
+            if (messagesType.Count > 9 && ((100 * count) / messagesType.Count) >= 70)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         //if specific user caused nmd alert, this function make sure that no other nmd alert will be send for "AlertWaitTime" seconds
         public void user_alert()
         {
             if (!NmdInAlertWaitTime())
+            {
                 lastAlertTime = DateTime.Now;
+                clearAfterAlert();
+            }
+        }
+
+        public void clearAfterAlert()
+        {
+            nmdCount = 0;
+            messagesType.Clear();
+            messagesTime.Clear();
         }
 
     }

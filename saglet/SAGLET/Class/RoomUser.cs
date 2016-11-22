@@ -52,8 +52,7 @@ namespace SAGLET.Class
                 return CriticalPointTypes.NMD;
             else if (tecCount >= 3)
                 return CriticalPointTypes.TEC;
-            else
-                return CriticalPointTypes.None;
+            return CriticalPointTypes.None;
         }
 
         public CriticalPointTypes HandleAction()
@@ -93,5 +92,14 @@ namespace SAGLET.Class
             this.lastIdleAlertTime = DateTime.Now;
         }
 
+        public void resetNmdAfterAlert()
+        {
+            nmdCount = 0;
+        }
+
+        public void resetTecAfterAlert()
+        {
+            tecCount = 0;
+        }
     }
 }

@@ -38,14 +38,14 @@ namespace SAGLET.Class
                 tecCount = 0;
 
             DateTime currentTime = DateTime.Now;
-            int secondsPass = calculateTimeDiffInSeconds(lastAlertTime, currentTime);
-            if (tecCount >= tecInRowAmount && (lastAlertTime == DateTime.MinValue || secondsPass >= AlertWaitTime))
+            int secondsPassed = calculateTimeDiffInSeconds(lastAlertTime, currentTime);
+            if (tecCount >= tecInRowAmount && (lastAlertTime == DateTime.MinValue || secondsPassed >= AlertWaitTime))
             {
+                tecCount = 0;
                 lastAlertTime = currentTime;
                 return CriticalPointTypes.TEC;
             }
-            else
-                return CriticalPointTypes.None;
+            return CriticalPointTypes.None;
         }
 
         private int calculateTimeDiffInSeconds(DateTime oldTime, DateTime newTime)
@@ -57,7 +57,10 @@ namespace SAGLET.Class
         public void user_alert()
         {
             if (!TecInAlertWaitTime())
+            {
                 lastAlertTime = DateTime.Now;
+                tecCount = 0;
+            }
         }
     }
 }

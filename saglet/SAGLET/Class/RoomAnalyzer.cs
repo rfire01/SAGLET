@@ -16,6 +16,7 @@ namespace SAGLET.Class
         private TecAlert tecAlert;
         private Boolean roomStarted;
         private DateTime lastUpdate;
+        private DateTime lastEmpty;
 
         public RoomAnalyzer(int roomID)
         {
@@ -26,6 +27,7 @@ namespace SAGLET.Class
             this.tecAlert = new TecAlert();
             this.roomStarted = false;
             this.lastUpdate = DateTime.MinValue;
+            this.lastEmpty = DateTime.MinValue;
         }
 
         public CriticalPointTypes HandleMessage(CriticalPointTypes tag, string user)
@@ -33,9 +35,9 @@ namespace SAGLET.Class
             lastUpdate = DateTime.Now;
             if (!roomStarted)
                 roomStarted = true;
-            //in case missed a user joined room
-            AddUserToRoom(user);
-            //
+            
+            AddUserToRoom(user); //in case missed a user joined room
+
             //check if any alert need to be sent
             idleAlert.HandleMessage(user);
             CriticalPointTypes nmdRes = nmdAlert.HandleMessage(tag);
@@ -44,24 +46,29 @@ namespace SAGLET.Class
 
             if (nmdRes == CriticalPointTypes.NMD || (userRes == CriticalPointTypes.NMD && !nmdAlert.NmdInAlertWaitTime()))
             {
-                nmdAlert.user_alert();
+                if (userRes == CriticalPointTypes.NMD)
+                {
+                    usersInfo[user].resetNmdAfterAlert();
+                    nmdAlert.user_alert();
+                }
                 return CriticalPointTypes.NMD;
             }
             else if (tecRes == CriticalPointTypes.TEC || (userRes == CriticalPointTypes.TEC && !tecAlert.TecInAlertWaitTime()))
             {
-                tecAlert.user_alert();
+                if (userRes == CriticalPointTypes.TEC)
+                {
+                    usersInfo[user].resetTecAfterAlert();
+                    tecAlert.user_alert();
+                }
                 return CriticalPointTypes.TEC;
             }
-            else
-                return CriticalPointTypes.None;
+            return CriticalPointTypes.None;
         }
 
         public CriticalPointTypes HandleAction(string user)
         {
             lastUpdate = DateTime.Now;
-            //in case missed a user joined room
-            AddUserToRoom(user);
-            //
+            AddUserToRoom(user); //in case missed a user joined room
             CriticalPointTypes userRes = usersInfo[user].HandleAction();
             return CriticalPointTypes.None;
         }
@@ -77,6 +84,8 @@ namespace SAGLET.Class
             if (!usersInfo.ContainsKey(userID))
             {
                 usersInfo.Add(userID, new RoomUser(userID));
+                if (usersInfo.Count == 1)
+                    lastEmpty = DateTime.MinValue;
             }
         }
 
@@ -85,6 +94,8 @@ namespace SAGLET.Class
             if (usersInfo.ContainsKey(userID) == true)
             {
                 usersInfo.Remove(userID);
+                if (usersInfo.Count == 0)
+                    lastEmpty = DateTime.Now;
             }
         }
 
@@ -99,16 +110,12 @@ namespace SAGLET.Class
             return roomStarted;
         }
 
-        //return if its been more than 10 minutes since last usage in room
+        // return if its been more than 30 minutes since last user left the room
         public Boolean RoomUnused()
         {
-            int secondsFromLastUpdate = calculateTimeDiffInSeconds(lastUpdate, DateTime.Now);
-            if (lastUpdate == DateTime.MinValue)
-                return false;
-            else if (secondsFromLastUpdate < 10 * 60)
-                return false;
-            else
+            if (lastEmpty != DateTime.MinValue && calculateTimeDiffInSeconds(lastEmpty, DateTime.Now) >= 30 * 60)
                 return true;
+            return false;
         }
 
     }

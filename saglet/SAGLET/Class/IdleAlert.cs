@@ -41,20 +41,18 @@ namespace SAGLET.Class
             KeyValuePair<Boolean, List<string>> idleUsers = GetIdleUsersInInterval(usersInfo);
             if (StartTime != DateTime.MinValue && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || idleUsers.Key))
             {
-                Boolean isntInWaitAlertTime = (lastAlertTime==DateTime.MinValue || calculateTimeDiffInSeconds(lastAlertTime,DateTime.Now)>=idleAlertWaitTime);
+                Boolean isntInWaitAlertTime = (lastAlertTime == DateTime.MinValue || calculateTimeDiffInSeconds(lastAlertTime,DateTime.Now) >= idleAlertWaitTime);
                 if (isntInWaitAlertTime && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo)))
                 {
                     lastAlertTime = DateTime.Now;
                     return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE, new List<string>());
                 }
-                else if(idleUsers.Key)
+                else if (idleUsers.Key)
                 {
                     return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE, idleUsers.Value);
                 }
-                
             }
             return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.None, idleUsers.Value);
-                
         }
 
         private int calculateTimeDiffInSeconds(DateTime oldTime, DateTime newTime)
@@ -77,7 +75,7 @@ namespace SAGLET.Class
                     secondsPassed = calculateTimeDiffInSeconds(StartTime, currentTime);
                 allIdle = allIdle && (secondsPassed >= allIdleTime);
             }
-            if(usersInfo.Count==0)
+            if (usersInfo.Count == 0)
                 return false;
             return allIdle;
         }
@@ -100,27 +98,19 @@ namespace SAGLET.Class
                     if(!noActionYet)
                     {
                         if(!noMessageYet)
-                        {
                             onlyGeoIdle = onlyGeoIdle && (actionPassed >= noActionTime) && (messagePassed < noActionTime);
-                        }
                         else
-                        {
                             onlyGeoIdle = false;
-                        }
                     }
                     else
                     {
                         if (!noMessageYet)
-                        {
                             onlyGeoIdle = onlyGeoIdle && (timeFromStart >= noActionTime) && (messagePassed < noActionTime);
-                        }
                         else
-                        {
                             onlyGeoIdle = false;
-                        }
                     }
                 }
-                if(usersInfo.Count==0)
+                if (usersInfo.Count==0)
                     return false;
                 return onlyGeoIdle;
             }
@@ -150,10 +140,10 @@ namespace SAGLET.Class
                 userActivityCount.Add(user, 0);
             }
 
-            int count =0;
+            int count = 0;
             foreach (KeyValuePair<string,DateTime> userTimePair in idleQueue)
             {
-                count++ ;
+                count++;
                 if(users.Contains(userTimePair.Key))
                     userActivityCount[userTimePair.Key]++;
             }
@@ -165,12 +155,11 @@ namespace SAGLET.Class
             {
                 Boolean inIdleAlertWaitTime = false;
                 DateTime lastAlert = usersInfo[userCount.Key].GetLastIdleTime();
-                if (lastAlert == DateTime.MinValue)
-                    inIdleAlertWaitTime = false;
-                else if (calculateTimeDiffInSeconds(lastAlert, DateTime.Now) < idleAlertWaitTime)
+                if (lastAlert != DateTime.MinValue && calculateTimeDiffInSeconds(lastAlert, DateTime.Now) < idleAlertWaitTime)
                     inIdleAlertWaitTime = true;
+
                 // if less than 10% in interval
-                if (userCount.Value < count / 10 && !inIdleAlertWaitTime)
+                if (!inIdleAlertWaitTime && userCount.Value < (count / 10))
                 {
                     idleUsers.Add(userCount.Key);
                     usersInfo[userCount.Key].UpdateIdleTime();
