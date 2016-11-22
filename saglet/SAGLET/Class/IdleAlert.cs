@@ -39,15 +39,21 @@ namespace SAGLET.Class
         public KeyValuePair<CriticalPointTypes, List<string>> CheckIdle(Dictionary<string, RoomUser> usersInfo)
         {
             KeyValuePair<Boolean, List<string>> idleUsers = GetIdleUsersInInterval(usersInfo);
-            if (StartTime != DateTime.MinValue && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo) || idleUsers.Key))
+            Boolean isAllIdle = TotalIdle(usersInfo);
+            Boolean isGeogebraIdle = NoGeogebraUsage(usersInfo);
+            Boolean isUsersIdle = idleUsers.Key;
+            if (StartTime != DateTime.MinValue && (isAllIdle || isGeogebraIdle || isUsersIdle))
             {
                 Boolean isntInWaitAlertTime = (lastAlertTime == DateTime.MinValue || calculateTimeDiffInSeconds(lastAlertTime,DateTime.Now) >= idleAlertWaitTime);
-                if (isntInWaitAlertTime && (TotalIdle(usersInfo) || NoGeogebraUsage(usersInfo)))
+                if (isntInWaitAlertTime && (isAllIdle || isGeogebraIdle))
                 {
                     lastAlertTime = DateTime.Now;
-                    return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE, new List<string>());
+                    List<string> lst = new List<string>();
+                    if (isGeogebraIdle)
+                        lst.Add("No Geogebra Usage");
+                    return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE, lst);
                 }
-                else if (idleUsers.Key)
+                else if (isUsersIdle)
                 {
                     return new KeyValuePair<CriticalPointTypes, List<string>>(CriticalPointTypes.IDLE, idleUsers.Value);
                 }
@@ -85,34 +91,27 @@ namespace SAGLET.Class
         {
             DateTime currentTime = DateTime.Now;
             int timeFromStart = calculateTimeDiffInSeconds(StartTime, currentTime);
-            if (timeFromStart <= geoCheckTime)
+            if (timeFromStart >= noActionTime && timeFromStart <= geoCheckTime && usersInfo.Count > 0)
             {
-                Boolean onlyGeoIdle = true;
-                int actionPassed,messagePassed;
+                Boolean geoIdle = true;
+                Boolean msgIdle = true;
+                Boolean hadMessages = false;
+                int actionPassed, messagePassed;
                 foreach (KeyValuePair<string, RoomUser> pair in usersInfo)
                 {
                     messagePassed = calculateTimeDiffInSeconds(pair.Value.getLastMessageTime(), currentTime);
                     actionPassed = calculateTimeDiffInSeconds(pair.Value.getLastActionTime(), currentTime);
-                    Boolean noActionYet = (pair.Value.getLastActionTime() == DateTime.MinValue);
-                    Boolean noMessageYet = (pair.Value.getLastMessageTime() == DateTime.MinValue);
-                    if(!noActionYet)
+                    if (pair.Value.getLastActionTime() != DateTime.MinValue)
                     {
-                        if(!noMessageYet)
-                            onlyGeoIdle = onlyGeoIdle && (actionPassed >= noActionTime) && (messagePassed < noActionTime);
-                        else
-                            onlyGeoIdle = false;
+                        geoIdle = geoIdle && (actionPassed >= noActionTime);
                     }
-                    else
+                    if (pair.Value.getLastMessageTime() != DateTime.MinValue)
                     {
-                        if (!noMessageYet)
-                            onlyGeoIdle = onlyGeoIdle && (timeFromStart >= noActionTime) && (messagePassed < noActionTime);
-                        else
-                            onlyGeoIdle = false;
+                        msgIdle = msgIdle && (messagePassed < noActionTime);
+                        hadMessages = true;
                     }
                 }
-                if (usersInfo.Count==0)
-                    return false;
-                return onlyGeoIdle;
+                return (hadMessages && geoIdle && msgIdle);
             }
             return false;
         }
