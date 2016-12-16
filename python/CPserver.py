@@ -89,12 +89,9 @@ def handle_request(room_id, message):
         rooms[room_id]['context'] = 'NaN'
         rooms[room_id]['solutions'] = answers_file.loc[answers_file['room'] == int(room_id)]
 
-    app_word = False
     for word in app_signs:
         if word in message.lower():
-            app_word = True
-    if app_word:
-        return 'NaN,0'
+            return 'NaN,0'
 
     code = check_solution(room_id, message)
     if code != 3:
