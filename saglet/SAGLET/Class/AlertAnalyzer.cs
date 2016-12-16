@@ -54,7 +54,6 @@ namespace SAGLET.Class
             CriticalPointTypes alert = CriticalPointTypes.None;
             if (this.rooms.ContainsKey(roomID) == true)
             {
-
                 alert = this.rooms[roomID].HandleMessage(cps[0].Type, user);
             }
 

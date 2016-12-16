@@ -51,56 +51,29 @@ class TFIDFAnalyzer:
         else:
             return 1
 
-    def __check_solution(self, sol, sentence):
-        if sol in sentence:
-            return True
-        words = re.findall(r'\w+', sol)
-        for word in words:
-            if word in sentence:
-                return True
-        return False
-
-    def __ds_check__(self, sentence, solution):
+    def __ds_check__(self, sentence):
         for word in self.PlurarShapes:
             if word in sentence:
-                if solution[1] == 'shape':
-                    if self.__check_solution(solution[0], sentence):
-                        return self.__check_two_words(word, sentence), 1
-                    else:
-                        return self.__check_two_words(word, sentence), 0
-                else:
-                    return self.__check_two_words(word, sentence), 3
+                return self.__check_two_words(word, sentence)
         for word in self.Shapes:
             if word in sentence:
-                if solution[1] == 'shape':
-                    if self.__check_solution(solution[0], sentence):
-                        return self.__check_two_words(word, sentence), 1
-                    else:
-                        return self.__check_two_words(word, sentence), 0
-                else:
-                    return self.__check_two_words(word, sentence), 3
+                return self.__check_two_words(word, sentence)
         for word in self.geo:
             if word in sentence:
-                if solution[1] == 'geoTerm':
-                    if self.__check_solution(solution[0], sentence):
-                        return self.__check_two_words(word, sentence), 1
-                    else:
-                        return self.__check_two_words(word, sentence), 0
-                else:
-                    return self.__check_two_words(word, sentence), 3
+                return self.__check_two_words(word, sentence)
         for word in self.claim:
             if word in sentence:
-                return self.__check_two_words(word, sentence), 3
+                return self.__check_two_words(word, sentence)
         for word in self.conclusion:
             if word in sentence:
-                return self.__check_two_words(word, sentence), 3
+                return self.__check_two_words(word, sentence)
         for word in self.structure:
             if word in sentence:
-                return self.__check_two_words(word, sentence), 3
+                return self.__check_two_words(word, sentence)
         for word in self.software:
             if word in sentence:
-                return self.__check_two_words(word, sentence), 3
-        return 0, 3
+                return self.__check_two_words(word, sentence)
+        return 0
 
     def __nmd_check__(self, sentence):
         for word in self.nonMath:
@@ -115,7 +88,7 @@ class TFIDFAnalyzer:
         return 0
 
     def __get_word_tag__(self, word):
-        if self.__ds_check__(word, ['x', 'x']) == 1:
+        if self.__ds_check__(word) == 1:
             return 'DS'
         elif self.__nmd_check__(word) == 1:
             return 'NMD'
@@ -124,7 +97,7 @@ class TFIDFAnalyzer:
         else:
             return 'NaN'
 
-    def get_tag(self, sentence, solution):
+    def get_tag(self, sentence):
         blob = tb(sentence)
         self.bloblist.append(blob)
         blob_list = self.bloblist[:]
@@ -140,17 +113,12 @@ class TFIDFAnalyzer:
         ds = 0
         nmd = 0
         tec = 0
-        codes = []
         for i, word in enumerate(sorted_words_single):
-            ds_res, code = self.__ds_check__(word[0], solution)
-            codes.append(code)
-            ds += ds_res * word[1]
+            ds += self.__ds_check__(word[0]) * word[1]
             nmd += self.__nmd_check__(word[0]) * word[1]
             tec += self.__tec_check__(word[0]) * word[1]
         for i, word in enumerate(sorted_words_pairs):
-            ds_res, code = self.__ds_check__(word[0], solution)
-            codes.append(code)
-            ds += ds_res * word[1]
+            ds += self.__ds_check__(word[0]) * word[1]
             nmd += self.__nmd_check__(word[0]) * word[1]
             tec += self.__tec_check__(word[0]) * word[1]
 
@@ -158,19 +126,14 @@ class TFIDFAnalyzer:
             return 'NaN', -1
         if ds > nmd:
             if ds > tec:
-                if 1 in codes:
-                    return 'DS', 1
-                elif 0 in codes:
-                    return 'DS', 0
-                else:
-                    return 'DS', 3
+                return 'DS', 3
             else:
-                return 'TEC', -1
+                return 'TEC', 3
         else:
             if nmd > tec:
-                return 'NMD', -1
+                return 'NMD', 3
             else:
-                return 'TEC', -1
+                return 'TEC', 3
 
     def get_tfidf_values(self, sentence):
         blob = tb(sentence)
@@ -188,17 +151,12 @@ class TFIDFAnalyzer:
         ds = 0
         nmd = 0
         tec = 0
-        codes = []
         for i, word in enumerate(sorted_words_single):
-            ds_res, code = self.__ds_check__(word[0], ['x', 'x'])
-            codes.append(code)
-            ds += ds_res * word[1]
+            ds += self.__ds_check__(word[0]) * word[1]
             nmd += self.__nmd_check__(word[0]) * word[1]
             tec += self.__tec_check__(word[0]) * word[1]
         for i, word in enumerate(sorted_words_pairs):
-            ds_res, code = self.__ds_check__(word[0], ['x', 'x'])
-            codes.append(code)
-            ds += ds_res * word[1]
+            ds += self.__ds_check__(word[0]) * word[1]
             nmd += self.__nmd_check__(word[0]) * word[1]
             tec += self.__tec_check__(word[0]) * word[1]
 

@@ -213,22 +213,12 @@ namespace SAGLET.Class
         {
             int idleWindow = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["idlenessWindow"]);
             ctrl.IdlenessOpenRoom(idleWindow, rooms);
-            ctrl.RestartSolutionIndex(rooms);
         }
 
         //check with timer for idle alerts
         public static void HandleIdleness(List<int> rooms)
         {
             ctrl.getRoomIdles(rooms);
-        }
-
-        //need to be updated later, to get solutions according to excel files
-        public static List<string> getSolutions(int roomID)
-        {
-            List<string> sol = new List<string>();
-            sol.Add("דלתון");
-            sol.Add("מעוין");
-            return sol;
         }
     }
 }

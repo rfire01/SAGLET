@@ -18,7 +18,8 @@ namespace SAGLET.Controllers
         public ActionResult RegisterMod(string username)
         {
             db.Moderators.Add(new Moderator(username, AppHelper.GetAspUserID()));
-            if (db.Users.Find(username) == null) db.Users.Add(new User(username));
+            if (db.Users.Find(username) == null)
+                db.Users.Add(new User(username));
             db.SaveChanges();
 
             return RedirectToAction("app", "Home");

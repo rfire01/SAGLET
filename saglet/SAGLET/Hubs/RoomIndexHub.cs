@@ -63,7 +63,6 @@ namespace SAGLET.Hubs
             GetRooms();
         }
 
-
         public void UpdateRoomIndex(string roomID)
         {
             using (SagletModel db = new SagletModel())
@@ -78,7 +77,5 @@ namespace SAGLET.Hubs
                 context.Clients.Group(roomID).updateRoomIndex(room);
             }
         }
-
     }
-
 }

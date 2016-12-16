@@ -16,7 +16,7 @@
 
         var detailsHub = $.connection.roomDetailsHub;
         var idleAlertFreq = 20000;
-        var disconnectCheckFreq = 30000;
+        var disconnectCheckFreq = 5000;
 
         vm.loader = true;
         vm.user;
@@ -133,10 +133,6 @@
         /* idleness event handler */
         detailsHub.client.updateIdlenessLive = function (idleRoom, idelenssData) {
             console.info("************ updateIdlenessLive ************");
-            
-            var idel = JSON.parse(idelenssData);
-            console.log(idel);
-            console.log(idleRoom);
 
             returnCp(idelenssData).then(function (idle) {
                 if (idel.Key == '18') {

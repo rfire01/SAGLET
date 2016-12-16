@@ -6,17 +6,19 @@ using System.Web;
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
+using System.Threading;
 using SAGLET.Hubs;
 
 namespace SAGLET.Class
 {
     public class CriticalPointAnalyzer
     {
+        static QueuedLock qlock = new QueuedLock();
         static string[] priority = { "1", "2" };
         static int i=0;
 
         //return the tag for a message and the room solution
-        internal static List<CriticalMsgPoints> Analyze(VMsg msg, string solution, RoomDetailsHub hubDetails)
+        internal static List<CriticalMsgPoints> Analyze(VMsg msg, RoomDetailsHub hubDetails)
         {
             List<CriticalMsgPoints> cps = new List<CriticalMsgPoints>();
 
@@ -25,7 +27,7 @@ namespace SAGLET.Class
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
 
-            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, solution, hubDetails);
+            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, hubDetails);
             string[] splitReply = cpReply.Split(',');
 
             if (splitReply[0].CompareTo("DS") == 0)
@@ -61,10 +63,12 @@ namespace SAGLET.Class
             return cps;
         }
 
-        private static string GetCriticalPoint(int roomID, string message, string solution, RoomDetailsHub hubDetails)
+        private static string GetCriticalPoint(int roomID, string message, RoomDetailsHub hubDetails)
         {
             // Open the named pipe.
             // exception, if there is a problem with opening pipe - try again until pipe opened successfully (in case 2 threads try to open the pipe at the same time)
+            qlock.Enter();
+
             while (true)
             {
                 try
@@ -76,22 +80,24 @@ namespace SAGLET.Class
                     var br = new BinaryReader(server);
                     var bw = new BinaryWriter(server);
 
-                    var buf = Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message + ";" + solution);     // Get ASCII byte array     
-                    bw.Write((uint)buf.Length);                // Write string length
-                    bw.Write(buf);                              // Write string
+                    var buf = Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message);     // Get ASCII byte array     
+                    bw.Write((uint)buf.Length); // Write string length
+                    bw.Write(buf); // Write string
 
-                    var len = (int)br.ReadUInt32();            // Read string length
-                    var cpResponse = new string(br.ReadChars(len));    // Read string
+                    var len = (int)br.ReadUInt32(); // Read string length
+                    var cpResponse = new string(br.ReadChars(len)); // Read string
 
+                    if (server.IsConnected)
+                        server.Disconnect();
                     server.Close();
                     server.Dispose();
 
+                    qlock.Exit();
+
                     return cpResponse;
                 }
-                catch (System.IO.IOException){}
+                catch (IOException) { } //should not happen
             }
-
         }
-
     }
 }

@@ -61,6 +61,10 @@ namespace SAGLET.Class
                     tecAlert.user_alert();
                 }
                 return CriticalPointTypes.TEC;
+            } 
+            else if (tag == CriticalPointTypes.WDS || tag == CriticalPointTypes.CDS)
+            {
+                return tag;
             }
             return CriticalPointTypes.None;
         }

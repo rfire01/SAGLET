@@ -26,12 +26,8 @@ namespace SAGLET.Controllers
         private SagletModel db = new SagletModel();
         private static RoomDetailsHub hubDetails = new RoomDetailsHub();
         private static RoomIndexHub hubIndex = new RoomIndexHub();
-
         private readonly Object dbLock = new Object();
-        private Dictionary<int, int> solutionIndex = new Dictionary<int, int>();
-
         private AlertAnalyzer criticalPointAlerts = new AlertAnalyzer();
-
         private Dictionary<string, HashSet<string>> roomSagletUsers = new Dictionary<string, HashSet<string>>();
 
         private static RoomsController instance;
@@ -549,8 +545,7 @@ namespace SAGLET.Controllers
             //check msg not empty and its not teacher message
             if (msg != null && !isSagletUserInRoom(roomID.ToString(), msg.UserID))
             {
-                string solution = GetSolution(msg.Text, roomID);
-                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg, solution, hubDetails);  //tag for current message
+                msg.CriticalPoints = CriticalPointAnalyzer.Analyze(msg, hubDetails);  //tag for current message
                 
                 if (msg.Text.Contains("joined"))
                 {
@@ -647,37 +642,12 @@ namespace SAGLET.Controllers
             }
         }
 
-        public void RestartSolutionIndex(List<int> roomIDs)
-        {
-            this.solutionIndex.Clear();
-            foreach (int roomID in roomIDs)
-                this.solutionIndex.Add(roomID, 0);
-        }
-
-        private string GetSolution(string msg,int roomID)
-        {
-            if (this.solutionIndex.ContainsKey(roomID))
-            {
-                if (PassQuestion(msg))
-                    this.solutionIndex[roomID]++;
-
-                List<string> solList = VmtDevAPI.getSolutions(roomID);
-                if (this.solutionIndex[roomID] < solList.Count() - 1)
-                    return VmtDevAPI.getSolutions(roomID)[this.solutionIndex[roomID]];
-                else
-                    return VmtDevAPI.getSolutions(roomID)[solList.Count() - 1];
-            }
-            else
-                return "";
-
-        }
-
         private Boolean PassQuestion(string msg)
         {
-            string base_folder = System.AppDomain.CurrentDomain.BaseDirectory;
+            string base_folder = AppDomain.CurrentDomain.BaseDirectory;
             string file_path = base_folder + "\\config\\NextQuestionTerms.txt";
             string line;
-            System.IO.StreamReader file = new System.IO.StreamReader(file_path);
+            StreamReader file = new StreamReader(file_path);
             while ((line = file.ReadLine()) != null)
             {
                 if (LevenshteinDistance.Compute(line, msg) <= line.Length / 2.0)

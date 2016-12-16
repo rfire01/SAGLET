@@ -16,22 +16,17 @@ class DictAnalyzer:
         self.shorts = open('Dictionaries\\ShortTerms.txt', 'r', encoding="utf8").read().split('\n')
         self.context = open('Dictionaries\\ContextTerms.txt', 'r', encoding="utf8").read().split('\n')
 
-    def __ds_count__(self, sentence, context, solution):
+    def __ds_count__(self, sentence, context):
         count = 0
-        shape = False
-        geo_term = False
         for word in self.PlurarShapes:
             if word in sentence:
                 count += 1
-                shape = True
         for word in self.Shapes:
             if word in sentence:
                 count += 1
-                shape = True
         for word in self.geo:
             if word in sentence:
                 count += 1
-                geo_term = True
         for word in self.claim:
             if word in sentence:
                 count += 1
@@ -50,19 +45,7 @@ class DictAnalyzer:
             for word in self.context:
                 if word in sentence:
                     count += 2  # higher value
-        if solution[1] == 'shape' and shape:
-            if self.__check_solution(solution[0], sentence):
-                code = 1
-            else:
-                code = 0
-        elif solution[1] == 'geoTerm' and geo_term:
-            if self.__check_solution(solution[0], sentence):
-                code = 1
-            else:
-                code = 0
-        else:
-            code = 3
-        return [count, code]
+        return count
 
     def __nmd_count__(self, sentence):
         count = 0
@@ -84,22 +67,42 @@ class DictAnalyzer:
                 count += 10  # higher value - contains DS context words
         return count
 
-    def get_tag(self, sentence, context, solution):
-        [ds, code] = self.__ds_count__(sentence, context, solution)
+    def get_tag(self, sentence, context):
+        ds = self.__ds_count__(sentence, context)
         nmd = self.__nmd_count__(sentence)
         tec = self.__tec_count__(sentence)
         if tec == 0 and nmd == 0 and ds == 0:
             return 'NaN', -1
+        if context == "DS" and tec > 0 and "לא" in sentence:
+            ds -= 2
         if ds > nmd:
             if ds > tec:
-                return 'DS', code
+                return 'DS', 3
             else:
                 return 'TEC', tec
         else:
             if nmd > tec:
-                return 'NMD', -1
+                return 'NMD', 3
             else:
                 return 'TEC', tec
+
+    def get_tag_with_counts(self, sentence, context):
+        ds = self.__ds_count__(sentence, context)
+        nmd = self.__nmd_count__(sentence)
+        tec = self.__tec_count__(sentence)
+        counts = [ds, nmd, tec]
+        if tec == 0 and nmd == 0 and ds == 0:
+            return 'NaN', -1, counts
+        if ds > nmd:
+            if ds > tec:
+                return 'DS', 3, counts
+            else:
+                return 'TEC', tec, counts
+        else:
+            if nmd > tec:
+                return 'NMD', 3, counts
+            else:
+                return 'TEC', tec, counts
 
     def __if_then_statment__(self, sentence):
         conclusion_split = sentence.split('אם')
@@ -109,29 +112,8 @@ class DictAnalyzer:
                     return 1
         return 0
 
-    def check_group(self, sol):
-        for word in self.PlurarShapes:
-            if word in sol:
-                return 'shape'
-        for word in self.Shapes:
-            if word in sol:
-                return 'shape'
-        for word in self.geo:
-            if word in sol:
-                return 'geoTerm'
-        return ""
-
-    def __check_solution(self, sol, sentence):
-        if sol in sentence:
-            return True
-        words = re.findall(r'\w+', sentence)
-        for word in words:
-            if word in sol:
-                return True
-        return False
-
     def get_dict_values(self, sentence):
-        [ds, code] = self.__ds_count__(sentence, 'x', ['x', 'x'])
+        ds = self.__ds_count__(sentence, 'x')
         nmd = self.__nmd_count__(sentence)
         tec = self.__tec_count__(sentence)
         return [ds, nmd, tec]

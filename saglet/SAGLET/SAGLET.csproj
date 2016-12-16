@@ -256,6 +256,7 @@
     <Compile Include="Class\LevenshteinDistance.cs" />
     <Compile Include="Class\MyRestrictiveAuthorizationFilter.cs" />
     <Compile Include="Class\NmdAlert.cs" />
+    <Compile Include="Class\QueuedLock.cs" />
     <Compile Include="Class\RoomAnalyzer.cs" />
     <Compile Include="Class\RoomUser.cs" />
     <Compile Include="Class\SentimentAnalyzer.cs" />

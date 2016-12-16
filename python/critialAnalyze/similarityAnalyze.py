@@ -52,7 +52,7 @@ class SimAnalyzer:
             for word in self.context:
                 if word in sentence:
                     count += 1
-        return [count, 3]
+        return count
 
     def __nmd_count__(self, sentence):
         count = 0
@@ -80,43 +80,17 @@ class SimAnalyzer:
         return 0
 
     def get_tag(self, sentence, context, metric=1):
-        sentence = self.remove_stop(sentence)
-        sim1 = [cs.get_cosine(sentence, self.remove_stop(sen)) for sen in self.tecSentences]
-        try:
-            sim2 = [cataly.string_similarity(sentence, self.remove_stop(sen)) for sen in self.tecSentences]
-        except:
-            sim2 = [0]
-        sim3 = [value[1] for value in self.gTec.search(sentence)]
+        tec_cs, tec_cat, tec_ng, ds_cs, ds_cat, ds_ng = self.get_results(sentence)
 
-        sim1ds = [cs.get_cosine(sentence, self.remove_stop(sen)) for sen in self.dsSentences]
-        try:
-            sim2ds = [cataly.string_similarity(sentence, self.remove_stop(sen)) for sen in self.dsSentences]
-        except:
-            sim2ds = [0]
-        sim3ds = [value[1] for value in self.gTec.search(sentence)]
-
-        sim1.sort(reverse=True)
-        sim2.sort(reverse=True)
-        sim3.sort(reverse=True)
-
-        sim1ds.sort(reverse=True)
-        sim2ds.sort(reverse=True)
-        sim3ds.sort(reverse=True)
-
-        if len(sim3) == 0:
-            sim3.append(0)
-        if len(sim3ds) == 0:
-            sim3ds.append(0)
-
-        ds_amount, code = self.__ds_count__(sentence, context)
+        ds_amount = self.__ds_count__(sentence, context)
         tec_amount = self.__tec_count__(sentence)
 
-        if sim1[0] * sim2[0] * sim3[0] == 0 and sim1ds[0] * sim2ds[0] * sim3ds[0] == 0:
+        if tec_cs[0] * tec_cat[0] * tec_ng[0] == 0 and ds_cs[0] * ds_cat[0] * ds_ng[0] == 0:
             return 'NMD', 0
 
         if metric == 1:
-            tec_weight = (sim1[0] * sim2[0] * sim3[0]) ** (1./3.)
-            ds_weight = (sim1ds[0] * sim2ds[0] * sim3ds[0]) ** (1./3.)
+            tec_weight = float(tec_cs[0] * tec_cat[0] * tec_ng[0]) ** (1./3.)
+            ds_weight = float(ds_cs[0] * ds_cat[0] * ds_ng[0]) ** (1./3.)
 
             ds = ds_amount * ds_weight
             tec = tec_amount * tec_weight
@@ -126,12 +100,42 @@ class SimAnalyzer:
             else:
                 return 'TEC', 3
         else:  # metric == 2
-            count = [1 for val in [[sim1[0], sim1ds[0]], [sim2[0], sim2ds[0]], [sim3[0], sim3ds[0]]] if val[0] > val[1]]
+            count = [1 for val in [[tec_cs[0], ds_cs[0]], [tec_cat[0], ds_cat[0]], [tec_ng[0], ds_ng[0]]] if val[0] > val[1]]
 
             if sum(count) <= 1:
                 return 'DS', 3
             else:
                 return 'TEC', 3
+
+    def get_results(self, sentence):
+        sentence = self.remove_stop(sentence)
+
+        # tec similarities
+        try:
+            tec_cat = [cataly.string_similarity(sentence, self.remove_stop(sen)) for sen in self.tecSentences]
+        except:
+            tec_cat = [0]
+        tec_cs = [cs.get_cosine(sentence, self.remove_stop(sen)) for sen in self.tecSentences]
+        tec_ng = [value[1] for value in self.gTec.search(sentence)]
+        tec_ng = [0] if len(tec_ng) == 0 else tec_ng
+
+        # ds similarities
+        try:
+            ds_cat = [cataly.string_similarity(sentence, self.remove_stop(sen)) for sen in self.dsSentences]
+        except:
+            ds_cat = [0]
+        ds_cs = [cs.get_cosine(sentence, self.remove_stop(sen)) for sen in self.dsSentences]
+        ds_ng = [value[1] for value in self.gTec.search(sentence)]
+        ds_ng = [0] if len(ds_ng) == 0 else ds_ng
+
+        tec_cs.sort(reverse=True)
+        tec_cat.sort(reverse=True)
+        tec_ng.sort(reverse=True)
+        ds_cs.sort(reverse=True)
+        ds_cat.sort(reverse=True)
+        ds_ng.sort(reverse=True)
+
+        return tec_cs, tec_cat, tec_ng, ds_cs, ds_cat, ds_ng
 
     def remove_stop(self, sentence):
         words = sentence.split(' ')

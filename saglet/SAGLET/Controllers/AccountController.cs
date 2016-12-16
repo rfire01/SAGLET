@@ -18,10 +18,9 @@ namespace SAGLET.Controllers
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
+        private SagletModel db = new SagletModel();
 
-        public AccountController()
-        {
-        }
+        public AccountController() { }
 
         public AccountController(ApplicationUserManager userManager)
         {
@@ -93,26 +92,17 @@ namespace SAGLET.Controllers
             {
                 var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                Moderator mod = db.Moderators.Find(model.VmtUserName);
+                if (result.Succeeded && mod == null)
                 {
                     await SignInAsync(user, isPersistent: false);
-
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    // return Redirect("/#!");
-                    // return RedirectToAction("app", "Home", new { username = model.VmtUserName });
-
-                    //return RedirectToAction("app", "Home");
-
                     return RedirectToAction("RegisterMod", "Moderators", new { username = model.VmtUserName });
                 }
                 else
                 {
                     AddErrors(result);
+                    if (mod != null)
+                        AddError("VMT Username is already linked with another user.");
                 }
             }
 
@@ -496,6 +486,11 @@ namespace SAGLET.Controllers
             {
                 ModelState.AddModelError("", error);
             }
+        }
+
+        private void AddError(string error)
+        {
+            ModelState.AddModelError("", error);
         }
 
         private bool HasPassword()
