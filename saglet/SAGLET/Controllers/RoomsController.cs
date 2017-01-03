@@ -129,6 +129,12 @@ namespace SAGLET.Controllers
                         {
                             if (r.Name == null || r.Name.CompareTo(Convert.ToString(item.roomName).ToLower()) != 0)
                                 r.Name = item.roomName;
+                            if (r.Moderator.Username != moderator.Username && user == currUser)
+                            {
+                                r.Moderator = moderator;
+                                r.ModeratorsAllowed.Add(moderator);
+                                newRooms.Add(r);
+                            }
                         }
                         else
                         {
@@ -167,8 +173,8 @@ namespace SAGLET.Controllers
                 try
                 {
                     var results = JsonConvert.DeserializeObject<dynamic>(roomsData);
-                    Moderator moderator = db.Moderators.Find(user);
-                    if (moderator == null) moderator = new Moderator(user, AppHelper.GetAspUserID());
+                    Moderator newModerator = db.Moderators.Find(user);
+                    if (newModerator == null) newModerator = new Moderator(user, AppHelper.GetAspUserID());
 
                     foreach (var item in results.rooms)
                     {
@@ -182,11 +188,14 @@ namespace SAGLET.Controllers
                             if (r.ModeratorsAllowed.Any(m => m.Username == user))
                                 return newRooms;
 
-                            r.ModeratorsAllowed.Add(moderator);
+                            r.ModeratorsAllowed.Add(newModerator);
                             newRooms.Add(r);
                         }
                         else
                         {
+                            Moderator realModerator = db.Moderators.Find(Convert.ToString(item.creator));
+                            
+
                             Room room = new Room();
                             room.ID = item.id;
                             room.Name = item.roomName;
@@ -194,8 +203,16 @@ namespace SAGLET.Controllers
                             foreach (var itemTab in item.tabs) { room.RoomGroup.Tabs.Add(new Tab(Convert.ToInt32(itemTab.Value))); }
 
                             room.LastUpdate = Convert.ToDateTime(DateTime.Now.ToString("d"));
-                            room.Moderator = moderator;
-                            room.ModeratorsAllowed.Add(moderator);
+                            if (realModerator == null)
+                            {
+                                room.Moderator = newModerator;
+                            }
+                            else
+                            {
+                                room.Moderator = realModerator;
+                                room.ModeratorsAllowed.Add(realModerator);
+                            }
+                            room.ModeratorsAllowed.Add(newModerator);
                             room.Sync = true;
                             newRooms.Add(room);
                             db.Rooms.Add(room);

@@ -86,7 +86,7 @@ class SimAnalyzer:
         tec_amount = self.__tec_count__(sentence)
 
         if tec_cs[0] * tec_cat[0] * tec_ng[0] == 0 and ds_cs[0] * ds_cat[0] * ds_ng[0] == 0:
-            return 'NMD', 0
+            return 'NMD'
 
         if metric == 1:
             tec_weight = float(tec_cs[0] * tec_cat[0] * tec_ng[0]) ** (1./3.)
@@ -96,16 +96,16 @@ class SimAnalyzer:
             tec = tec_amount * tec_weight
 
             if ds >= tec:
-                return 'DS', 3
+                return 'DS'
             else:
-                return 'TEC', 3
+                return 'TEC'
         else:  # metric == 2
             count = [1 for val in [[tec_cs[0], ds_cs[0]], [tec_cat[0], ds_cat[0]], [tec_ng[0], ds_ng[0]]] if val[0] > val[1]]
 
             if sum(count) <= 1:
-                return 'DS', 3
+                return 'DS'
             else:
-                return 'TEC', 3
+                return 'TEC'
 
     def get_results(self, sentence):
         sentence = self.remove_stop(sentence)

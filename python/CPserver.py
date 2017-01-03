@@ -98,15 +98,15 @@ def handle_request(room_id, message):
         return "DS," + str(code)
 
     context = rooms[room_id]['context']
-    da_tag, da_code = da.get_tag(message, context)
-    tfa_tag, _ = tfa.get_tag(message)
-    sim_tag, _ = sa.get_tag(message, context, 2)
+    da_tag = da.get_tag(message, context)
+    tfa_tag = tfa.get_tag(message)
+    sim_tag = sa.get_tag(message, context, 2)
 
     ds_count = sum([1 for tag in [da_tag, tfa_tag, sim_tag] if tag == 'DS'])
     tec_count = sum([1 for tag in [da_tag, tfa_tag, sim_tag] if tag == 'TEC'])
     nmd_count = sum([1 for tag in [da_tag, tfa_tag] if tag == 'NMD'])
 
-    if da_tag == "TEC" and da_code >= 10:
+    if da_tag == "TEC10":
         tag = "TEC"
     elif tfa_tag == 'NaN' or da_tag == 'NaN':
         if da_tag != 'NaN':

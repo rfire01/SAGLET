@@ -1,4 +1,3 @@
-import re
 
 
 class DictAnalyzer:
@@ -72,19 +71,23 @@ class DictAnalyzer:
         nmd = self.__nmd_count__(sentence)
         tec = self.__tec_count__(sentence)
         if tec == 0 and nmd == 0 and ds == 0:
-            return 'NaN', -1
+            return 'NaN'
+
         if context == "DS" and tec > 0 and "לא" in sentence:
             ds -= 2
-        if ds > nmd:
+
+        if tec >= 10:
+            return 'TEC10'
+        if ds >= nmd:
             if ds > tec:
-                return 'DS', 3
+                return 'DS'
             else:
-                return 'TEC', tec
+                return 'TEC'
         else:
             if nmd > tec:
-                return 'NMD', 3
+                return 'NMD'
             else:
-                return 'TEC', tec
+                return 'TEC'
 
     def get_tag_with_counts(self, sentence, context):
         ds = self.__ds_count__(sentence, context)
@@ -92,17 +95,23 @@ class DictAnalyzer:
         tec = self.__tec_count__(sentence)
         counts = [ds, nmd, tec]
         if tec == 0 and nmd == 0 and ds == 0:
-            return 'NaN', -1, counts
+            return 'NaN', counts
+
+        if context == "DS" and tec > 0 and "לא" in sentence:
+            ds -= 2
+
+        if tec >= 10:
+            return 'TEC', counts
         if ds > nmd:
             if ds > tec:
-                return 'DS', 3, counts
+                return 'DS', counts
             else:
-                return 'TEC', tec, counts
+                return 'TEC', counts
         else:
             if nmd > tec:
-                return 'NMD', 3, counts
+                return 'NMD', counts
             else:
-                return 'TEC', tec, counts
+                return 'TEC', counts
 
     def __if_then_statment__(self, sentence):
         conclusion_split = sentence.split('אם')

@@ -123,17 +123,17 @@ class TFIDFAnalyzer:
             tec += self.__tec_check__(word[0]) * word[1]
 
         if tec == 0 and nmd == 0 and ds == 0:
-            return 'NaN', -1
+            return 'NaN'
         if ds > nmd:
             if ds > tec:
-                return 'DS', 3
+                return 'DS'
             else:
-                return 'TEC', 3
+                return 'TEC'
         else:
             if nmd > tec:
-                return 'NMD', 3
+                return 'NMD'
             else:
-                return 'TEC', 3
+                return 'TEC'
 
     def get_tfidf_values(self, sentence):
         blob = tb(sentence)

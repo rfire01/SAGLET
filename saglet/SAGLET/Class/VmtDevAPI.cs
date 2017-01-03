@@ -128,7 +128,7 @@ namespace SAGLET.Class
             {
                 Debug.WriteLine(String.Format("RegisterLiveChat({0}) | New Msg!", id));
                 string results = data.ToString();
-                ctrl.ResetState();
+                //ctrl.ResetState();
                 ctrl.HandleLiveMessage(id, results);
             });
         }
