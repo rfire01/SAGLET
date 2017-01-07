@@ -179,7 +179,6 @@ kbd{
 /* VMT */
 #vmt-iframes-container iframe, #vmt-iframes-container video{
     width: 100%;
-    min-height: 600px;
 }
 
 #rooms-toolbar .panel-heading:hover{

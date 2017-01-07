@@ -43,7 +43,7 @@ var demos = {
         popup: false,
         usersUpdate: false,
         toolbarCp: false,
-        feedback: true,
+        feedback: false,
         roomsList: false
     }
 

@@ -14,7 +14,7 @@ namespace SAGLET.Areas.Demo.Controllers
         public ActionResult Index()
         {
             Dictionary<int, string> videos = null;
-            ViewBag.Commands = LoadScript("demo exp2 .csv", out videos);
+            ViewBag.Commands = LoadScript("script.csv", out videos);
             ViewBag.Vidoes = videos;
             return View();
         }
@@ -22,7 +22,7 @@ namespace SAGLET.Areas.Demo.Controllers
         private List<Command> LoadScript(string scriptName, out Dictionary<int, string> videos)
         {
             var client = new ExtendedWebClient();
-            string scriptStr = client.DownloadString("https://dl.dropboxusercontent.com/u/30630388/saglet/script.csv");
+            string scriptStr = client.DownloadString("https://dl.dropboxusercontent.com/u/71589444/SAGLET/" + scriptName);
             //string path = Server.MapPath("~/Areas/Demo/Videos/Scripts/" + scriptName);
             List<Command> commands = new List<Command>();
             //string[] commandsStr = System.IO.File.ReadAllLines(path);

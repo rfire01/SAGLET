@@ -98,7 +98,7 @@
     <script src="~/Scripts/jquery-ui.min.js"></script>   @* jquery custom build without tooltip -> to avoid clash with bootstrap tooltip  *@
     @*<script src='~/Scripts/live/socket.io.js'></script>
         <script src="~/Scripts/live/vmt-highlight-api.js"></script>*@
-    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script src="~/Areas/Demo/Scripts/hub/demo-page.js"></script>
     <script src="~/Scripts/hub/details-page.js"></script>
@@ -132,6 +132,8 @@
             $('#login-modal').modal('toggle');
             $("#hm_timer").countdowntimer({
                 minutes: 20,
+                seconds: 00,
+                tickInterval: 1,
                 size: "lg",
                 borderColor: "#222222",
                 backgroundColor : "#222222"
@@ -158,6 +160,7 @@
                 displayActionGraph: false,
                 usersPerLine: 1
             };
+            
             room['demo'] = demos[user]; //set demo type (according to username demo#)
             room['commands'] = @Html.Raw(Json.Encode(ViewBag.Commands))
             room['cp'] = { nextId: 0};

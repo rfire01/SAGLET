@@ -135,7 +135,7 @@
             console.info("************ updateIdlenessLive ************");
 
             returnCp(idelenssData).then(function (idle) {
-                if (idel.Key == '18') {
+                if (idle.Key == '18') {
                     vm.newCp = true;
                     vm.cpRoom = idleRoom;
                     vm.cpMsg = '';

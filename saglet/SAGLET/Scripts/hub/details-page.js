@@ -864,15 +864,6 @@ $(function () {
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     }
-
-
-    $("#hm_timer").countdowntimer({
-        minutes: 0,
-        seconds: 0,
-        size: "lg",
-        borderColor: "#222222",
-        backgroundColor: "#222222"
-    });
 });
 
 $(document).on('click', '#summary-table table tr', function (e) {
