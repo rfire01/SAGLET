@@ -1,5 +1,3 @@
-
-
 class DictAnalyzer:
     def __init__(self):
         self.PlurarShapes = open('Dictionaries\\PlurarShape.txt', 'r', encoding="utf8").read().split('\n')
@@ -66,7 +64,7 @@ class DictAnalyzer:
                 count += 10  # higher value - contains DS context words
         return count
 
-    def get_tag(self, sentence, context):
+    def get_tag(self, sentence, context='NaN'):
         ds = self.__ds_count__(sentence, context)
         nmd = self.__nmd_count__(sentence)
         tec = self.__tec_count__(sentence)
@@ -89,7 +87,7 @@ class DictAnalyzer:
             else:
                 return 'TEC'
 
-    def get_tag_with_counts(self, sentence, context):
+    def get_tag_with_counts(self, sentence, context='NaN'):
         ds = self.__ds_count__(sentence, context)
         nmd = self.__nmd_count__(sentence)
         tec = self.__tec_count__(sentence)
@@ -113,7 +111,8 @@ class DictAnalyzer:
             else:
                 return 'TEC', counts
 
-    def __if_then_statment__(self, sentence):
+    @staticmethod
+    def __if_then_statment__(sentence):
         conclusion_split = sentence.split('אם')
         for i in range(len(conclusion_split)):
             if i > 0:

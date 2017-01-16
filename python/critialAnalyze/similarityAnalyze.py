@@ -79,18 +79,18 @@ class SimAnalyzer:
                     return 1
         return 0
 
-    def get_tag(self, sentence, context, metric=1):
+    def get_tag(self, sentence, context='NaN', metric=1):
         tec_cs, tec_cat, tec_ng, ds_cs, ds_cat, ds_ng = self.get_results(sentence)
 
         ds_amount = self.__ds_count__(sentence, context)
         tec_amount = self.__tec_count__(sentence)
 
-        if tec_cs[0] * tec_cat[0] * tec_ng[0] == 0 and ds_cs[0] * ds_cat[0] * ds_ng[0] == 0:
+        if tec_cs * tec_cat * tec_ng == 0 and ds_cs * ds_cat * ds_ng == 0:
             return 'NMD'
 
         if metric == 1:
-            tec_weight = float(tec_cs[0] * tec_cat[0] * tec_ng[0]) ** (1./3.)
-            ds_weight = float(ds_cs[0] * ds_cat[0] * ds_ng[0]) ** (1./3.)
+            tec_weight = float(tec_cs * tec_cat * tec_ng) ** (1./3.)
+            ds_weight = float(ds_cs * ds_cat * ds_ng) ** (1./3.)
 
             ds = ds_amount * ds_weight
             tec = tec_amount * tec_weight
@@ -100,7 +100,7 @@ class SimAnalyzer:
             else:
                 return 'TEC'
         else:  # metric == 2
-            count = [1 for val in [[tec_cs[0], ds_cs[0]], [tec_cat[0], ds_cat[0]], [tec_ng[0], ds_ng[0]]] if val[0] > val[1]]
+            count = [1 for val in [[tec_cs, ds_cs], [tec_cat, ds_cat], [tec_ng, ds_ng]] if val[0] > val[1]]
 
             if sum(count) <= 1:
                 return 'DS'
@@ -135,7 +135,7 @@ class SimAnalyzer:
         ds_cat.sort(reverse=True)
         ds_ng.sort(reverse=True)
 
-        return tec_cs, tec_cat, tec_ng, ds_cs, ds_cat, ds_ng
+        return tec_cs[0], tec_cat[0], tec_ng[0], ds_cs[0], ds_cat[0], ds_ng[0]
 
     def remove_stop(self, sentence):
         words = sentence.split(' ')

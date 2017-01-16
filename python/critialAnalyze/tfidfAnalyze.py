@@ -23,13 +23,15 @@ class TFIDFAnalyzer:
         for filename in os.listdir(os.getcwd()+"\\tfidfTexts"):
             self.bloblist.append(tb(open("tfidfTexts\\"+filename, 'r').read()))
 
-    def __tf__(self, word, blob, size):
+    @staticmethod
+    def __tf__(word, blob, size):
         if size == 1:
             return blob.words.count(word) / len(blob.words)
         else:
             return str(blob).count(word) / (len(blob.words)-1)
 
-    def __n_containing__(self, word, bloblist, size):
+    @staticmethod
+    def __n_containing__(word, bloblist, size):
         if size == 1:
             return sum(1 for blob in bloblist if word in blob.words)
         else:
@@ -87,21 +89,10 @@ class TFIDFAnalyzer:
                 return self.__check_two_words(word, sentence)
         return 0
 
-    def __get_word_tag__(self, word):
-        if self.__ds_check__(word) == 1:
-            return 'DS'
-        elif self.__nmd_check__(word) == 1:
-            return 'NMD'
-        elif self.__tec_check__(word) == 1:
-            return 'TEC'
-        else:
-            return 'NaN'
-
     def get_tag(self, sentence):
         blob = tb(sentence)
         self.bloblist.append(blob)
         blob_list = self.bloblist[:]
-        # blobList.append(blob)
         single_words = blob.words
         pairs = [Word(single_words[i]+' '+single_words[i+1]) for i in range(len(single_words)-1)]
         scores_pairs = {word: self.__tfidf__(word, blob, blob_list, 2) for word in pairs}

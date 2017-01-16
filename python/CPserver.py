@@ -5,13 +5,10 @@ import struct
 from critialAnalyze.DictAnalyze import DictAnalyzer
 from critialAnalyze.tfidfAnalyze import TFIDFAnalyzer
 from critialAnalyze.similarityAnalyze import SimAnalyzer
-import pandas as pd
+from critialAnalyze.answerAnalyze import check_solution, init_room_solutions
 
 app_signs = open("Dictionaries\\AppTerms.txt", 'r', encoding="utf8").read().split('\n')
-answers_file = pd.read_excel("Dictionaries\\Answers.xlsx")
 
-tasks = ["א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט", "י"]
-subtasks = range(1, 10)
 rooms = {}
 da = DictAnalyzer()
 tfa = TFIDFAnalyzer()
@@ -44,50 +41,11 @@ def check_for_request():
         pass
 
 
-def get_solutions(room_id, task, subtask=None):
-    try:
-        answers = rooms[room_id]['solutions']
-        answers = answers.loc[answers['task'] == task]
-        if subtask:
-            answers = answers.loc[answers['subtask'] == subtask]
-        solutions = answers.solutions.values[0].split(',')
-    except:
-        solutions = []
-    return solutions
-
-
-def check_solution(room_id, message):
-    if "התשובה הסופית למשימה" not in message:
-        return 3
-
-    # get task id
-    task = None
-    for t in tasks:
-        s = "משימה " + t
-        if s in message:
-            task = t
-            break
-
-    if task:
-        # get subtask id, if any
-        subtask = None
-        for st in subtasks:
-            s = "סעיף " + str(st)
-            if s in message:
-                subtask = st
-                break
-
-        for solution in get_solutions(room_id, task, subtask):
-            if solution in message:
-                return 1
-    return 0
-
-
 def handle_request(room_id, message):
     if room_id not in rooms:
         rooms[room_id] = {}
         rooms[room_id]['context'] = 'NaN'
-        rooms[room_id]['solutions'] = answers_file.loc[answers_file['room'] == int(room_id)]
+        init_room_solutions(room_id)
 
     for word in app_signs:
         if word in message.lower():
