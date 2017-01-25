@@ -622,7 +622,7 @@ namespace SAGLET.Controllers
 
                 if (msg.UserID != "server")
                 {
-                    Logger.Log(msg.TimeStamp.ToString(), msg.UserID, msg.Text, msg.CriticalPoints.ElementAt(0).Type.ToString(), msg.CriticalPoints.ElementAt(1).Type.ToString());
+                    Logger.Log(msg.TimeStamp.ToLocalTime().ToString(), roomID.ToString(), msg.UserID, msg.Text, msg.CriticalPoints.ElementAt(0).Type.ToString(), msg.CriticalPoints.ElementAt(1).Type.ToString());
                     UpdateRoomLastUpdate(roomID);
                     hubDetails.UpdateRoomMsgLiveControl(roomID.ToString(), msg);
                 }
@@ -696,11 +696,26 @@ namespace SAGLET.Controllers
             foreach (int roomID in roomIDs)
             {
                 KeyValuePair<CriticalPointTypes, List<string>> res = criticalPointAlerts.IsIdle(roomID);
-
+                if (res.Key == CriticalPointTypes.IDLE)
+                    Logger.Log(DateTime.Now.ToString(), roomID + "", "SAGLET", listToString(res.Value), "IDLE", "IDLE");
+                
                 string jsonRes = JsonConvert.SerializeObject(res);
-
                 hubDetails.UpdateIdleness(roomID.ToString(), jsonRes);
             }   
+        }
+
+        private string listToString(List<string> l)
+        {
+            string res = "";
+            if (l.Count == 0)
+                return "All Users";
+            else
+            {
+                res = l.ElementAt(0);
+                for (int i = 1; i < l.Count; i++)
+                    res += ", " + l.ElementAt(i);
+            }
+            return res;
         }
 
         private void UpdateRoomLastUpdate(int roomID)
