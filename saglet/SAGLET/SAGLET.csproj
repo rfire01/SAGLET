@@ -254,6 +254,7 @@
     <Compile Include="Class\FourArgumentsListener.cs" />
     <Compile Include="Class\IdleAlert.cs" />
     <Compile Include="Class\LevenshteinDistance.cs" />
+    <Compile Include="Class\Logger.cs" />
     <Compile Include="Class\MyRestrictiveAuthorizationFilter.cs" />
     <Compile Include="Class\NmdAlert.cs" />
     <Compile Include="Class\QueuedLock.cs" />

@@ -71,7 +71,7 @@ def dt_predict(room_id, message):
         rooms[room_id]['context_features'] = [0] * 12
         init_room_solutions(room_id)
 
-    if contains_app_terms(message):
+    if contains_app_terms(message) or len(message) == 0:
         return 'NaN,0'
 
     code = check_solution(room_id, message)

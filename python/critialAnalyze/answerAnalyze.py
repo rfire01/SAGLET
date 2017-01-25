@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-answers_file = pd.read_excel("Dictionaries\\Answers.xlsx")
+answers_file = pd.read_excel("Dictionaries\\Answers.xlsx", converters={'task': str, 'subtask': str})
 answer_terms = ('התשובה הסופית', 'תשובתנו הסופית', 'תשובתינו הסופית',
                 'התשובות הסופיות', 'תשובותנו הסופיות', 'תשובותינו הסופיות')
 task_terms = ('מטלה ', 'משימה ', 'שאלה ', 'תרגיל ',

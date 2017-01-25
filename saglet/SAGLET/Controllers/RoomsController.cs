@@ -622,6 +622,7 @@ namespace SAGLET.Controllers
 
                 if (msg.UserID != "server")
                 {
+                    Logger.Log(msg.TimeStamp.ToString(), msg.UserID, msg.Text, msg.CriticalPoints.ElementAt(0).Type.ToString(), msg.CriticalPoints.ElementAt(1).Type.ToString());
                     UpdateRoomLastUpdate(roomID);
                     hubDetails.UpdateRoomMsgLiveControl(roomID.ToString(), msg);
                 }
