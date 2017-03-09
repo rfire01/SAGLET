@@ -1,5 +1,7 @@
 ﻿using SAGLET.Models;
 using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -27,13 +29,13 @@ namespace SAGLET.Class
             cp.MsgID = msg.ID;
             cp.Priority = priority[i++ % priority.Length];
 
-            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text, hubDetails);
+            string cpReply = GetCriticalPoint(msg.GroupID, msg.Text);
             string[] splitReply = cpReply.Split(',');
 
             if (splitReply[0].CompareTo("DS") == 0)
-                if(splitReply[1].CompareTo("0")==0)
+                if(splitReply[1].CompareTo("0") == 0)
                     cp.Type = CriticalPointTypes.WDS;
-                else if(splitReply[1].CompareTo("1")==0)
+                else if(splitReply[1].CompareTo("1") == 0)
                     cp.Type = CriticalPointTypes.CDS;
                 else
                     cp.Type = CriticalPointTypes.DS;
@@ -63,41 +65,44 @@ namespace SAGLET.Class
             return cps;
         }
 
-        private static string GetCriticalPoint(int roomID, string message, RoomDetailsHub hubDetails)
+        private static string GetCriticalPoint(int roomID, string message)
         {
-            // Open the named pipe.
-            // exception, if there is a problem with opening pipe - try again until pipe opened successfully (in case 2 threads try to open the pipe at the same time)
+            // Get the lock
             qlock.Enter();
 
-            while (true)
+            byte[] bytes = new byte[32];
+            try
             {
-                try
-                {
-                    var server = new NamedPipeServerStream("cpPipe");
+                Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                client.Connect(IPAddress.Parse("127.0.0.1"), 5999);
 
-                    server.WaitForConnection();
+                client.Send(Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message));
+                int bytesRec = client.Receive(bytes);
+                string cpResponse = Encoding.UTF8.GetString(bytes, 0, bytesRec);
 
-                    var br = new BinaryReader(server);
-                    var bw = new BinaryWriter(server);
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
 
-                    var buf = Encoding.UTF8.GetBytes(roomID.ToString() + ";" + message);     // Get ASCII byte array     
-                    bw.Write((uint)buf.Length); // Write string length
-                    bw.Write(buf); // Write string
-
-                    var len = (int)br.ReadUInt32(); // Read string length
-                    var cpResponse = new string(br.ReadChars(len)); // Read string
-
-                    if (server.IsConnected)
-                        server.Disconnect();
-                    server.Close();
-                    server.Dispose();
-
-                    qlock.Exit();
-
-                    return cpResponse;
-                }
-                catch (IOException) { } //should not happen
+                return cpResponse;
             }
+            catch (ArgumentNullException ane)
+            {
+                Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+            }
+            catch (SocketException se)
+            {
+                Console.WriteLine("SocketException : {0}", se.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unexpected exception : {0}", e.ToString());
+            }
+            finally
+            {
+                qlock.Exit();
+            }
+
+            return "NaN,0";
         }
     }
 }

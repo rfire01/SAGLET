@@ -6,7 +6,7 @@ from critialAnalyze.answerAnalyze import check_solution, init_room_solutions
 from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
-import struct
+import socket
 
 app_signs = open("Dictionaries\\AppTerms.txt", 'r', encoding="utf8").read().split('\n')
 dt = None
@@ -27,6 +27,7 @@ rooms = {}
 da = DictAnalyzer()
 tfa = TFIDFAnalyzer()
 sa = SimAnalyzer()
+BUFF_SIZE = 64
 
 
 def contains_app_terms(message):
@@ -38,31 +39,33 @@ def contains_app_terms(message):
 
 def check_for_request():
     while True:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(('127.0.0.1', 5998))
+        s.listen(1)
+        # wait for a message
+        conn, addr = s.accept()
+
+        # read message
+        data = bytearray('', 'utf-8')
+        while True:
+            part = conn.recv(BUFF_SIZE)
+            data += part
+            if len(part) < BUFF_SIZE:
+                break
+
+        # tag message
         try:
-            f = open(r'\\.\pipe\cpPipe2', 'r+b', 0)
+            request = str(data, 'utf-8').split(';')
+            response = dt_predict(request[0], request[1])
+            print("received:", request[1])
+            print("response:", response)
+        except Exception as e:
+            print(str(e))
+            return
 
-            n = struct.unpack('I', f.read(4))[0]  # Read str length
-            s = f.read(n)  # Read str
-            f.seek(0)  # Important!!!
-
-            request = s.decode('utf-8').split(';')
-            room_id = request[0]
-            message = request[1]
-            try:
-                response = dt_predict(room_id, message)
-            except Exception as e:
-                print(str(e))
-                return
-            print(response)
-
-            try:
-                f.write(struct.pack('I', len(response)) + response.encode())  # Write str length and str
-                f.seek(0)
-                f.close()
-            except Exception as e:
-                print(str(e))
-        except Exception:
-            continue
+        # send the response
+        conn.send(bytearray(response, 'utf-8'))
+        conn.close()
 
 
 def dt_predict(room_id, message):
