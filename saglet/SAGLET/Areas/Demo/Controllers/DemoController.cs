@@ -22,7 +22,7 @@ namespace SAGLET.Areas.Demo.Controllers
         private List<Command> LoadScript(string scriptName, out Dictionary<int, string> videos)
         {
             var client = new ExtendedWebClient();
-            string scriptStr = client.DownloadString("https://dl.dropboxusercontent.com/u/71589444/SAGLET/" + scriptName);
+            string scriptStr = System.IO.File.ReadAllText("C:/Data/SAGLET/Videos/" + scriptName);
             //string path = Server.MapPath("~/Areas/Demo/Videos/Scripts/" + scriptName);
             List<Command> commands = new List<Command>();
             //string[] commandsStr = System.IO.File.ReadAllLines(path);
